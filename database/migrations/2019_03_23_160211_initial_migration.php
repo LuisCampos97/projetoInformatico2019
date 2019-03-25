@@ -14,7 +14,9 @@ class InitialMigration extends Migration
     public function up()
     {
         Schema::create('user', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id'); //ou NIF ou BI (9 numeros em caso de CC)
+            //Parecer e anexo
+            $table->enum('tipo_documento', ['cartao_cidadao', 'passaporte']);
             $table->string('name');
             $table->string('username')->unique();
             $table->enum('role', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao, recursos_humanos']);
@@ -95,6 +97,7 @@ class InitialMigration extends Migration
             $table->foreign('unidade_curricular_id')->references('unidade_curricular')->on('id');
             $table->dateTime('data_de_assinatura_coordenador_departamento');
             $table->dateTime('data_de_assinatura_coordenador_de_curso');
+            $table->
             $table->softDeletes();
             $table->timestamps();
         });
@@ -124,6 +127,7 @@ class InitialMigration extends Migration
 
         Schema::create('proposta_secretariado_direcao', function(Blueprint $table){
             $table->increments('id');
+            $table->string('convite');
             $table->softDeletes();
             $table->timestamps();
             ///WHAT ELSE???
