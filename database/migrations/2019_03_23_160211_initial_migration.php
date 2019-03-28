@@ -16,10 +16,11 @@ class InitialMigration extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id'); //ou NIF ou BI (9 numeros em caso de CC)
             //Parecer e anexo
+            $table->string('numero_identificacao');
             $table->enum('tipo_documento', ['cartao_cidadao', 'passaporte']);
             $table->string('name');
             $table->string('username')->unique();
-            $table->enum('role', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao, recursos_humanos']);
+            $table->enum('role', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao', 'recursos_humanos']);
             $table->string('password');
             $table->string('email')->unique();
             $table->boolean('blocked')->default(false);
@@ -74,7 +75,7 @@ class InitialMigration extends Migration
             $table->string('nome_departamento');
             $table->string('sigla');
             $table->integer('coordenador_departamento')->unsigned();
-            $table->foreign('coordenador_departamento')->references('user')->on('id');
+            $table->foreign('coordenador_departamento')->references('id')->on('user');
         });
 
         Schema::create('unidade_curricular', function (Blueprint $table){
@@ -92,12 +93,11 @@ class InitialMigration extends Migration
             $table->enum('unidade_organica', ['ESECS', 'ESTG', 'ESAD.CR', 'ESTM', 'ESSLei']);
             $table->string('nome_completo');
             $table->integer('departamento_id')->unsigned();
-            $table->foreign('departamento_id')->references('departamento')->on('id');
+            $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->integer('unidade_curricular_id')->unsigned();
-            $table->foreign('unidade_curricular_id')->references('unidade_curricular')->on('id');
+            $table->foreign('unidade_curricular_id')->references('id')->on('unidade_curricular');
             $table->dateTime('data_de_assinatura_coordenador_departamento');
             $table->dateTime('data_de_assinatura_coordenador_de_curso');
-            $table->
             $table->softDeletes();
             $table->timestamps();
         });
@@ -180,17 +180,17 @@ class InitialMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('proposta');
+        Schema::dropIfExists('proposta_proponente');
         Schema::dropIfExists('proposta_proponente_professor');
         Schema::dropIfExists('proposta_proponente_assistente');
         Schema::dropIfExists('proposta_proponente_monitor');
         Schema::dropIfExists('departamento');
-        Schema::dropIfExists('unidade_curricular');
-        Schema::dropIfExists('proposta_proponente');
         Schema::dropIfExists('proposta_diretor_uo');
         Schema::dropIfExists('proposta_ctc');
         Schema::dropIfExists('proposta_secretariado_direcao');
         Schema::dropIfExists('proposta_recursos_humanos');
-        Schema::dropIfExists('proposta');
+        Schema::dropIfExists('unidade_curricular');
+        Schema::dropIfExists('user');
     }
 }
