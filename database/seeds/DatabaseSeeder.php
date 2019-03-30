@@ -43,6 +43,6 @@ class DatabaseSeeder extends Seeder
         DB::statement("SET foreign_key_checks=1"); //Sera preciso??
 
         $this->call(UserTableSeeder::class);
-
+        $this->call(DepartmentTableSeeder::class);
     }
 }

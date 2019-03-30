@@ -6,8 +6,8 @@ class UserTableSeeder extends Seeder
 {
     private $typesOfUsers = ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao', 'recursos_humanos'];
     private $typesOfUsersPrefix = ['p', 'd', 'c', 's', 'r'];
-    private $numberOfUsers = [5,5,5,5,5];
-    private $numberOfSoftDeletedUsers = [1,1,1,1,1];
+    private $numberOfUsers = [5,1,5,5,5];
+    private $numberOfSoftDeletedUsers = [1,0,1,1,1];
 
     /**
      * Run the database seeds.
