@@ -18,7 +18,7 @@ class UserTableSeeder extends Seeder
     {
         $this->command->line("");
         $this->command->line("##################################################################################");
-        $this->command->line("Creating Users");
+        $this->command->line("A criar utilizadores...");
         $this->command->line("##################################################################################");
 
         $this->faker = Faker\Factory::create('pt_PT');

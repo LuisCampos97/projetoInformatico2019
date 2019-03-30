@@ -13,7 +13,7 @@ class DepartmentTableSeeder extends Seeder
     {
         $this->command->line("");
         $this->command->line("##################################################################################");
-        $this->command->line("Creating Departments");
+        $this->command->line("A criar departamentos...");
         $this->command->line("##################################################################################");
 
         $this->faker = Faker\Factory::create('pt_PT');

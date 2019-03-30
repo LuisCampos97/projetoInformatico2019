@@ -81,7 +81,8 @@ class InitialMigration extends Migration
         Schema::create('unidade_curricular', function (Blueprint $table){
             $table->increments('id');
             $table->string('nome');
-            $table->string('curso'); //Enum???
+            $table->integer('departamento_id')->unsigned();
+            $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->enum('regime', ['Diurno', 'Pos-Laboral']);
             $table->enum('tipo', ['Semestral', 'Anual']);
             $table->integer('horas')->unsigned();
