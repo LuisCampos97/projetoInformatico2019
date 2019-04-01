@@ -13,14 +13,14 @@ class InitialMigration extends Migration
      */
     public function up()
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->increments('id'); //ou NIF ou BI (9 numeros em caso de CC)
             //Parecer e anexo
-            $table->string('numero_identificacao');
-            $table->enum('tipo_documento', ['cartao_cidadao', 'passaporte']);
+            $table->string('numero_identificacao')->nullable();
+            $table->enum('tipo_documento', ['cartao_cidadao', 'passaporte'])->nullable();
             $table->string('name');
-            $table->string('username')->unique();
-            $table->enum('role', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao', 'recursos_humanos']);
+            $table->string('username')->unique()->nullable();
+            $table->enum('role', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao', 'recursos_humanos'])->nullable();
             $table->string('password');
             $table->string('email')->unique();
             $table->boolean('blocked')->default(false);
@@ -75,7 +75,7 @@ class InitialMigration extends Migration
             $table->string('nome_departamento');
             $table->string('sigla');
             $table->integer('coordenador_departamento')->unsigned();
-            $table->foreign('coordenador_departamento')->references('id')->on('user');
+            $table->foreign('coordenador_departamento')->references('id')->on('users');
         });
 
         Schema::create('unidade_curricular', function (Blueprint $table){
@@ -192,6 +192,6 @@ class InitialMigration extends Migration
         Schema::dropIfExists('proposta_secretariado_direcao');
         Schema::dropIfExists('proposta_recursos_humanos');
         Schema::dropIfExists('unidade_curricular');
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('users');
     }
 }
