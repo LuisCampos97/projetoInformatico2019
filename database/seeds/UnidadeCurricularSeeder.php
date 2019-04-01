@@ -53,5 +53,4 @@ class UnidadeCurricularSeeder extends Seeder
         return $departamentoInformatica;
     }
 
-    
 }

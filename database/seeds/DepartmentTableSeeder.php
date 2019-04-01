@@ -20,6 +20,7 @@ class DepartmentTableSeeder extends Seeder
 
         $this->adicionarDepartamento($this->faker, 'Engenharia Informatica', 'EI');
         $this->adicionarDepartamento($this->faker, 'Matematica', 'MAT');
+        
     }
 
     private function adicionarDepartamento(Faker\Generator $faker, $name, $sigla)
