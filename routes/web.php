@@ -16,5 +16,6 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+// Ver quais sao as rotas
 
 Route::get('/home', 'HomeController@index')->name('home');
