@@ -12,10 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('master');
 });
 
 Auth::routes();
-// Ver quais sao as rotas
-
-Route::get('/home', 'HomeController@index')->name('home');

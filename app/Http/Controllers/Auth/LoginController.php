@@ -51,8 +51,10 @@ class LoginController extends Controller
 
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             //dd(\Adldap\Laravel\Facades\Adldap::search()->find($request->email));
-            
-            return redirect()->intended('dashboard');
+            return response()->json([
+                'error' => 'Login with success.'
+            ], 200);
+            //return redirect()->intended('dashboard');
         }  else {
             $this->incrementLoginAttempts($request);
             return response()->json([
