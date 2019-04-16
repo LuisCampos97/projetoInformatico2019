@@ -49,6 +49,10 @@
         >Esqueceu-se do seu nome de utilizador ou da senha?</a>
       </div>
     </div>
+
+    <button type="button" class="btn btn-success" style="float:right" @click="showProponenteView">
+      Proponente
+    </button>
   </div>
 </template>
 
@@ -67,6 +71,9 @@ module.exports = {
       axios.post("api/login", this.user).then(response => {
         console.log(response);
       });
+    },
+    showProponenteView() {
+      this.$router.push({ name: 'proponente' });
     }
   }
 };
