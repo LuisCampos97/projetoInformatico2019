@@ -1,31 +1,52 @@
 <template>
-  <div>
-    <div class="container">
-      <h2>Login</h2>
-      <div class="form-group">
-        <label for="inputEmail">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          v-model.trim="user.email"
-          name="email"
-          id="inputEmail"
-          placeholder="Enter email address"
-        >
+  <div id="wrapper">
+    <div id="welcome">
+      <h1 id="logo">
+        <a href="https://ead.ipleiria.pt/2018-19">
+          <img
+            src="https://ead.ipleiria.pt/2018-19/theme/image.php/ead/theme/1554110091/logo-white"
+            alt="Politécnico de Leiria"
+            width="260"
+            height="80"
+          >
+        </a>
+      </h1>
+      <div id="app-name">
+        <div>Plataforma de</div>
+        <div class="main-title">Gestão de Contrações</div>
+        <div></div>
+        <div class="year">2018.19</div>
       </div>
-      <div class="form-group">
-        <label for="inputPassword">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          v-model="user.password"
-          name="password"
-          id="inputPassword"
-          placeholder="Enter password"
-        >
+    </div>
+    <div id="login-form">
+      <div class="form-label">
+        <label for="inputEmail">Nome de utilizador</label>
       </div>
-      <div class="form-group">
-        <a class="btn btn-primary" v-on:click.prevent="login">Login</a>
+      <div class="form-input">
+        <input type="email" name="email" v-model.trim="user.email" id="inputEmail">
+      </div>
+      <div class="clearer"></div>
+      <div class="form-label">
+        <label for="inputPassword">Senha</label>
+      </div>
+      <div class="form-input">
+        <input type="password" name="password" id="inputPassword" v-model.trim="user.password">
+      </div>
+
+      <div class="clearer"></div>
+      <div class="rememberpass">
+        <input type="checkbox" name="rememberusername" id="rememberusername" value="1">
+        <label for="rememberusername">Lembrar nome de utilizador</label>
+      </div>
+      <div class="clearer"></div>
+      <input id="anchor" type="hidden" name="anchor" value>
+      <input type="hidden" name="logintoken" value="xXmFcR9IcSorlXUxa11eH1rHtkJ13afg">
+      <input type="submit" id="loginbtn" value="Entrar" v-on:click.prevent="login">
+      <a class="btn btn-primary" v-on:click.prevent="login">Login</a>
+      <div class="forgetpass">
+        <a
+          href="https://ead.ipleiria.pt/2018-19/login/forgot_password.php"
+        >Esqueceu-se do seu nome de utilizador ou da senha?</a>
       </div>
     </div>
   </div>
@@ -52,19 +73,6 @@ module.exports = {
 </script>
 
 <style>
-div {
-  display: table-cell;
-}
-
-body {
-  margin: 0;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
-  color: #676a6c;
-  background-color: #f3f3f4;
-}
-
 #wrapper {
   display: table;
   overflow: hidden;
@@ -74,34 +82,70 @@ body {
   height: 100%;
 }
 
-#welcome {
-  background-size: cover;
-  background-color: #1a1a1a;
-  color: #fff;
-  padding: 70px 0 0 0;
-  vertical-align: middle;
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  color: #676a6c;
 }
 
-.login-title-content-wrapper {
-  font-size: 2.2rem;
-  line-height: 3.5rem;
-  text-align: center;
-}
-
-#app-name {
-  padding: 70px 0 60px;
-}
-
-#logo {
-  padding: 20px 0 0;
-  text-align: center;
-  position: relative;
-}
-
+#welcome,
 #login-form {
+  display: table-cell;
   width: 50%;
   height: 100%;
   vertical-align: top;
-  display: table-cell;
+}
+
+/* Welcome */
+#welcome {
+  background-color: #1a1a1a;
+  background-size: cover;
+  color: white;
+  vertical-align: middle;
+}
+
+#app_name,
+#logo {
+  padding: 20px 0 0;
+  position: relative;
+  text-align: center;
+  margin: 0;
+}
+
+#app-name {
+  text-align: center;
+  line-height: 3.5rem;
+  font-size: 2.2rem;
+  letter-spacing: 0.5rem; /* Retificar para ver como fica melhor */
+  padding: 70px 0 60px;
+}
+
+.main-title,
+.year {
+  font-weight: 700;
+}
+
+/* Login Form */
+#login-form {
+  max-width: 400px;
+  margin: 0 auto;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.form-input,
+.form-label {
+  float: none;
+  text-align: center;
+}
+
+input {
+  border: 1px solid #ccc;
+  width: 50%;
+}
+
+.form-label label {
+  font-weight: 700;
 }
 </style>

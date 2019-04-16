@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('master');
 });
 
-Auth::routes();
+//Auth::routes();
