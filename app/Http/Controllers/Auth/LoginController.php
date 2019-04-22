@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -51,10 +52,14 @@ class LoginController extends Controller
 
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             //dd(\Adldap\Laravel\Facades\Adldap::search()->find($request->email));
-            return response()->json([
-                'errorMessage' => 'Login with success.'
-            ], 200);
-            //return redirect()->intended('dashboard');
+            $token = Str::random(60);
+            $response = compact('token');
+            $response['user'] = Auth::user();
+            return $response;
+
+            // return response()->json([
+            //     'errorMessage' => 'Login with success.'
+            // ], 200);
         }  else {
             $this->incrementLoginAttempts($request);
             return response()->json([

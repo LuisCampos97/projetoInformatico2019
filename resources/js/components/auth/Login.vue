@@ -2,7 +2,7 @@
   <div id="wrapper">
     <div id="welcome">
       <h1 id="logo">
-        <a href="https://ead.ipleiria.pt/2018-19">
+        <a>
           <img
             src="https://ead.ipleiria.pt/2018-19/theme/image.php/ead/theme/1554110091/logo-white"
             alt="Politécnico de Leiria"
@@ -59,9 +59,16 @@ module.exports = {
   },
   methods: {
     login() {
-      axios.post("api/login", this.user).then(response => {
-        console.log(response);
-      });
+      axios
+        .post("api/login", this.user)
+        .then(response => {
+          this.$store.commit("setToken", response.data.token);
+          this.$store.commit("setUser", response.data.user);
+          this.$router.push({ name: "dashboard" });
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     showProponenteView() {
       this.$router.push({ name: "proponente" });
@@ -177,5 +184,4 @@ label {
   float: none;
   margin-top: 15px;
 }
-
 </style>

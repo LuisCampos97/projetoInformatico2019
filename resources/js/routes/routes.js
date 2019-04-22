@@ -8,6 +8,7 @@ Vue.use(VueRouter);
 //------------------------------ Auth -------------------------------
 Vue.component('master', require('../components/utils/Master.vue').default);
 const login = Vue.component('login', require('../components/auth/Login.vue').default);
+const dashboard = Vue.component('dashboard', require('../components/Dashboard.vue').default);
 const proponente = Vue.component('proponente', require('../components/Proponente/Proponente.vue').default);
 const propostaProponenteProfessor = Vue.component('propostaProponenteProfessor', require('../components/Proponente/PropostaProponenteProfessor.vue').default);
 const propostaProponenteAssistente = Vue.component('propostaProponenteAssistente', require('../components/Proponente/PropostaProponenteAssistente').default);
@@ -22,6 +23,11 @@ const routes = [
     path: '/login',
     component: login,
     name: 'login',
+  },
+  {
+    path: '/dashboard',
+    component: dashboard,
+    name: 'dashboard'
   },
 
   //-----------------------------------Proponente---------------------------
