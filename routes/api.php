@@ -29,3 +29,7 @@ Route::get('/departamentos', 'DepartamentoController@all');
 Route::get('/unidadesCurriculares', 'UnidadeCurricularController@all');
 Route::get('/unidadesCurricularesDoDepartamentoSelecionado/{dep_id}', 'UnidadeCurricularController@getUcsParaDepartamento');
 Route::get('/unidadesCurriculares/{uc_id}', 'UnidadeCurricularController@getUcParaId');
+
+//_----------------Propostas diretor UO-------------------------------
+Route::get('/propostaDiretorUO/historico', 'DiretorUOController@getHistoricoPropostas');
+Route::get('/propostaDiretorUO/propostasPendentes', 'DiretorUOController@getPropostasPendentes');

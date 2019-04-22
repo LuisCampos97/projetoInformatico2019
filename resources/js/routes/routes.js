@@ -42,11 +42,10 @@ const routes = [
     name: 'propostaProponenteAssistente',
   },
   {
-  path: '/propostaProponenteMonitor',
-  component: propostaProponenteMonitor,
-  name: 'propostaProponenteMonitor',
+    path: '/propostaProponenteMonitor',
+    component: propostaProponenteMonitor,
+    name: 'propostaProponenteMonitor',
   },
-  
 ];
 
 export default new VueRouter({

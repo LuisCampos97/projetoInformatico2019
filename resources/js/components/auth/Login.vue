@@ -50,9 +50,18 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-success" style="float:right" @click="showProponenteView">
-      Proponente
-    </button>
+    <button
+      type="button"
+      class="btn btn-success"
+      style="float:right"
+      @click="showProponenteView"
+    >Proponente</button>
+    <button
+      type="button"
+      class="btn btn-warning"
+      style="float:right"
+      @click="showDiretorView"
+    >Diretor UO</button>
   </div>
 </template>
 
@@ -73,7 +82,10 @@ module.exports = {
       });
     },
     showProponenteView() {
-      this.$router.push({ name: 'proponente' });
+      this.$router.push({ name: "proponente" });
+    },
+    showDiretorView(){
+      this.$router.push({ name: "vistaPropostasGeralDiretor" });
     }
   }
 };

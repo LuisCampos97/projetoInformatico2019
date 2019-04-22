@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div>
-      <button type="button" class="btn btn-outline-danger" v-on:click.prevent="goBack">Voltar</button>
-    </div>
-    <div>PropostaProponenteMonitor</div>
+    
+    <div>PROPOSTA PROPONENTE MONITOR</div>
   </div>
 </template>
 <script>
@@ -12,9 +10,6 @@ module.exports = {
     return {};
   },
   methods: {
-    goBack() {
-      this.$router.go(-1);
-    }
   }
 };
 </script>

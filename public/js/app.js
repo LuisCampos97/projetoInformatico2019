@@ -1834,6 +1834,36 @@ module.exports = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 module.exports = {
   data: function data() {
     return {
@@ -1855,24 +1885,19 @@ module.exports = {
       regimeUCSelecionada: "",
       tipoUCSelecionada: "",
       horasUC: "",
-      horasSemestraisUC: ""
+      horasSemestraisUC: "",
+      roleSelecionado: "",
+      errors: []
     };
   },
   methods: {
-    showNextComponent: function showNextComponent(proposta) {
-      if (proposta.role == "professor") this.$router.push({
-        name: "propostaProponenteProfessor"
-      });else if (proposta.role == "assistente") this.$router.push({
-        name: "propostaProponenteAssistente"
-      });else if (proposta.role == "monitor") this.$router.push({
-        name: "propostaProponenteMonitor"
-      });
-      console.log(proposta.tipoProposta);
-      console.log(proposta.unidadeOrganica);
-      console.log(proposta.role);
-      console.log(proposta.nomeCompleto);
-      console.log(proposta.departamento);
-      console.log(proposta.unidadeCurricular);
+    verificarErrosOuAvançar: function verificarErrosOuAvanAr(proposta) {
+      if (proposta.nomeCompleto == "") {
+        this.errors.push("Nome nao pode ser vazio");
+      } //e.preventDefault();
+
+
+      this.roleSelecionado = proposta.role;
     },
     getUcsDeDepartamento: function getUcsDeDepartamento(dep_id) {
       var _this = this;
@@ -1894,7 +1919,6 @@ module.exports = {
         _this2.tipoUCSelecionada = _this2.ucSelecionada[0].tipo;
         _this2.horasUC = _this2.ucSelecionada[0].horas;
         _this2.horasSemestraisUC = _this2.ucSelecionada[0].horas_semestrais;
-        console.log(_this2.horasSemestraisUC);
       });
     }
   },
@@ -1923,16 +1947,11 @@ module.exports = {
 //
 //
 //
-//
 module.exports = {
   data: function data() {
     return {};
   },
-  methods: {
-    goBack: function goBack() {
-      this.$router.go(-1);
-    }
-  }
+  methods: {}
 };
 
 /***/ }),
@@ -1950,17 +1969,11 @@ module.exports = {
 //
 //
 //
-//
-//
 module.exports = {
   data: function data() {
     return {};
   },
-  methods: {
-    goBack: function goBack() {
-      this.$router.go(-1);
-    }
-  }
+  methods: {}
 };
 
 /***/ }),
@@ -1977,20 +1990,12 @@ module.exports = {
 //
 //
 //
-//
-//
-//
-//
-//
 module.exports = {
+  props: ["proposta"],
   data: function data() {
     return {};
   },
-  methods: {
-    goBack: function goBack() {
-      this.$router.go(-1);
-    }
-  }
+  methods: {}
 };
 
 /***/ }),
@@ -2002,6 +2007,15 @@ module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2077,7 +2091,12 @@ module.exports = {
     },
     showProponenteView: function showProponenteView() {
       this.$router.push({
-        name: 'proponente'
+        name: "proponente"
+      });
+    },
+    showDiretorView: function showDiretorView() {
+      this.$router.push({
+        name: "vistaPropostasGeralDiretor"
       });
     }
   }
@@ -37785,461 +37804,502 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h2", [_vm._v("Vista de Proponente")]),
-    _vm._v(" "),
-    _c("br"),
-    _vm._v(" "),
-    _c("h5", [_vm._v("Que tipo de proposta pretende efetuar?")]),
-    _vm._v(" "),
-    _c("br"),
-    _vm._v(" "),
-    _c("div", { staticClass: "radio", attrs: { id: "radioTipoProposta" } }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.proposta.tipoProposta,
-            expression: "proposta.tipoProposta"
-          }
-        ],
-        attrs: { type: "radio", value: "contratacaoInicial" },
-        domProps: {
-          checked: _vm._q(_vm.proposta.tipoProposta, "contratacaoInicial")
-        },
-        on: {
-          change: function($event) {
-            return _vm.$set(_vm.proposta, "tipoProposta", "contratacaoInicial")
-          }
-        }
-      }),
-      _vm._v(" Contratacao Inicial\n    "),
+  return _c(
+    "div",
+    [
+      _c("h2", [_vm._v("Vista de Proponente")]),
+      _vm._v(" "),
       _c("br"),
       _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.proposta.tipoProposta,
-            expression: "proposta.tipoProposta"
-          }
-        ],
-        attrs: { type: "radio", value: "renovacao" },
-        domProps: { checked: _vm._q(_vm.proposta.tipoProposta, "renovacao") },
-        on: {
-          change: function($event) {
-            return _vm.$set(_vm.proposta, "tipoProposta", "renovacao")
-          }
-        }
-      }),
-      _vm._v(" Renovação\n    "),
+      _c("h5", [_vm._v("Que tipo de proposta pretende efetuar?")]),
+      _vm._v(" "),
       _c("br"),
       _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.proposta.tipoProposta,
-            expression: "proposta.tipoProposta"
-          }
-        ],
-        attrs: { type: "radio", value: "alteracao" },
-        domProps: { checked: _vm._q(_vm.proposta.tipoProposta, "alteracao") },
-        on: {
-          change: function($event) {
-            return _vm.$set(_vm.proposta, "tipoProposta", "alteracao")
-          }
-        }
-      }),
-      _vm._v(" Alteração\n    "),
-      _c("br")
-    ]),
-    _vm._v(" "),
-    _c("br"),
-    _vm._v(" "),
-    _vm.proposta.tipoProposta == "contratacaoInicial"
-      ? _c("div", [
-          _c("h5", [
-            _vm._v("Para que unidade organica será o docente contratado?")
-          ]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "radio", attrs: { id: "radioUnidadeOrganica" } },
-            [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.unidadeOrganica,
-                    expression: "proposta.unidadeOrganica"
-                  }
-                ],
-                attrs: { type: "radio", value: "ESECS" },
-                domProps: {
-                  checked: _vm._q(_vm.proposta.unidadeOrganica, "ESECS")
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.$set(_vm.proposta, "unidadeOrganica", "ESECS")
-                  }
-                }
-              }),
-              _vm._v(" ESECS\n      "),
-              _c("br"),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.unidadeOrganica,
-                    expression: "proposta.unidadeOrganica"
-                  }
-                ],
-                attrs: { type: "radio", value: "ESTG" },
-                domProps: {
-                  checked: _vm._q(_vm.proposta.unidadeOrganica, "ESTG")
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.$set(_vm.proposta, "unidadeOrganica", "ESTG")
-                  }
-                }
-              }),
-              _vm._v(" ESTG\n      "),
-              _c("br"),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.unidadeOrganica,
-                    expression: "proposta.unidadeOrganica"
-                  }
-                ],
-                attrs: { type: "radio", value: "ESSLei" },
-                domProps: {
-                  checked: _vm._q(_vm.proposta.unidadeOrganica, "ESSLei")
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.$set(_vm.proposta, "unidadeOrganica", "ESSLei")
-                  }
-                }
-              }),
-              _vm._v(" ESSLei\n      "),
-              _c("br"),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.unidadeOrganica,
-                    expression: "proposta.unidadeOrganica"
-                  }
-                ],
-                attrs: { type: "radio", value: "ESTM" },
-                domProps: {
-                  checked: _vm._q(_vm.proposta.unidadeOrganica, "ESTM")
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.$set(_vm.proposta, "unidadeOrganica", "ESTM")
-                  }
-                }
-              }),
-              _vm._v(" ESTM\n      "),
-              _c("br"),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.unidadeOrganica,
-                    expression: "proposta.unidadeOrganica"
-                  }
-                ],
-                attrs: { type: "radio", value: "ESAD.CR" },
-                domProps: {
-                  checked: _vm._q(_vm.proposta.unidadeOrganica, "ESAD.CR")
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.$set(_vm.proposta, "unidadeOrganica", "ESAD.CR")
-                  }
-                }
-              }),
-              _vm._v(" ESAD.CR\n      "),
-              _c("br")
-            ]
-          ),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("h5", [_vm._v("Nome completo")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.proposta.nomeCompleto,
-                  expression: "proposta.nomeCompleto"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                placeholder: "Insira o nome completo do docente"
-              },
-              domProps: { value: _vm.proposta.nomeCompleto },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.proposta, "nomeCompleto", $event.target.value)
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("h5", [_vm._v("Departamento")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.departamento,
-                    expression: "proposta.departamento"
-                  }
-                ],
-                staticClass: "custom-select",
-                on: {
-                  change: [
-                    function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.proposta,
-                        "departamento",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    },
-                    function($event) {
-                      return _vm.getUcsDeDepartamento(_vm.proposta.departamento)
-                    }
-                  ]
-                }
-              },
-              _vm._l(_vm.departamentos, function(dep) {
-                return _c(
-                  "option",
-                  { key: dep.id, domProps: { value: dep.id } },
-                  [_vm._v(_vm._s(dep.nome_departamento))]
-                )
-              }),
-              0
-            ),
-            _vm._v(" "),
-            _c("br"),
-            _c("br"),
-            _vm._v(" "),
-            _c("h5", [_vm._v("Unidade Curricular")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.unidadeCurricular,
-                    expression: "proposta.unidadeCurricular"
-                  }
-                ],
-                staticClass: "custom-select",
-                on: {
-                  change: [
-                    function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.proposta,
-                        "unidadeCurricular",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    },
-                    function($event) {
-                      return _vm.getUC(_vm.proposta.unidadeCurricular)
-                    }
-                  ]
-                }
-              },
-              _vm._l(_vm.ucsDeDepartamento, function(uc) {
-                return _c(
-                  "option",
-                  { key: uc.id, domProps: { value: uc.id } },
-                  [_vm._v(_vm._s(uc.nome) + " ")]
-                )
-              }),
-              0
-            ),
-            _vm._v(" "),
-            _c("h5", [_vm._v("Regime")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", readonly: "" },
-              domProps: { value: _vm.regimeUCSelecionada }
-            }),
-            _vm._v(" "),
-            _c("h5", [_vm._v("Tipo")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", readonly: "" },
-              domProps: { value: _vm.tipoUCSelecionada }
-            }),
-            _vm._v(" "),
-            _c("h5", [_vm._v("Horas")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", readonly: "" },
-              domProps: { value: _vm.horasUC }
-            }),
-            _vm._v(" "),
-            _c("h5", [_vm._v("Horas Semestrais")]),
-            _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", readonly: "" },
-              domProps: { value: _vm.horasSemestraisUC }
-            }),
-            _vm._v(" "),
-            _c("br")
-          ]),
-          _vm._v(" "),
-          _c("h5", [
-            _vm._v(
-              "Qual será o papel a desempenhar pelo docente a ser contratado?"
-            )
-          ]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("div", { staticClass: "radio", attrs: { id: "radioRole" } }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.proposta.role,
-                  expression: "proposta.role"
-                }
-              ],
-              attrs: { type: "radio", value: "professor" },
-              domProps: { checked: _vm._q(_vm.proposta.role, "professor") },
-              on: {
-                change: function($event) {
-                  return _vm.$set(_vm.proposta, "role", "professor")
-                }
-              }
-            }),
-            _vm._v(" Professor\n      "),
-            _c("br"),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.proposta.role,
-                  expression: "proposta.role"
-                }
-              ],
-              attrs: { type: "radio", value: "assistente" },
-              domProps: { checked: _vm._q(_vm.proposta.role, "assistente") },
-              on: {
-                change: function($event) {
-                  return _vm.$set(_vm.proposta, "role", "assistente")
-                }
-              }
-            }),
-            _vm._v(" Assistente\n      "),
-            _c("br"),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.proposta.role,
-                  expression: "proposta.role"
-                }
-              ],
-              attrs: { type: "radio", value: "monitor" },
-              domProps: { checked: _vm._q(_vm.proposta.role, "monitor") },
-              on: {
-                change: function($event) {
-                  return _vm.$set(_vm.proposta, "role", "monitor")
-                }
-              }
-            }),
-            _vm._v(" Monitor\n      "),
-            _c("br")
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
+      _c("div", { staticClass: "radio", attrs: { id: "radioTipoProposta" } }, [
+        _c("input", {
+          directives: [
             {
-              staticClass: "btn btn-outline-success",
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  return _vm.showNextComponent(_vm.proposta)
+              name: "model",
+              rawName: "v-model",
+              value: _vm.proposta.tipoProposta,
+              expression: "proposta.tipoProposta"
+            }
+          ],
+          attrs: { type: "radio", value: "contratacaoInicial" },
+          domProps: {
+            checked: _vm._q(_vm.proposta.tipoProposta, "contratacaoInicial")
+          },
+          on: {
+            change: function($event) {
+              return _vm.$set(
+                _vm.proposta,
+                "tipoProposta",
+                "contratacaoInicial"
+              )
+            }
+          }
+        }),
+        _vm._v(" Contratacao Inicial\n    "),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.proposta.tipoProposta,
+              expression: "proposta.tipoProposta"
+            }
+          ],
+          attrs: { type: "radio", value: "renovacao" },
+          domProps: { checked: _vm._q(_vm.proposta.tipoProposta, "renovacao") },
+          on: {
+            change: function($event) {
+              return _vm.$set(_vm.proposta, "tipoProposta", "renovacao")
+            }
+          }
+        }),
+        _vm._v(" Renovação\n    "),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.proposta.tipoProposta,
+              expression: "proposta.tipoProposta"
+            }
+          ],
+          attrs: { type: "radio", value: "alteracao" },
+          domProps: { checked: _vm._q(_vm.proposta.tipoProposta, "alteracao") },
+          on: {
+            change: function($event) {
+              return _vm.$set(_vm.proposta, "tipoProposta", "alteracao")
+            }
+          }
+        }),
+        _vm._v(" Alteração\n    "),
+        _c("br")
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _vm.proposta.tipoProposta == "contratacaoInicial"
+        ? _c("div", [
+            _c("h5", [
+              _vm._v("Para que unidade organica será o docente contratado?")
+            ]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "radio", attrs: { id: "radioUnidadeOrganica" } },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.proposta.unidadeOrganica,
+                      expression: "proposta.unidadeOrganica"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "ESECS" },
+                  domProps: {
+                    checked: _vm._q(_vm.proposta.unidadeOrganica, "ESECS")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.proposta, "unidadeOrganica", "ESECS")
+                    }
+                  }
+                }),
+                _vm._v(" ESECS\n      "),
+                _c("br"),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.proposta.unidadeOrganica,
+                      expression: "proposta.unidadeOrganica"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "ESTG" },
+                  domProps: {
+                    checked: _vm._q(_vm.proposta.unidadeOrganica, "ESTG")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.proposta, "unidadeOrganica", "ESTG")
+                    }
+                  }
+                }),
+                _vm._v(" ESTG\n      "),
+                _c("br"),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.proposta.unidadeOrganica,
+                      expression: "proposta.unidadeOrganica"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "ESSLei" },
+                  domProps: {
+                    checked: _vm._q(_vm.proposta.unidadeOrganica, "ESSLei")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.proposta, "unidadeOrganica", "ESSLei")
+                    }
+                  }
+                }),
+                _vm._v(" ESSLei\n      "),
+                _c("br"),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.proposta.unidadeOrganica,
+                      expression: "proposta.unidadeOrganica"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "ESTM" },
+                  domProps: {
+                    checked: _vm._q(_vm.proposta.unidadeOrganica, "ESTM")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(_vm.proposta, "unidadeOrganica", "ESTM")
+                    }
+                  }
+                }),
+                _vm._v(" ESTM\n      "),
+                _c("br"),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.proposta.unidadeOrganica,
+                      expression: "proposta.unidadeOrganica"
+                    }
+                  ],
+                  attrs: { type: "radio", value: "ESAD.CR" },
+                  domProps: {
+                    checked: _vm._q(_vm.proposta.unidadeOrganica, "ESAD.CR")
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.$set(
+                        _vm.proposta,
+                        "unidadeOrganica",
+                        "ESAD.CR"
+                      )
+                    }
+                  }
+                }),
+                _vm._v(" ESAD.CR\n      "),
+                _c("br")
+              ]
+            ),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("h5", [_vm._v("Nome completo")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.proposta.nomeCompleto,
+                    expression: "proposta.nomeCompleto"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  placeholder: "Insira o nome completo do docente"
+                },
+                domProps: { value: _vm.proposta.nomeCompleto },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.proposta, "nomeCompleto", $event.target.value)
+                  }
                 }
-              }
-            },
-            [_vm._v("\n    Seguinte")]
-          )
-        ])
-      : _vm._e()
-  ])
+              }),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Departamento")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.proposta.departamento,
+                      expression: "proposta.departamento"
+                    }
+                  ],
+                  staticClass: "custom-select",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.proposta,
+                          "departamento",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getUcsDeDepartamento(
+                          _vm.proposta.departamento
+                        )
+                      }
+                    ]
+                  }
+                },
+                _vm._l(_vm.departamentos, function(dep) {
+                  return _c(
+                    "option",
+                    { key: dep.id, domProps: { value: dep.id } },
+                    [_vm._v(_vm._s(dep.nome_departamento))]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Unidade Curricular")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.proposta.unidadeCurricular,
+                      expression: "proposta.unidadeCurricular"
+                    }
+                  ],
+                  staticClass: "custom-select",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.proposta,
+                          "unidadeCurricular",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getUC(_vm.proposta.unidadeCurricular)
+                      }
+                    ]
+                  }
+                },
+                _vm._l(_vm.ucsDeDepartamento, function(uc) {
+                  return _c(
+                    "option",
+                    { key: uc.id, domProps: { value: uc.id } },
+                    [_vm._v(_vm._s(uc.nome))]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Regime")]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text", readonly: "" },
+                domProps: { value: _vm.regimeUCSelecionada }
+              }),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Tipo")]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text", readonly: "" },
+                domProps: { value: _vm.tipoUCSelecionada }
+              }),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Horas")]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text", readonly: "" },
+                domProps: { value: _vm.horasUC }
+              }),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Horas Semestrais")]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text", readonly: "" },
+                domProps: { value: _vm.horasSemestraisUC }
+              }),
+              _vm._v(" "),
+              _c("br")
+            ]),
+            _vm._v(" "),
+            _c("h5", [
+              _vm._v(
+                "Qual será o papel a desempenhar pelo docente a ser contratado?"
+              )
+            ]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("div", { staticClass: "radio", attrs: { id: "radioRole" } }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.proposta.role,
+                    expression: "proposta.role"
+                  }
+                ],
+                attrs: { type: "radio", value: "professor" },
+                domProps: { checked: _vm._q(_vm.proposta.role, "professor") },
+                on: {
+                  change: function($event) {
+                    return _vm.$set(_vm.proposta, "role", "professor")
+                  }
+                }
+              }),
+              _vm._v(" Professor\n      "),
+              _c("br"),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.proposta.role,
+                    expression: "proposta.role"
+                  }
+                ],
+                attrs: { type: "radio", value: "assistente" },
+                domProps: { checked: _vm._q(_vm.proposta.role, "assistente") },
+                on: {
+                  change: function($event) {
+                    return _vm.$set(_vm.proposta, "role", "assistente")
+                  }
+                }
+              }),
+              _vm._v(" Assistente\n      "),
+              _c("br"),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.proposta.role,
+                    expression: "proposta.role"
+                  }
+                ],
+                attrs: { type: "radio", value: "monitor" },
+                domProps: { checked: _vm._q(_vm.proposta.role, "monitor") },
+                on: {
+                  change: function($event) {
+                    return _vm.$set(_vm.proposta, "role", "monitor")
+                  }
+                }
+              }),
+              _vm._v(" Monitor\n      "),
+              _c("br")
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-success",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.verificarErrosOuAvançar(_vm.proposta)
+                  }
+                }
+              },
+              [_vm._v("Seguinte")]
+            ),
+            _vm._v(" "),
+            _vm.errors.length
+              ? _c("div", [
+                  _c("b", [_vm._v("Please correct the following error(s):")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    _vm._l(_vm.errors, function(error) {
+                      return _c("li", { key: error }, [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                ])
+              : _vm._e()
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.roleSelecionado == "professor"
+        ? _c("proposta-proponente-professor")
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.roleSelecionado == "assistente"
+        ? _c("proposta-proponente-assistente")
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.roleSelecionado == "monitor"
+        ? _c("proposta-proponente-monitor")
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -38263,26 +38323,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline-danger",
-          attrs: { type: "button" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.goBack($event)
-            }
-          }
-        },
-        [_vm._v("Voltar")]
-      )
-    ])
-  ])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("div", [_vm._v("\n    PROPOSTEA PROPONENTE ASSISTENTE\n  ")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -38304,28 +38356,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline-danger",
-          attrs: { type: "button" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.goBack($event)
-            }
-          }
-        },
-        [_vm._v("Voltar")]
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", [_vm._v("PropostaProponenteMonitor")])
-  ])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("div", [_vm._v("PROPOSTA PROPONENTE MONITOR")])])
+  }
+]
 render._withStripped = true
 
 
@@ -38347,28 +38387,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline-danger",
-          attrs: { type: "button" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.goBack($event)
-            }
-          }
-        },
-        [_vm._v("Voltar")]
-      )
-    ]),
-    _vm._v(" "),
-    _c("div")
-  ])
+  return _vm._m(0)
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [_c("div", [_vm._v("TESTE PROPONENTE PROFESSOR")])])
+  }
+]
 render._withStripped = true
 
 
@@ -38507,7 +38535,18 @@ var render = function() {
         attrs: { type: "button" },
         on: { click: _vm.showProponenteView }
       },
-      [_vm._v("\n    Proponente\n  ")]
+      [_vm._v("Proponente")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-warning",
+        staticStyle: { float: "right" },
+        attrs: { type: "button" },
+        on: { click: _vm.showDiretorView }
+      },
+      [_vm._v("Diretor UO")]
     )
   ])
 }

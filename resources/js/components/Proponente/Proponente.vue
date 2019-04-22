@@ -14,6 +14,7 @@
     </div>
     <br>
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
+
     <div v-if="proposta.tipoProposta == 'contratacaoInicial'">
       <h5>Para que unidade organica será o docente contratado?</h5>
       <br>
@@ -33,17 +34,34 @@
       <br>
       <div class="form-group">
         <h5>Nome completo</h5>
-        <input type="text" class="form-control" placeholder="Insira o nome completo do docente" v-model="proposta.nomeCompleto"
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Insira o nome completo do docente"
+          v-model="proposta.nomeCompleto"
         >
         <br>
         <h5>Departamento</h5>
-        <select class="custom-select" v-model="proposta.departamento" @change="getUcsDeDepartamento(proposta.departamento)">
-          <option  v-for="dep in departamentos" :value="dep.id" v-bind:key="dep.id">{{dep.nome_departamento}}</option>
+        <select
+          class="custom-select"
+          v-model="proposta.departamento"
+          @change="getUcsDeDepartamento(proposta.departamento)"
+        >
+          <option
+            v-for="dep in departamentos"
+            :value="dep.id"
+            v-bind:key="dep.id"
+          >{{dep.nome_departamento}}</option>
         </select>
-        <br><br>
+        <br>
+        <br>
         <h5>Unidade Curricular</h5>
-        <select class="custom-select" v-model="proposta.unidadeCurricular" @change="getUC(proposta.unidadeCurricular)">
-          <option v-for="uc in ucsDeDepartamento" :value="uc.id" v-bind:key="uc.id" >{{uc.nome}} </option>
+        <select
+          class="custom-select"
+          v-model="proposta.unidadeCurricular"
+          @change="getUC(proposta.unidadeCurricular)"
+        >
+          <option v-for="uc in ucsDeDepartamento" :value="uc.id" v-bind:key="uc.id">{{uc.nome}}</option>
         </select>
         <h5>Regime</h5>
         <input type="text" class="form-control" readonly :value="regimeUCSelecionada">
@@ -65,9 +83,21 @@
         <input type="radio" v-model="proposta.role" value="monitor"> Monitor
         <br>
       </div>
-      <button type="button" class="btn btn-outline-success" v-on:click="showNextComponent(proposta)">
-      Seguinte</button>
+      <button
+        type="button"
+        class="btn btn-outline-success"
+        v-on:click="verificarErrosOuAvançar(proposta)"
+      >Seguinte</button>
+      <div v-if="errors.length">
+        <b>Please correct the following error(s):</b>
+        <ul>
+          <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+        </ul>
+      </div>
     </div>
+    <proposta-proponente-professor v-if="roleSelecionado == 'professor'"></proposta-proponente-professor>
+    <proposta-proponente-assistente v-if="roleSelecionado == 'assistente'"></proposta-proponente-assistente>
+    <proposta-proponente-monitor v-if="roleSelecionado == 'monitor'"></proposta-proponente-monitor>
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
   </div>
 </template>
@@ -89,56 +119,51 @@ module.exports = {
       },
       departamentos: [],
       ucsDeDepartamento: [],
-      ucSelecionada: {},      
-      regimeUCSelecionada:"",
+      ucSelecionada: {},
+      regimeUCSelecionada: "",
       tipoUCSelecionada: "",
       horasUC: "",
       horasSemestraisUC: "",
+      roleSelecionado: "",
+      errors: []
     };
   },
   methods: {
-    showNextComponent: function(proposta) {
-      if (proposta.role == "professor")
-        this.$router.push({ name: "propostaProponenteProfessor" });
-      else if (proposta.role == "assistente")
-        this.$router.push({ name: "propostaProponenteAssistente" });
-      else if (proposta.role == "monitor")
-        this.$router.push({ name: "propostaProponenteMonitor" });
-      console.log(proposta.tipoProposta);
-      console.log(proposta.unidadeOrganica);
-      console.log(proposta.role);
-      console.log(proposta.nomeCompleto);
-      console.log(proposta.departamento);
-      console.log(proposta.unidadeCurricular);
+    verificarErrosOuAvançar: function(proposta) {
+      if (proposta.nomeCompleto == "") {
+        this.errors.push("Nome nao pode ser vazio");
+      }
+
+      //e.preventDefault();
+
+      this.roleSelecionado = proposta.role;
     },
 
     getUcsDeDepartamento(dep_id) {
       axios
-        .get("/api/unidadesCurricularesDoDepartamentoSelecionado/" + dep_id).then(response => {
+        .get("/api/unidadesCurricularesDoDepartamentoSelecionado/" + dep_id)
+        .then(response => {
           this.ucsDeDepartamento = response.data;
-          this.regimeUCSelecionada="";
-          this.tipoUCSelecionada="";
-          this.horasUC="";
-          this.horasSemestraisUC="";
+          this.regimeUCSelecionada = "";
+          this.tipoUCSelecionada = "";
+          this.horasUC = "";
+          this.horasSemestraisUC = "";
         });
     },
-    getUC(uc_id){
-      axios
-        .get("/api/unidadesCurriculares/" + uc_id).then(response => {
-          this.ucSelecionada =  response.data;
-          this.regimeUCSelecionada = this.ucSelecionada[0].regime;
-          this.tipoUCSelecionada = this.ucSelecionada[0].tipo;
-          this.horasUC = this.ucSelecionada[0].horas;
-          this.horasSemestraisUC = this.ucSelecionada[0].horas_semestrais;
-          console.log(this.horasSemestraisUC);
-        });
+    getUC(uc_id) {
+      axios.get("/api/unidadesCurriculares/" + uc_id).then(response => {
+        this.ucSelecionada = response.data;
+        this.regimeUCSelecionada = this.ucSelecionada[0].regime;
+        this.tipoUCSelecionada = this.ucSelecionada[0].tipo;
+        this.horasUC = this.ucSelecionada[0].horas;
+        this.horasSemestraisUC = this.ucSelecionada[0].horas_semestrais;
+      });
     }
   },
   mounted() {
     axios.get("/api/departamentos").then(response => {
       this.departamentos = response.data;
     });
-    
   }
 };
 </script>
