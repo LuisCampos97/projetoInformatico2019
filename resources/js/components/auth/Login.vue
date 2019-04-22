@@ -32,27 +32,18 @@
       <div class="form-input">
         <input type="password" name="password" id="inputPassword" v-model.trim="user.password">
       </div>
-
-      <div class="clearer"></div>
-      <div class="rememberpass">
-        <input type="checkbox" name="rememberusername" id="rememberusername" value="1">
-        <label for="rememberusername">Lembrar nome de utilizador</label>
-      </div>
       <div class="clearer"></div>
       <input id="anchor" type="hidden" name="anchor" value>
       <input type="hidden" name="logintoken" value="xXmFcR9IcSorlXUxa11eH1rHtkJ13afg">
       <input type="submit" id="loginbtn" value="Entrar" v-on:click.prevent="login">
-      <a class="btn btn-primary" v-on:click.prevent="login">Login</a>
-      <div class="forgetpass">
-        <a
-          href="https://ead.ipleiria.pt/2018-19/login/forgot_password.php"
-        >Esqueceu-se do seu nome de utilizador ou da senha?</a>
-      </div>
     </div>
 
-    <button type="button" class="btn btn-success" style="float:right" @click="showProponenteView">
-      Proponente
-    </button>
+    <!-- <button
+      type="button"
+      class="btn btn-success"
+      style="float:right"
+      @click="showProponenteView"
+    >Proponente</button>-->
   </div>
 </template>
 
@@ -73,7 +64,7 @@ module.exports = {
       });
     },
     showProponenteView() {
-      this.$router.push({ name: 'proponente' });
+      this.$router.push({ name: "proponente" });
     }
   }
 };
@@ -84,7 +75,6 @@ module.exports = {
   display: table;
   overflow: hidden;
   position: absolute;
-  z-index: 0;
   width: 100%;
   height: 100%;
 }
@@ -137,6 +127,7 @@ body {
 #login-form {
   max-width: 400px;
   margin: 0 auto;
+  width: 100%;
   vertical-align: middle;
   text-align: center;
 }
@@ -144,15 +135,47 @@ body {
 .form-input,
 .form-label {
   float: none;
-  text-align: center;
 }
 
 input {
   border: 1px solid #ccc;
-  width: 50%;
+  width: 45%;
+  font-weight: 400;
+  vertical-align: middle;
 }
 
 .form-label label {
   font-weight: 700;
 }
+
+.clearer {
+  background: 0 0;
+  border-width: 0;
+  clear: both;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+}
+
+.form-input input,
+#loginbtn {
+  padding: 10px;
+}
+
+#loginbtn {
+  background: #ef4758;
+  color: #fff;
+  font-weight: 700;
+  text-shadow: none;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+label {
+  margin-bottom: 5px;
+  display: inline-block;
+  float: none;
+  margin-top: 15px;
+}
+
 </style>
