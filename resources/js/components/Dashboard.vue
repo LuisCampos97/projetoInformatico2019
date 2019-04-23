@@ -8,18 +8,18 @@
         <div class="navbar-name">Plataforma de Gestão de Contratações</div>
       </li>
       <li>
-        <a class="navbar-user" href="#home">Logout</a>
+        <a class="navbar-user" v-on:click.prevent="logout">Logout</a>
       </li>
     </ul>
     <div class="sidebar">
-       <div class="sidebar-item active" >PROPONENTE</div>
-       <div class="sidebar-item">DIRETOR DA UO</div>
-       <div class="sidebar-item">CONSELHO TÉCNICO-CIENTÍFICO</div>
-       <div class="sidebar-item">SECRETARIADO DA DIREÇÃO</div>
-       <div class="sidebar-item">RECURSOS HUMANOS</div>
+      <div class="sidebar-item active">PROPONENTE</div>
+      <div class="sidebar-item">DIRETOR DA UO</div>
+      <div class="sidebar-item">CONSELHO TÉCNICO-CIENTÍFICO</div>
+      <div class="sidebar-item">SECRETARIADO DA DIREÇÃO</div>
+      <div class="sidebar-item">RECURSOS HUMANOS</div>
     </div>
     <div class="main">
-       <proponente></proponente>
+      <proponente></proponente>
     </div>
   </div>
 </template>
@@ -28,6 +28,16 @@
 module.exports = {
   data: function() {
     return {};
+  },
+  methods: {
+    logout() {
+      axios.post("api/logout").then(response => {
+        this.$store.commit("clearUserAndToken");
+        this.$router.push({
+          name: "login"
+        });
+      });
+    }
   },
   computed: {
     user() {
@@ -85,13 +95,14 @@ li a:hover {
 }
 
 div.navbar-name {
-   color: white;
+  color: white;
   font-size: 30px;
   font-weight: 600;
 }
 
 a.navbar-user {
-   font-size: 15px;
+  font-size: 15px;
+  color: white;
 }
 
 /* SIDEBAR */
@@ -101,19 +112,18 @@ a.navbar-user {
 }
 
 .sidebar-item {
-   color: white;
-   font-size: 20px;
-   vertical-align: middle;
-   text-align: center;
-   padding: 75px;
-   border-bottom: 1px solid white;
-   border-top: 1px solid white;
+  color: white;
+  font-size: 20px;
+  vertical-align: middle;
+  text-align: center;
+  padding: 75px;
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
 }
 
 .sidebar-item.active {
-   background-color: #1b1b1b;
+  background-color: #1b1b1b;
 }
-
 
 .main {
   grid-area: main;
