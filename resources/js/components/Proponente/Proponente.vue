@@ -4,30 +4,30 @@
     <br>
     <h5>Que tipo de proposta pretende efetuar?</h5>
     <br>
-    <div id="radioTipoProposta" class="radio">
-      <input type="radio" v-model="proposta.tipoProposta" value="contratacaoInicial"> Contratacao Inicial
+    <div id="radiotipo_contrato" class="radio">
+      <input type="radio" v-model="proposta.tipo_contrato" value="Contratacao Inicial"> Contratacao Inicial
       <br>
-      <input type="radio" v-model="proposta.tipoProposta" value="renovacao"> Renovação
+      <input type="radio" v-model="proposta.tipo_contrato" value="Renovacao"> Renovação
       <br>
-      <input type="radio" v-model="proposta.tipoProposta" value="alteracao"> Alteração
+      <input type="radio" v-model="proposta.tipo_contrato" value="Alteracao"> Alteração
       <br>
     </div>
     <br>
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
-    <div v-if="proposta.tipoProposta == 'contratacaoInicial'">
+    <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
       <h5>Para que unidade organica será o docente contratado?</h5>
       <br>
-      <div id="radioUnidadeOrganica" class="radio">
-        <input type="radio" v-model="proposta.unidadeOrganica" value="ESECS"> ESECS
+      <div id="radiounidade_organica" class="radio">
+        <input type="radio" v-model="proposta.unidade_organica" value="ESECS"> ESECS
         <br>
-        <input type="radio" v-model="proposta.unidadeOrganica" value="ESTG"> ESTG
+        <input type="radio" v-model="proposta.unidade_organica" value="ESTG"> ESTG
         <br>
-        <input type="radio" v-model="proposta.unidadeOrganica" value="ESSLei"> ESSLei
+        <input type="radio" v-model="proposta.unidade_organica" value="ESSLei"> ESSLei
         <br>
-        <input type="radio" v-model="proposta.unidadeOrganica" value="ESTM"> ESTM
+        <input type="radio" v-model="proposta.unidade_organica" value="ESTM"> ESTM
         <br>
-        <input type="radio" v-model="proposta.unidadeOrganica" value="ESAD.CR"> ESAD.CR
+        <input type="radio" v-model="proposta.unidade_organica" value="ESAD.CR"> ESAD.CR
         <br>
       </div>
       <br>
@@ -37,14 +37,14 @@
           type="text"
           class="form-control"
           placeholder="Insira o nome completo do docente"
-          v-model="proposta.nomeCompleto"
+          v-model="proposta.nome_completo"
         >
         <br>
         <h5>Departamento</h5>
         <select
           class="custom-select"
-          v-model="proposta.departamento"
-          @change="getUcsDeDepartamento(proposta.departamento)"
+          v-model="unidadeCurricular.departamento_id"
+          @change="getUcsDeDepartamento(unidadeCurricular.departamento_id)"
         >
           <option
             v-for="dep in departamentos"
@@ -65,8 +65,8 @@
         <h5>Nome unidade curricular</h5>
         <select
           class="custom-select"
-          v-model="unidadeCurricular.nome"
-          @change="getRegimes(unidadeCurricular.nome)"
+          v-model="unidadeCurricular.nome_unidade_curricular"
+          @change="getRegimes(unidadeCurricular.nome_unidade_curricular)"
         >
           <option v-for="uc in ucsDeDepartamento" :value="uc.nome" v-bind:key="uc.nome">{{uc.nome}}</option>
         </select>
@@ -75,7 +75,7 @@
         <select
           class="custom-select"
           v-model="unidadeCurricular.regime"
-          @change="getTurnos(unidadeCurricular.nome, unidadeCurricular.regime)"
+          @change="getTurnos(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.regime)"
         >
           <option
             v-for="regime in regimesParaUC"
@@ -85,10 +85,14 @@
         </select>
         <br>
         <h5>Turno</h5>
-        <select class="custom-select" v-model="unidadeCurricular.turno">
+        <select
+          class="custom-select"
+          v-model="unidadeCurricular.turno"
+          @change="getTipo(unidadeCurricular.nome_unidade_curricular)"
+        >
           <option
             v-for="turno in turnosParaUCeRegime"
-            :value="turno.id"
+            :value="turno.turno"
             v-bind:key="turno.turno"
           >{{turno.turno}}</option>
         </select>
@@ -108,7 +112,7 @@
           placeholder="Numero de horas semestrais"
           v-model="unidadeCurricular.horas_semestrais"
         >
-        <button @click="adicionarOutraUC">Mais</button>
+        <button type="button" class="btn btn-success" @click="adicionarOutraUC">Adicionar UC</button>
         <br>
         <span v-if="unidadesCurriculares.length">
           <table class="table">
@@ -116,15 +120,17 @@
               <th>Nome</th>
               <th>Regime</th>
               <th>Turno</th>
+              <th>Departamento</th>
               <th>Horas</th>
               <th>Horas Semestrais</th>
               <th>Ações</th>
             </thead>
             <tbody>
               <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
-                <td>{{ucAUX.nome}}</td>
+                <td>{{ucAUX.nome_unidade_curricular}}</td>
                 <td>{{ucAUX.regime}}</td>
                 <td>{{ucAUX.turno}}</td>
+                <td>{{ucAUX.departamento_id}}</td>
                 <td>{{ucAUX.horas}}</td>
                 <td>{{ucAUX.horas_semestrais}}</td>
                 <td>
@@ -168,30 +174,51 @@ module.exports = {
   data() {
     return {
       proposta: {
-        tipoProposta: "",
-        unidadeOrganica: "",
-        nomeCompleto: "",
-        departamento: "",
-        role: ""
+        tipo_contrato: "",
+        unidade_organica: "",
+        nome_completo: "",
+        role: "",
+        data_de_assinatura_coordenador_departamento: ""
       },
       unidadeCurricular: {
-        nome: "",
+        nome_unidade_curricular: "",
         regime: "",
         horas: "",
         horas_semestrais: "",
-        turno: ""
+        departamento_id: "",
+        turno: "",
+        proposta_proponente_id: "",
+        tipo: ""
       },
       unidadesCurriculares: [],
       departamentos: [],
       ucsDeDepartamento: [],
       roleSelecionado: "",
       regimesParaUC: [],
-      turnosParaUCeRegime: []
+      turnosParaUCeRegime: [],
+      idParaUcsPropostaProponente: ""
     };
   },
   methods: {
     verificarErrosOuAvançar: function(proposta, unidadesCurriculares) {
+      this.proposta.data_de_assinatura_coordenador_departamento = new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " "); //Ver tipo de user autenticado
       this.roleSelecionado = proposta.role;
+
+      axios.post("/api/propostaProponente/", this.proposta).then(response => {
+        this.idParaUcsPropostaProponente = response.data.id;
+      });
+      this.unidadesCurriculares.forEach(unidadeCurricular => {
+        unidadeCurricular.id = this.idParaUcsPropostaProponente;
+      });
+
+      this.unidadesCurriculares.forEach(unidadeCurricular => {
+        axios
+          .post("/api/ucsPropostaProponente/", unidadeCurricular)
+          .then(response => {});
+      });
     },
 
     getUcsDeDepartamento(dep_id) {
@@ -215,6 +242,11 @@ module.exports = {
           this.turnosParaUCeRegime = response.data;
         });
     },
+    getTipo(uc_name) {
+      axios.get("/api/tiposUnidadesCurriculares/" + uc_name).then(response => {
+        this.unidadeCurricular.tipo = response.data[0].tipo;
+      });
+    },
     adicionarOutraUC() {
       if (
         this.unidadeCurricular.nome == "" ||
@@ -230,12 +262,12 @@ module.exports = {
         this.ucsDeDepartamento = [];
         this.regimesParaUC = [];
         this.turnosParaUCeRegime = [];
-        this.proposta.departamento = [];
+        this.unidadeCurricular.departamento_id = [];
       }
     },
-    removerUC(index){
-        delete this.unidadesCurriculares[index];
-        this.unidadesCurriculares.splice(index, 1);
+    removerUC(index) {
+      delete this.unidadesCurriculares[index];
+      this.unidadesCurriculares.splice(index, 1);
     }
   },
   mounted() {

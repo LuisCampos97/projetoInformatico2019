@@ -33,7 +33,18 @@ class UnidadeCurricularController extends Controller
                     ->select('regime')
                     ->distinct('regime')
                     ->get();
+
         return $regimes;
+    }
+
+    public function getTipoUC($uc_name){
+        $tipo = DB::table('unidade_curricular')
+                ->where('nome', '=', $uc_name)
+                ->select('tipo')
+                ->distinct('tipo')
+                ->get();
+
+        return $tipo;
     }
 
     public function getTurnosParaUCNomeeRegime($uc_name, $uc_regime){
@@ -44,4 +55,5 @@ class UnidadeCurricularController extends Controller
         
         return $turnos;
     }
+
 }

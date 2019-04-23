@@ -29,17 +29,11 @@ class InitialMigration extends Migration
             $table->timestamps();
         });
 
-        Schema::create('curso', function(Blueprint $table){
-            $table->increments('id');
-            $table->string('name');
-            $table->integer('departamento_id')->unsigned();
-            $table->foreign('departamento_id')->references('id')->on('departamento');
-        });
+        
 
         Schema::create('proposta_proponente_professor', function (Blueprint $table){
             $table->increments('id');
             $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
-            $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
             $table->integer('percentagem_prestacao_servicos')->unsigned();
             $table->integer('duracao')->unsigned();
@@ -53,7 +47,6 @@ class InitialMigration extends Migration
 
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
             $table->increments('id');
-            $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
             $table->integer('percentagem_prestacao_servicos')->unsigned();
             $table->integer('duracao')->unsigned();
@@ -67,7 +60,6 @@ class InitialMigration extends Migration
 
         Schema::create('proposta_proponente_monitor', function (Blueprint $table){
             $table->increments('id');
-            $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial']);
             $table->integer('percentagem_prestacao_servicos')->unsigned();
             $table->integer('duracao')->unsigned();
@@ -85,6 +77,13 @@ class InitialMigration extends Migration
             $table->foreign('coordenador_departamento')->references('id')->on('users');
         });
 
+        Schema::create('curso', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('name');
+            $table->integer('departamento_id')->unsigned();
+            $table->foreign('departamento_id')->references('id')->on('departamento');
+        });
+
         Schema::create('unidade_curricular', function (Blueprint $table){
             $table->increments('id');
             $table->string('nome');
@@ -99,14 +98,9 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('unidade_organica', ['ESECS', 'ESTG', 'ESAD.CR', 'ESTM', 'ESSLei']);
             $table->string('nome_completo');
-            $table->integer('departamento_id')->unsigned();
-            $table->foreign('departamento_id')->references('id')->on('departamento');
-            $table->integer('unidade_curricular_id')->unsigned();
-            $table->foreign('unidade_curricular_id')->references('id')->on('unidade_curricular');
-            $table->integer('horas')->unsigned();
-            $table->integer('horas_semestrais')->unsigned();
-            $table->dateTime('data_de_assinatura_coordenador_departamento');
-            $table->dateTime('data_de_assinatura_coordenador_de_curso');
+            $table->dateTime('data_de_assinatura_coordenador_departamento')->nullable();
+            $table->dateTime('data_de_assinatura_coordenador_de_curso')->nullable();
+            $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -118,6 +112,8 @@ class InitialMigration extends Migration
             $table->enum('tipo', ['Semestral', 'Anual']);
             $table->integer('horas')->unsigned();
             $table->integer('horas_semestrais')->unsigned();
+            $table->integer('departamento_id')->unsigned();
+            $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->integer('proposta_proponente_id')->unsigned();
             $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
             $table->string("turno");
