@@ -18,21 +18,20 @@ class UnidadeCurricularSeeder extends Seeder
 
         $this->faker = Faker\Factory::create('pt_PT');
 
-        $this->addUnidadeCurricular($this->faker, 'Programação 1', $this->getIdDepartamentoInformatica(), 'Diurno', 'Semestral', 5, 75);
-        $this->addUnidadeCurricular($this->faker, 'Programação 2', $this->getIdDepartamentoInformatica(), 'Diurno', 'Semestral', 6, 85);
+        $this->addUnidadeCurricular($this->faker, 'Programação 1', $this->getIdDepartamentoInformatica(), 'Diurno', 'Semestral', 'PL1');
+        $this->addUnidadeCurricular($this->faker, 'Programação 1', $this->getIdDepartamentoInformatica(), 'Diurno', 'Semestral', 6, 85);
         $this->addUnidadeCurricular($this->faker, 'Analise Matematica', $this->getIdDepartamentoMatematica(), 'Diurno', 'Semestral', 5, 75);
 
     }
 
-    private function addUnidadeCurricular(Faker\Generator $faker, $nome, $departamento, $regime, $tipo, $horas, $horas_semestrais)
+    private function addUnidadeCurricular(Faker\Generator $faker, $nome, $departamento, $regime, $tipo ,$turno)
     {
         $unidadeCurricular = [
             'nome' => $nome,
             'departamento_id' => $departamento,
             'regime' => $regime,
             'tipo' => $tipo,
-            'horas' => $horas,
-            'horas_semestrais' => $horas_semestrais,
+            'turno' => $turno
         ];
 
         DB::table('unidade_curricular')->insertGetId($unidadeCurricular);
@@ -52,5 +51,4 @@ class UnidadeCurricularSeeder extends Seeder
             ->where('nome_departamento', 'Engenharia Informatica')->pluck('id')[0];
         return $departamentoInformatica;
     }
-
 }

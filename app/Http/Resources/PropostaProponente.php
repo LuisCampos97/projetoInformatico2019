@@ -17,9 +17,8 @@ class PropostaProponente extends JsonResource
         return [
             'unidade_organica' => $this->unidade_organica,
             'nome_completo' => $this->nome_completo,
-            'departamento_id' => $this->departamento_id,
-            'unidade_curricular_id' => $this->unidade_curricular_id,
-            'data_de_assinatura_coordenador_departamento' => $this->data_de_assinatura_coordenador_departamento
+            'data_de_assinatura_coordenador_departamento' => $this->data_de_assinatura_coordenador_departamento,
+            'tipo_contrato' => $this->tipo_contrato
         ];
     }
 }
