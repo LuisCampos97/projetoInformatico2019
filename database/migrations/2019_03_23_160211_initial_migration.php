@@ -29,6 +29,13 @@ class InitialMigration extends Migration
             $table->timestamps();
         });
 
+        Schema::create('curso', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('name');
+            $table->integer('departamento_id')->unsigned();
+            $table->foreign('departamento_id')->references('id')->on('departamento');
+        });
+
         Schema::create('proposta_proponente_professor', function (Blueprint $table){
             $table->increments('id');
             $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
@@ -85,8 +92,7 @@ class InitialMigration extends Migration
             $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->enum('regime', ['Diurno', 'Pos-Laboral']);
             $table->enum('tipo', ['Semestral', 'Anual']);
-            $table->integer('horas')->unsigned();
-            $table->integer('horas_semestrais')->unsigned();
+            $table->string('turno');
         });
 
         Schema::create('proposta_proponente', function(Blueprint $table){
@@ -97,10 +103,24 @@ class InitialMigration extends Migration
             $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->integer('unidade_curricular_id')->unsigned();
             $table->foreign('unidade_curricular_id')->references('id')->on('unidade_curricular');
+            $table->integer('horas')->unsigned();
+            $table->integer('horas_semestrais')->unsigned();
             $table->dateTime('data_de_assinatura_coordenador_departamento');
             $table->dateTime('data_de_assinatura_coordenador_de_curso');
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('ucs_proposta_proponente', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('nome_unidade_curricular');
+            $table->enum('regime', ['Diurno', 'Pos-Laboral']);
+            $table->enum('tipo', ['Semestral', 'Anual']);
+            $table->integer('horas')->unsigned();
+            $table->integer('horas_semestrais')->unsigned();
+            $table->integer('proposta_proponente_id')->unsigned();
+            $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
+            $table->string("turno");
         });
 
         Schema::create('proposta_diretor_uo', function(Blueprint $table){
@@ -182,10 +202,12 @@ class InitialMigration extends Migration
     public function down()
     {
         Schema::dropIfExists('proposta');
+        Schema::dropIfExists('ucs_proposta_proponente');
         Schema::dropIfExists('proposta_proponente');
         Schema::dropIfExists('proposta_proponente_professor');
         Schema::dropIfExists('proposta_proponente_assistente');
         Schema::dropIfExists('proposta_proponente_monitor');
+        Schema::dropIfExists('curso');
         Schema::dropIfExists('departamento');
         Schema::dropIfExists('proposta_diretor_uo');
         Schema::dropIfExists('proposta_ctc');

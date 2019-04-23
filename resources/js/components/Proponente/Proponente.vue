@@ -31,8 +31,7 @@
         <br>
       </div>
       <br>
-      <br>
-      <div class="form-group">
+      <div class="form-group" id="departamento">
         <h5>Nome completo</h5>
         <input
           type="text"
@@ -54,25 +53,94 @@
           >{{dep.nome_departamento}}</option>
         </select>
         <br>
+      </div>
+      <div class="jumbotron" id="ucs">
+        <h5>Unidades Curriculares</h5>
         <br>
-        <h5>Unidade Curricular</h5>
+        <!-- A COLODAR NA DIV ANTERIOR??
+        v-for="unidadeCurricular in unidadesCurriculares"
+        v-bind:key="unidadeCurricular.id"
+        -->
+
+        <h5>Nome unidade curricular</h5>
         <select
           class="custom-select"
-          v-model="proposta.unidadeCurricular"
-          @change="getUC(proposta.unidadeCurricular)"
+          v-model="unidadeCurricular.nome"
+          @change="getRegimes(unidadeCurricular.nome)"
         >
-          <option v-for="uc in ucsDeDepartamento" :value="uc.id" v-bind:key="uc.id">{{uc.nome}}</option>
+          <option v-for="uc in ucsDeDepartamento" :value="uc.nome" v-bind:key="uc.nome">{{uc.nome}}</option>
         </select>
-        <h5>Regime</h5>
-        <input type="text" class="form-control" readonly :value="regimeUCSelecionada">
-        <h5>Tipo</h5>
-        <input type="text" class="form-control" readonly :value="tipoUCSelecionada">
-        <h5>Horas</h5>
-        <input type="text" class="form-control" readonly :value="horasUC">
-        <h5>Horas Semestrais</h5>
-        <input type="text" class="form-control" readonly :value="horasSemestraisUC">
         <br>
+        <h5>Regime unidade curricular</h5>
+        <select
+          class="custom-select"
+          v-model="unidadeCurricular.regime"
+          @change="getTurnos(unidadeCurricular.nome, unidadeCurricular.regime)"
+        >
+          <option
+            v-for="regime in regimesParaUC"
+            :value="regime.regime"
+            v-bind:key="regime.regime"
+          >{{regime.regime}}</option>
+        </select>
+        <br>
+        <h5>Turno</h5>
+        <select class="custom-select" v-model="unidadeCurricular.turno">
+          <option
+            v-for="turno in turnosParaUCeRegime"
+            :value="turno.id"
+            v-bind:key="turno.turno"
+          >{{turno.turno}}</option>
+        </select>
+        <br>
+        <h5>Numero de horas</h5>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Numero de horas semanais"
+          v-model="unidadeCurricular.horas"
+        >
+        <br>
+        <h5>Numero de horas (semestrais)</h5>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Numero de horas semestrais"
+          v-model="unidadeCurricular.horas_semestrais"
+        >
+        <button @click="adicionarOutraUC">Mais</button>
+        <br>
+        <span v-if="unidadesCurriculares.length">
+          <table class="table">
+            <thead>
+              <th>Nome</th>
+              <th>Regime</th>
+              <th>Turno</th>
+              <th>Horas</th>
+              <th>Horas Semestrais</th>
+              <th>Ações</th>
+            </thead>
+            <tbody>
+              <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
+                <td>{{ucAUX.nome}}</td>
+                <td>{{ucAUX.regime}}</td>
+                <td>{{ucAUX.turno}}</td>
+                <td>{{ucAUX.horas}}</td>
+                <td>{{ucAUX.horas_semestrais}}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    v-on:click="removerUC(ucAUX, index)"
+                  >Remover UC</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </span>
       </div>
+
+      <br>
       <h5>Qual será o papel a desempenhar pelo docente a ser contratado?</h5>
       <br>
       <div id="radioRole" class="radio">
@@ -85,15 +153,9 @@
       </div>
       <button
         type="button"
-        class="btn btn-outline-success"
-        v-on:click="verificarErrosOuAvançar(proposta)"
+        class="btn btn-success"
+        v-on:click="verificarErrosOuAvançar(proposta, unidadesCurriculares)"
       >Seguinte</button>
-      <div v-if="errors.length">
-        <b>Please correct the following error(s):</b>
-        <ul>
-          <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-        </ul>
-      </div>
     </div>
     <proposta-proponente-professor v-if="roleSelecionado == 'professor'"></proposta-proponente-professor>
     <proposta-proponente-assistente v-if="roleSelecionado == 'assistente'"></proposta-proponente-assistente>
@@ -110,32 +172,25 @@ module.exports = {
         unidadeOrganica: "",
         nomeCompleto: "",
         departamento: "",
-        role: "",
-        unidadeCurricular: "",
-        regime: "",
-        tipo: "",
-        horas: "",
-        horasSemestrais: ""
+        role: ""
       },
+      unidadeCurricular: {
+        nome: "",
+        regime: "",
+        horas: "",
+        horas_semestrais: "",
+        turno: ""
+      },
+      unidadesCurriculares: [],
       departamentos: [],
       ucsDeDepartamento: [],
-      ucSelecionada: {},
-      regimeUCSelecionada: "",
-      tipoUCSelecionada: "",
-      horasUC: "",
-      horasSemestraisUC: "",
       roleSelecionado: "",
-      errors: []
+      regimesParaUC: [],
+      turnosParaUCeRegime: []
     };
   },
   methods: {
-    verificarErrosOuAvançar: function(proposta) {
-      if (proposta.nomeCompleto == "") {
-        this.errors.push("Nome nao pode ser vazio");
-      }
-
-      //e.preventDefault();
-
+    verificarErrosOuAvançar: function(proposta, unidadesCurriculares) {
       this.roleSelecionado = proposta.role;
     },
 
@@ -144,20 +199,43 @@ module.exports = {
         .get("/api/unidadesCurricularesDoDepartamentoSelecionado/" + dep_id)
         .then(response => {
           this.ucsDeDepartamento = response.data;
-          this.regimeUCSelecionada = "";
-          this.tipoUCSelecionada = "";
-          this.horasUC = "";
-          this.horasSemestraisUC = "";
         });
     },
-    getUC(uc_id) {
-      axios.get("/api/unidadesCurriculares/" + uc_id).then(response => {
-        this.ucSelecionada = response.data;
-        this.regimeUCSelecionada = this.ucSelecionada[0].regime;
-        this.tipoUCSelecionada = this.ucSelecionada[0].tipo;
-        this.horasUC = this.ucSelecionada[0].horas;
-        this.horasSemestraisUC = this.ucSelecionada[0].horas_semestrais;
-      });
+    getRegimes(uc_name) {
+      axios
+        .get("/api/unidadesCurriculares/regime/" + uc_name)
+        .then(response => {
+          this.regimesParaUC = response.data;
+        });
+    },
+    getTurnos(uc_name, uc_regime) {
+      axios
+        .get("/api/unidadesCurriculares/" + uc_name + "/" + uc_regime)
+        .then(response => {
+          this.turnosParaUCeRegime = response.data;
+        });
+    },
+    adicionarOutraUC() {
+      if (
+        this.unidadeCurricular.nome == "" ||
+        this.unidadeCurricular.regime == "" ||
+        this.unidadeCurricular.turno == "" ||
+        this.unidadeCurricular.horas == "" ||
+        this.unidadeCurricular.horas_semestrais == ""
+      ) {
+        console.log("ERROR!!!!");
+      } else {
+        this.unidadesCurriculares.push(this.unidadeCurricular);
+        this.unidadeCurricular = {};
+        this.ucsDeDepartamento = [];
+        this.regimesParaUC = [];
+        this.turnosParaUCeRegime = [];
+        this.proposta.departamento = [];
+      }
+    },
+    removerUC(index){
+        delete this.unidadesCurriculares[index];
+        this.unidadesCurriculares.splice(index, 1);
     }
   },
   mounted() {

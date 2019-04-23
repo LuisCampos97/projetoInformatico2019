@@ -50,7 +50,7 @@ class LoginController extends Controller
         }
 
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            //dd(\Adldap\Laravel\Facades\Adldap::search()->find($request->email));
+            dd(\Adldap\Laravel\Facades\Adldap::search()->find($request->email));
             return response()->json([
                 'errorMessage' => 'Login with success.'
             ], 200);

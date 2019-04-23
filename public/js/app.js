@@ -1864,6 +1864,68 @@ module.exports = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 module.exports = {
   data: function data() {
     return {
@@ -1872,31 +1934,25 @@ module.exports = {
         unidadeOrganica: "",
         nomeCompleto: "",
         departamento: "",
-        role: "",
-        unidadeCurricular: "",
-        regime: "",
-        tipo: "",
-        horas: "",
-        horasSemestrais: ""
+        role: ""
       },
+      unidadeCurricular: {
+        nome: "",
+        regime: "",
+        horas: "",
+        horas_semestrais: "",
+        turno: ""
+      },
+      unidadesCurriculares: [],
       departamentos: [],
       ucsDeDepartamento: [],
-      ucSelecionada: {},
-      regimeUCSelecionada: "",
-      tipoUCSelecionada: "",
-      horasUC: "",
-      horasSemestraisUC: "",
       roleSelecionado: "",
-      errors: []
+      regimesParaUC: [],
+      turnosParaUCeRegime: []
     };
   },
   methods: {
-    verificarErrosOuAvançar: function verificarErrosOuAvanAr(proposta) {
-      if (proposta.nomeCompleto == "") {
-        this.errors.push("Nome nao pode ser vazio");
-      } //e.preventDefault();
-
-
+    verificarErrosOuAvançar: function verificarErrosOuAvanAr(proposta, unidadesCurriculares) {
       this.roleSelecionado = proposta.role;
     },
     getUcsDeDepartamento: function getUcsDeDepartamento(dep_id) {
@@ -1904,29 +1960,44 @@ module.exports = {
 
       axios.get("/api/unidadesCurricularesDoDepartamentoSelecionado/" + dep_id).then(function (response) {
         _this.ucsDeDepartamento = response.data;
-        _this.regimeUCSelecionada = "";
-        _this.tipoUCSelecionada = "";
-        _this.horasUC = "";
-        _this.horasSemestraisUC = "";
       });
     },
-    getUC: function getUC(uc_id) {
+    getRegimes: function getRegimes(uc_name) {
       var _this2 = this;
 
-      axios.get("/api/unidadesCurriculares/" + uc_id).then(function (response) {
-        _this2.ucSelecionada = response.data;
-        _this2.regimeUCSelecionada = _this2.ucSelecionada[0].regime;
-        _this2.tipoUCSelecionada = _this2.ucSelecionada[0].tipo;
-        _this2.horasUC = _this2.ucSelecionada[0].horas;
-        _this2.horasSemestraisUC = _this2.ucSelecionada[0].horas_semestrais;
+      axios.get("/api/unidadesCurriculares/regime/" + uc_name).then(function (response) {
+        _this2.regimesParaUC = response.data;
       });
+    },
+    getTurnos: function getTurnos(uc_name, uc_regime) {
+      var _this3 = this;
+
+      axios.get("/api/unidadesCurriculares/" + uc_name + "/" + uc_regime).then(function (response) {
+        _this3.turnosParaUCeRegime = response.data;
+      });
+    },
+    adicionarOutraUC: function adicionarOutraUC() {
+      if (this.unidadeCurricular.nome == "" || this.unidadeCurricular.regime == "" || this.unidadeCurricular.turno == "" || this.unidadeCurricular.horas == "" || this.unidadeCurricular.horas_semestrais == "") {
+        console.log("ERROR!!!!");
+      } else {
+        this.unidadesCurriculares.push(this.unidadeCurricular);
+        this.unidadeCurricular = {};
+        this.ucsDeDepartamento = [];
+        this.regimesParaUC = [];
+        this.turnosParaUCeRegime = [];
+        this.proposta.departamento = [];
+      }
+    },
+    removerUC: function removerUC(index) {
+      delete this.unidadesCurriculares[index];
+      this.unidadesCurriculares.splice(index, 1);
     }
   },
   mounted: function mounted() {
-    var _this3 = this;
+    var _this4 = this;
 
     axios.get("/api/departamentos").then(function (response) {
-      _this3.departamentos = response.data;
+      _this4.departamentos = response.data;
     });
   }
 };
@@ -2056,24 +2127,6 @@ module.exports = {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 module.exports = {
   data: function data() {
     return {
@@ -2092,11 +2145,6 @@ module.exports = {
     showProponenteView: function showProponenteView() {
       this.$router.push({
         name: "proponente"
-      });
-    },
-    showDiretorView: function showDiretorView() {
-      this.$router.push({
-        name: "vistaPropostasGeralDiretor"
       });
     }
   }
@@ -6574,7 +6622,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#wrapper {\r\n  display: table;\r\n  overflow: hidden;\r\n  position: absolute;\r\n  z-index: 0;\r\n  width: 100%;\r\n  height: 100%;\n}\nbody {\r\n  font-family: \"Open Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n  font-size: 13px;\r\n  line-height: 18px;\r\n  color: #676a6c;\n}\n#welcome,\r\n#login-form {\r\n  display: table-cell;\r\n  width: 50%;\r\n  height: 100%;\r\n  vertical-align: top;\n}\r\n\r\n/* Welcome */\n#welcome {\r\n  background-color: #1a1a1a;\r\n  background-size: cover;\r\n  color: white;\r\n  vertical-align: middle;\n}\n#app_name,\r\n#logo {\r\n  padding: 20px 0 0;\r\n  position: relative;\r\n  text-align: center;\r\n  margin: 0;\n}\n#app-name {\r\n  text-align: center;\r\n  line-height: 3.5rem;\r\n  font-size: 2.2rem;\r\n  letter-spacing: 0.5rem; /* Retificar para ver como fica melhor */\r\n  padding: 70px 0 60px;\n}\n.main-title,\r\n.year {\r\n  font-weight: 700;\n}\r\n\r\n/* Login Form */\n#login-form {\r\n  max-width: 400px;\r\n  margin: 0 auto;\r\n  vertical-align: middle;\r\n  text-align: center;\n}\n.form-input,\r\n.form-label {\r\n  float: none;\r\n  text-align: center;\n}\ninput {\r\n  border: 1px solid #ccc;\r\n  width: 50%;\n}\n.form-label label {\r\n  font-weight: 700;\n}\r\n", ""]);
+exports.push([module.i, "\n#wrapper {\r\n  display: table;\r\n  overflow: hidden;\r\n  position: absolute;\r\n  width: 100%;\r\n  height: 100%;\n}\nbody {\r\n  font-family: \"Open Sans\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\r\n  font-size: 13px;\r\n  line-height: 18px;\r\n  color: #676a6c;\n}\n#welcome,\r\n#login-form {\r\n  display: table-cell;\r\n  width: 50%;\r\n  height: 100%;\r\n  vertical-align: top;\n}\r\n\r\n/* Welcome */\n#welcome {\r\n  background-color: #1a1a1a;\r\n  background-size: cover;\r\n  color: white;\r\n  vertical-align: middle;\n}\n#app_name,\r\n#logo {\r\n  padding: 20px 0 0;\r\n  position: relative;\r\n  text-align: center;\r\n  margin: 0;\n}\n#app-name {\r\n  text-align: center;\r\n  line-height: 3.5rem;\r\n  font-size: 2.2rem;\r\n  letter-spacing: 0.5rem; /* Retificar para ver como fica melhor */\r\n  padding: 70px 0 60px;\n}\n.main-title,\r\n.year {\r\n  font-weight: 700;\n}\r\n\r\n/* Login Form */\n#login-form {\r\n  max-width: 400px;\r\n  margin: 0 auto;\r\n  width: 100%;\r\n  vertical-align: middle;\r\n  text-align: center;\n}\n.form-input,\r\n.form-label {\r\n  float: none;\n}\ninput {\r\n  border: 1px solid #ccc;\r\n  width: 45%;\r\n  font-weight: 400;\r\n  vertical-align: middle;\n}\n.form-label label {\r\n  font-weight: 700;\n}\n.clearer {\r\n  background: 0 0;\r\n  border-width: 0;\r\n  clear: both;\r\n  height: 1px;\r\n  margin: 0;\r\n  padding: 0;\n}\n.form-input input,\r\n#loginbtn {\r\n  padding: 10px;\n}\n#loginbtn {\r\n  background: #ef4758;\r\n  color: #fff;\r\n  font-weight: 700;\r\n  text-shadow: none;\r\n  cursor: pointer;\r\n  margin-top: 15px;\n}\nlabel {\r\n  margin-bottom: 5px;\r\n  display: inline-block;\r\n  float: none;\r\n  margin-top: 15px;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -38015,94 +38063,104 @@ var render = function() {
             _vm._v(" "),
             _c("br"),
             _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("h5", [_vm._v("Nome completo")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.proposta.nomeCompleto,
-                    expression: "proposta.nomeCompleto"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "Insira o nome completo do docente"
-                },
-                domProps: { value: _vm.proposta.nomeCompleto },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.proposta, "nomeCompleto", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("h5", [_vm._v("Departamento")]),
-              _vm._v(" "),
-              _c(
-                "select",
-                {
+            _c(
+              "div",
+              { staticClass: "form-group", attrs: { id: "departamento" } },
+              [
+                _c("h5", [_vm._v("Nome completo")]),
+                _vm._v(" "),
+                _c("input", {
                   directives: [
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.proposta.departamento,
-                      expression: "proposta.departamento"
+                      value: _vm.proposta.nomeCompleto,
+                      expression: "proposta.nomeCompleto"
                     }
                   ],
-                  staticClass: "custom-select",
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "Insira o nome completo do docente"
+                  },
+                  domProps: { value: _vm.proposta.nomeCompleto },
                   on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.proposta,
-                          "departamento",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      },
-                      function($event) {
-                        return _vm.getUcsDeDepartamento(
-                          _vm.proposta.departamento
-                        )
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
                       }
-                    ]
+                      _vm.$set(
+                        _vm.proposta,
+                        "nomeCompleto",
+                        $event.target.value
+                      )
+                    }
                   }
-                },
-                _vm._l(_vm.departamentos, function(dep) {
-                  return _c(
-                    "option",
-                    { key: dep.id, domProps: { value: dep.id } },
-                    [_vm._v(_vm._s(dep.nome_departamento))]
-                  )
                 }),
-                0
-              ),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("h5", [_vm._v("Departamento")]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.proposta.departamento,
+                        expression: "proposta.departamento"
+                      }
+                    ],
+                    staticClass: "custom-select",
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.proposta,
+                            "departamento",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                        function($event) {
+                          return _vm.getUcsDeDepartamento(
+                            _vm.proposta.departamento
+                          )
+                        }
+                      ]
+                    }
+                  },
+                  _vm._l(_vm.departamentos, function(dep) {
+                    return _c(
+                      "option",
+                      { key: dep.id, domProps: { value: dep.id } },
+                      [_vm._v(_vm._s(dep.nome_departamento))]
+                    )
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _c("br")
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "jumbotron", attrs: { id: "ucs" } }, [
+              _c("h5", [_vm._v("Unidades Curriculares")]),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("h5", [_vm._v("Unidade Curricular")]),
+              _c("h5", [_vm._v("Nome unidade curricular")]),
               _vm._v(" "),
               _c(
                 "select",
@@ -38111,8 +38169,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.proposta.unidadeCurricular,
-                      expression: "proposta.unidadeCurricular"
+                      value: _vm.unidadeCurricular.nome,
+                      expression: "unidadeCurricular.nome"
                     }
                   ],
                   staticClass: "custom-select",
@@ -38128,15 +38186,15 @@ var render = function() {
                             return val
                           })
                         _vm.$set(
-                          _vm.proposta,
-                          "unidadeCurricular",
+                          _vm.unidadeCurricular,
+                          "nome",
                           $event.target.multiple
                             ? $$selectedVal
                             : $$selectedVal[0]
                         )
                       },
                       function($event) {
-                        return _vm.getUC(_vm.proposta.unidadeCurricular)
+                        return _vm.getRegimes(_vm.unidadeCurricular.nome)
                       }
                     ]
                   }
@@ -38144,47 +38202,232 @@ var render = function() {
                 _vm._l(_vm.ucsDeDepartamento, function(uc) {
                   return _c(
                     "option",
-                    { key: uc.id, domProps: { value: uc.id } },
+                    { key: uc.nome, domProps: { value: uc.nome } },
                     [_vm._v(_vm._s(uc.nome))]
                   )
                 }),
                 0
               ),
               _vm._v(" "),
-              _c("h5", [_vm._v("Regime")]),
+              _c("br"),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Regime unidade curricular")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.unidadeCurricular.regime,
+                      expression: "unidadeCurricular.regime"
+                    }
+                  ],
+                  staticClass: "custom-select",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.unidadeCurricular,
+                          "regime",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      function($event) {
+                        return _vm.getTurnos(
+                          _vm.unidadeCurricular.nome,
+                          _vm.unidadeCurricular.regime
+                        )
+                      }
+                    ]
+                  }
+                },
+                _vm._l(_vm.regimesParaUC, function(regime) {
+                  return _c(
+                    "option",
+                    { key: regime.regime, domProps: { value: regime.regime } },
+                    [_vm._v(_vm._s(regime.regime))]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Turno")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.unidadeCurricular.turno,
+                      expression: "unidadeCurricular.turno"
+                    }
+                  ],
+                  staticClass: "custom-select",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.unidadeCurricular,
+                        "turno",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.turnosParaUCeRegime, function(turno) {
+                  return _c(
+                    "option",
+                    { key: turno.turno, domProps: { value: turno.id } },
+                    [_vm._v(_vm._s(turno.turno))]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Numero de horas")]),
               _vm._v(" "),
               _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.unidadeCurricular.horas,
+                    expression: "unidadeCurricular.horas"
+                  }
+                ],
                 staticClass: "form-control",
-                attrs: { type: "text", readonly: "" },
-                domProps: { value: _vm.regimeUCSelecionada }
+                attrs: {
+                  type: "text",
+                  placeholder: "Numero de horas semanais"
+                },
+                domProps: { value: _vm.unidadeCurricular.horas },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.unidadeCurricular,
+                      "horas",
+                      $event.target.value
+                    )
+                  }
+                }
               }),
               _vm._v(" "),
-              _c("h5", [_vm._v("Tipo")]),
+              _c("br"),
+              _vm._v(" "),
+              _c("h5", [_vm._v("Numero de horas (semestrais)")]),
               _vm._v(" "),
               _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.unidadeCurricular.horas_semestrais,
+                    expression: "unidadeCurricular.horas_semestrais"
+                  }
+                ],
                 staticClass: "form-control",
-                attrs: { type: "text", readonly: "" },
-                domProps: { value: _vm.tipoUCSelecionada }
+                attrs: {
+                  type: "text",
+                  placeholder: "Numero de horas semestrais"
+                },
+                domProps: { value: _vm.unidadeCurricular.horas_semestrais },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.unidadeCurricular,
+                      "horas_semestrais",
+                      $event.target.value
+                    )
+                  }
+                }
               }),
               _vm._v(" "),
-              _c("h5", [_vm._v("Horas")]),
+              _c("button", { on: { click: _vm.adicionarOutraUC } }, [
+                _vm._v("Mais")
+              ]),
               _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: { type: "text", readonly: "" },
-                domProps: { value: _vm.horasUC }
-              }),
+              _c("br"),
               _vm._v(" "),
-              _c("h5", [_vm._v("Horas Semestrais")]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: { type: "text", readonly: "" },
-                domProps: { value: _vm.horasSemestraisUC }
-              }),
-              _vm._v(" "),
-              _c("br")
+              _vm.unidadesCurriculares.length
+                ? _c("span", [
+                    _c("table", { staticClass: "table" }, [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.unidadesCurriculares, function(
+                          ucAUX,
+                          index
+                        ) {
+                          return _c("tr", { key: ucAUX.id }, [
+                            _c("td", [_vm._v(_vm._s(ucAUX.nome))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(ucAUX.regime))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(ucAUX.turno))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(ucAUX.horas))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(ucAUX.horas_semestrais))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-danger",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.removerUC(ucAUX, index)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Remover UC")]
+                              )
+                            ])
+                          ])
+                        }),
+                        0
+                      )
+                    ])
+                  ])
+                : _vm._e()
             ]),
+            _vm._v(" "),
+            _c("br"),
             _vm._v(" "),
             _c("h5", [
               _vm._v(
@@ -38259,30 +38502,19 @@ var render = function() {
             _c(
               "button",
               {
-                staticClass: "btn btn-outline-success",
+                staticClass: "btn btn-success",
                 attrs: { type: "button" },
                 on: {
                   click: function($event) {
-                    _vm.verificarErrosOuAvançar(_vm.proposta)
+                    _vm.verificarErrosOuAvançar(
+                      _vm.proposta,
+                      _vm.unidadesCurriculares
+                    )
                   }
                 }
               },
               [_vm._v("Seguinte")]
-            ),
-            _vm._v(" "),
-            _vm.errors.length
-              ? _c("div", [
-                  _c("b", [_vm._v("Please correct the following error(s):")]),
-                  _vm._v(" "),
-                  _c(
-                    "ul",
-                    _vm._l(_vm.errors, function(error) {
-                      return _c("li", { key: error }, [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                ])
-              : _vm._e()
+            )
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -38301,7 +38533,26 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", [_vm._v("Nome")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Regime")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Turno")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Horas")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Horas Semestrais")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Ações")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -38484,10 +38735,6 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "clearer" }),
       _vm._v(" "),
-      _vm._m(3),
-      _vm._v(" "),
-      _c("div", { staticClass: "clearer" }),
-      _vm._v(" "),
       _c("input", {
         attrs: { id: "anchor", type: "hidden", name: "anchor", value: "" }
       }),
@@ -38508,46 +38755,8 @@ var render = function() {
             return _vm.login($event)
           }
         }
-      }),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-primary",
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.login($event)
-            }
-          }
-        },
-        [_vm._v("Login")]
-      ),
-      _vm._v(" "),
-      _vm._m(4)
-    ]),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-success",
-        staticStyle: { float: "right" },
-        attrs: { type: "button" },
-        on: { click: _vm.showProponenteView }
-      },
-      [_vm._v("Proponente")]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-warning",
-        staticStyle: { float: "right" },
-        attrs: { type: "button" },
-        on: { click: _vm.showDiretorView }
-      },
-      [_vm._v("Diretor UO")]
-    )
+      })
+    ])
   ])
 }
 var staticRenderFns = [
@@ -38599,41 +38808,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-label" }, [
       _c("label", { attrs: { for: "inputPassword" } }, [_vm._v("Senha")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "rememberpass" }, [
-      _c("input", {
-        attrs: {
-          type: "checkbox",
-          name: "rememberusername",
-          id: "rememberusername",
-          value: "1"
-        }
-      }),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "rememberusername" } }, [
-        _vm._v("Lembrar nome de utilizador")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "forgetpass" }, [
-      _c(
-        "a",
-        {
-          attrs: {
-            href: "https://ead.ipleiria.pt/2018-19/login/forgot_password.php"
-          }
-        },
-        [_vm._v("Esqueceu-se do seu nome de utilizador ou da senha?")]
-      )
     ])
   }
 ]
