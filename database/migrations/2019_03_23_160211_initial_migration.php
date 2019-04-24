@@ -31,20 +31,6 @@ class InitialMigration extends Migration
 
         
 
-        Schema::create('proposta_proponente_professor', function (Blueprint $table){
-            $table->increments('id');
-            $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
-            $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
-            $table->integer('percentagem_prestacao_servicos')->unsigned();
-            $table->integer('duracao')->unsigned();
-            $table->datetime('data_inicio_contrato');
-            $table->datetime('data_fim_contrato');
-            $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa']);
-            //Signature???
-            $table->softDeletes();
-            $table->timestamps();
-        });
-
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
@@ -101,6 +87,22 @@ class InitialMigration extends Migration
             $table->dateTime('data_de_assinatura_coordenador_departamento')->nullable();
             $table->dateTime('data_de_assinatura_coordenador_de_curso')->nullable();
             $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('proposta_proponente_professor', function (Blueprint $table){
+            $table->increments('id');
+            $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
+            $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
+            $table->integer('percentagem_prestacao_servicos')->nullable(); //em caso de tempo parcial??
+            $table->integer('duracao')->unsigned();
+            $table->datetime('data_inicio_contrato');
+            $table->datetime('data_fim_contrato');
+            $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa'])->nullable();
+            //Signature???
+            $table->integer('proposta_proponente_id')->unsigned();
+            $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
             $table->softDeletes();
             $table->timestamps();
         });

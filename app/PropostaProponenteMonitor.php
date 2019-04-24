@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PropostaPreponenteMonitor extends Model
+class PropostaProponenteMonitor extends Model
 {
     protected $fillable = [
         'tipo_contrato', 'regime_prestacao_servicos', 'percentagem_prestacao_servicos', 'duracao', 

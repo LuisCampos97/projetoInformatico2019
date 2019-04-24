@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div>
-      PROPOSTEA PROPONENTE ASSISTENTE
-    </div>
+    <h2>Proponente (Assistente)</h2>
+    <br>
   </div>
 </template>
 <script>

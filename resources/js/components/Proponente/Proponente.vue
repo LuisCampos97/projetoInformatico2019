@@ -123,6 +123,7 @@
               <th>Departamento</th>
               <th>Horas</th>
               <th>Horas Semestrais</th>
+              <th>Tipo</th>
               <th>Ações</th>
             </thead>
             <tbody>
@@ -133,10 +134,12 @@
                 <td>{{ucAUX.departamento_id}}</td>
                 <td>{{ucAUX.horas}}</td>
                 <td>{{ucAUX.horas_semestrais}}</td>
+                <td>{{ucAUX.tipo}}</td>
                 <td>
                   <button
                     type="button"
                     class="btn btn-danger"
+                    v-if="isClicked"
                     v-on:click="removerUC(ucAUX, index)"
                   >Remover UC</button>
                 </td>
@@ -161,9 +164,11 @@
         type="button"
         class="btn btn-success"
         v-on:click="verificarErrosOuAvançar(proposta, unidadesCurriculares)"
+        v-if="isClicked"
       >Seguinte</button>
     </div>
-    <proposta-proponente-professor v-if="roleSelecionado == 'professor'"></proposta-proponente-professor>
+    <br>
+    <proposta-proponente-professor :idParaUcsPropostaProponente="idParaUcsPropostaProponente" v-if="roleSelecionado == 'professor'"></proposta-proponente-professor>
     <proposta-proponente-assistente v-if="roleSelecionado == 'assistente'"></proposta-proponente-assistente>
     <proposta-proponente-monitor v-if="roleSelecionado == 'monitor'"></proposta-proponente-monitor>
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
@@ -197,7 +202,8 @@ module.exports = {
       roleSelecionado: "",
       regimesParaUC: [],
       turnosParaUCeRegime: [],
-      idParaUcsPropostaProponente: ""
+      idParaUcsPropostaProponente: "",
+      isClicked: true
     };
   },
   methods: {
@@ -207,19 +213,30 @@ module.exports = {
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
       this.roleSelecionado = proposta.role;
-
-      axios.post("/api/propostaProponente/", this.proposta).then(response => {
-        this.idParaUcsPropostaProponente = response.data.id;
-        this.unidadesCurriculares.forEach(unidadeCurricular => {
-          unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+      if (
+        this.unidadesCurriculares.length == 0 ||
+        this.proposta.tipo_contrato == "" ||
+        this.proposta.unidade_organica == "" ||
+        this.proposta.nome_completo == "" ||
+        this.proposta.role == ""
+        //this.proposta.data_de_assinatura_coordenador_departamento == ""
+      ) {
+        console.log("ERROR!!! Validar ainda nas caixas correspondentes");
+      } else {
+        axios.post("/api/propostaProponente/", this.proposta).then(response => {
+          console.log(response.data);
+          this.idParaUcsPropostaProponente = response.data.id;
+          this.unidadesCurriculares.forEach(unidadeCurricular => {
+            unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+          });
+          this.unidadesCurriculares.forEach(unidadeCurricular => {
+            axios
+              .post("/api/ucsPropostaProponente/", unidadeCurricular)
+              .then(response => {});
+          });
         });
-        console.log(this.unidadesCurriculares);
-        this.unidadesCurriculares.forEach(unidadeCurricular => {
-          axios
-            .post("/api/ucsPropostaProponente/", unidadeCurricular)
-            .then(response => {});
-        });
-      });
+        this.isClicked = false;
+      }
     },
 
     getUcsDeDepartamento(dep_id) {

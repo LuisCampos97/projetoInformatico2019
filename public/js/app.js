@@ -1978,6 +1978,11 @@ module.exports = {
 //
 //
 //
+//
+//
+//
+//
+//
 module.exports = {
   data: function data() {
     return {
@@ -2005,7 +2010,8 @@ module.exports = {
       roleSelecionado: "",
       regimesParaUC: [],
       turnosParaUCeRegime: [],
-      idParaUcsPropostaProponente: ""
+      idParaUcsPropostaProponente: "",
+      isClicked: true
     };
   },
   methods: {
@@ -2015,19 +2021,25 @@ module.exports = {
       this.proposta.data_de_assinatura_coordenador_departamento = new Date().toISOString().slice(0, 19).replace("T", " "); //Ver tipo de user autenticado
 
       this.roleSelecionado = proposta.role;
-      axios.post("/api/propostaProponente/", this.proposta).then(function (response) {
-        _this.idParaUcsPropostaProponente = response.data.id;
 
-        _this.unidadesCurriculares.forEach(function (unidadeCurricular) {
-          unidadeCurricular.proposta_proponente_id = _this.idParaUcsPropostaProponente;
+      if (this.unidadesCurriculares.length == 0 || this.proposta.tipo_contrato == "" || this.proposta.unidade_organica == "" || this.proposta.nome_completo == "" || this.proposta.role == "" //this.proposta.data_de_assinatura_coordenador_departamento == ""
+      ) {
+          console.log("ERROR!!! Validar ainda nas caixas correspondentes");
+        } else {
+        axios.post("/api/propostaProponente/", this.proposta).then(function (response) {
+          console.log(response.data);
+          _this.idParaUcsPropostaProponente = response.data.id;
+
+          _this.unidadesCurriculares.forEach(function (unidadeCurricular) {
+            unidadeCurricular.proposta_proponente_id = _this.idParaUcsPropostaProponente;
+          });
+
+          _this.unidadesCurriculares.forEach(function (unidadeCurricular) {
+            axios.post("/api/ucsPropostaProponente/", unidadeCurricular).then(function (response) {});
+          });
         });
-
-        console.log(_this.unidadesCurriculares);
-
-        _this.unidadesCurriculares.forEach(function (unidadeCurricular) {
-          axios.post("/api/ucsPropostaProponente/", unidadeCurricular).then(function (response) {});
-        });
-      });
+        this.isClicked = false;
+      }
     },
     getUcsDeDepartamento: function getUcsDeDepartamento(dep_id) {
       var _this2 = this;
@@ -2098,7 +2110,6 @@ module.exports = {
 //
 //
 //
-//
 module.exports = {
   data: function data() {
     return {};
@@ -2115,6 +2126,7 @@ module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+//
 //
 //
 //
@@ -2142,12 +2154,126 @@ module.exports = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 module.exports = {
-  props: ["proposta"],
+  props: ["idParaUcsPropostaProponente"],
   data: function data() {
-    return {};
+    return {
+      propostaProponenteProfessor: {
+        role_professor: "",
+        regime_prestacao_servicos: "",
+        percentagem_prestacao_servicos: "",
+        duracao: "",
+        data_inicio_contrato: "",
+        data_fim_contrato: "",
+        proposta_proponente_id: ""
+      },
+      dataFimContratoText: ""
+    };
   },
-  methods: {}
+  methods: {
+    setDataFimContrato: function setDataFimContrato(duracao) {
+      this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
+      var array = this.propostaProponenteProfessor.data_inicio_contrato.split("-");
+      console.log(array[2], array[1], array[0]);
+      var data = new Date(parseInt(array[0]), parseInt(array[1]) - 1, parseInt(array[2]));
+      data.setMonth(data.getUTCMonth() + parseInt(duracao));
+      var dia = data.getDate();
+      var mes = data.getMonth() + 1;
+      var ano = data.getFullYear();
+      this.dataFimContratoText = dia + "/" + mes + "/" + ano;
+      this.propostaProponenteProfessor.data_fim_contrato = new Date(data).toISOString().slice(0, 19).replace("T", " ");
+      console.log(this.propostaProponenteProfessor.data_fim_contrato);
+    },
+    criarPropostaProponenteProfessor: function criarPropostaProponenteProfessor(propostaProponenteProfessor) {
+      if (this.propostaProponenteProfessor.role_professor == "" || this.propostaProponenteProfessor.regime_prestacao_servicos == "" || this.propostaProponenteProfessor.duracao == "" || this.propostaProponenteProfessor.data_inicio_contrato == "" || this.propostaProponenteProfessor.data_fim_contrato == "") {
+        console.log("ERROR!!! Validar ainda nas caixas correspondentes");
+      } else {
+        axios.post("/api/propostaProponenteProfessor", propostaProponenteProfessor).then(function (response) {});
+      }
+    }
+  }
 };
 
 /***/ }),
@@ -38648,20 +38774,24 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(ucAUX.horas_semestrais))]),
                             _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(ucAUX.tipo))]),
+                            _vm._v(" "),
                             _c("td", [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-danger",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.removerUC(ucAUX, index)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Remover UC")]
-                              )
+                              _vm.isClicked
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-danger",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.removerUC(ucAUX, index)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Remover UC")]
+                                  )
+                                : _vm._e()
                             ])
                           ])
                         }),
@@ -38744,27 +38874,35 @@ var render = function() {
               _c("br")
             ]),
             _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.verificarErrosOuAvançar(
-                      _vm.proposta,
-                      _vm.unidadesCurriculares
-                    )
-                  }
-                }
-              },
-              [_vm._v("Seguinte")]
-            )
+            _vm.isClicked
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.verificarErrosOuAvançar(
+                          _vm.proposta,
+                          _vm.unidadesCurriculares
+                        )
+                      }
+                    }
+                  },
+                  [_vm._v("Seguinte")]
+                )
+              : _vm._e()
           ])
         : _vm._e(),
       _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
       _vm.roleSelecionado == "professor"
-        ? _c("proposta-proponente-professor")
+        ? _c("proposta-proponente-professor", {
+            attrs: {
+              idParaUcsPropostaProponente: _vm.idParaUcsPropostaProponente
+            }
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.roleSelecionado == "assistente"
@@ -38795,6 +38933,8 @@ var staticRenderFns = [
       _c("th", [_vm._v("Horas")]),
       _vm._v(" "),
       _c("th", [_vm._v("Horas Semestrais")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Tipo")]),
       _vm._v(" "),
       _c("th", [_vm._v("Ações")])
     ])
@@ -38829,7 +38969,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("div", [_vm._v("\n    PROPOSTEA PROPONENTE ASSISTENTE\n  ")])
+      _c("h2", [_vm._v("Proponente (Assistente)")]),
+      _vm._v(" "),
+      _c("br")
     ])
   }
 ]
@@ -38861,7 +39003,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("div", [_vm._v("PROPOSTA PROPONENTE MONITOR")])])
+    return _c("div", [
+      _c("h2", [_vm._v("Proponente (Monitor)")]),
+      _vm._v(" "),
+      _c("br")
+    ])
   }
 ]
 render._withStripped = true
@@ -38885,16 +39031,385 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("h2", [_vm._v("Proponente (Professor)")]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("h5", [
+      _vm._v(
+        "Qual será o role_professor específico do professor a ser contratado?"
+      )
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", { staticClass: "radio", attrs: { id: "radio_role_professor" } }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteProfessor.role_professor,
+            expression: "propostaProponenteProfessor.role_professor"
+          }
+        ],
+        attrs: { type: "radio", value: "Coordenador" },
+        domProps: {
+          checked: _vm._q(
+            _vm.propostaProponenteProfessor.role_professor,
+            "Coordenador"
+          )
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(
+              _vm.propostaProponenteProfessor,
+              "role_professor",
+              "Coordenador"
+            )
+          }
+        }
+      }),
+      _vm._v(" Coordenador\n    "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteProfessor.role_professor,
+            expression: "propostaProponenteProfessor.role_professor"
+          }
+        ],
+        attrs: { type: "radio", value: "Adjunto" },
+        domProps: {
+          checked: _vm._q(
+            _vm.propostaProponenteProfessor.role_professor,
+            "Adjunto"
+          )
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(
+              _vm.propostaProponenteProfessor,
+              "role_professor",
+              "Adjunto"
+            )
+          }
+        }
+      }),
+      _vm._v(" Adjunto\n    "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteProfessor.role_professor,
+            expression: "propostaProponenteProfessor.role_professor"
+          }
+        ],
+        attrs: { type: "radio", value: "Visitante" },
+        domProps: {
+          checked: _vm._q(
+            _vm.propostaProponenteProfessor.role_professor,
+            "Visitante"
+          )
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(
+              _vm.propostaProponenteProfessor,
+              "role_professor",
+              "Visitante"
+            )
+          }
+        }
+      }),
+      _vm._v(" Visitante\n  ")
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", [
+      _c("h5", [_vm._v("Regime de prestação de serviços:")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("div", { staticClass: "radio", attrs: { id: "radio_regime" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.propostaProponenteProfessor.regime_prestacao_servicos,
+              expression:
+                "propostaProponenteProfessor.regime_prestacao_servicos"
+            }
+          ],
+          attrs: { type: "radio", value: "Tempo Integral" },
+          domProps: {
+            checked: _vm._q(
+              _vm.propostaProponenteProfessor.regime_prestacao_servicos,
+              "Tempo Integral"
+            )
+          },
+          on: {
+            change: function($event) {
+              return _vm.$set(
+                _vm.propostaProponenteProfessor,
+                "regime_prestacao_servicos",
+                "Tempo Integral"
+              )
+            }
+          }
+        }),
+        _vm._v(" Tempo Integral\n      "),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.propostaProponenteProfessor.regime_prestacao_servicos,
+              expression:
+                "propostaProponenteProfessor.regime_prestacao_servicos"
+            }
+          ],
+          attrs: { type: "radio", value: "Tempo Parcial" },
+          domProps: {
+            checked: _vm._q(
+              _vm.propostaProponenteProfessor.regime_prestacao_servicos,
+              "Tempo Parcial"
+            )
+          },
+          on: {
+            change: function($event) {
+              return _vm.$set(
+                _vm.propostaProponenteProfessor,
+                "regime_prestacao_servicos",
+                "Tempo Parcial"
+              )
+            }
+          }
+        }),
+        _vm._v(" Tempo Parcial\n      "),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.propostaProponenteProfessor.regime_prestacao_servicos,
+              expression:
+                "propostaProponenteProfessor.regime_prestacao_servicos"
+            }
+          ],
+          attrs: { type: "radio", value: "Dedicação Exclusiva" },
+          domProps: {
+            checked: _vm._q(
+              _vm.propostaProponenteProfessor.regime_prestacao_servicos,
+              "Dedicação Exclusiva"
+            )
+          },
+          on: {
+            change: function($event) {
+              return _vm.$set(
+                _vm.propostaProponenteProfessor,
+                "regime_prestacao_servicos",
+                "Dedicação Exclusiva"
+              )
+            }
+          }
+        }),
+        _vm._v(" Dedicação Exclusiva\n      "),
+        _c("br")
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _vm.propostaProponenteProfessor.regime_prestacao_servicos == "Tempo Parcial"
+      ? _c("span", [
+          _c("h5", [_vm._v("Percentagem de tempo parcial:")]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value:
+                  _vm.propostaProponenteProfessor
+                    .percentagem_prestacao_servicos,
+                expression:
+                  "propostaProponenteProfessor.percentagem_prestacao_servicos"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              placeholder: "Insira um valor entre 1 e 100"
+            },
+            domProps: {
+              value:
+                _vm.propostaProponenteProfessor.percentagem_prestacao_servicos
+            },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(
+                  _vm.propostaProponenteProfessor,
+                  "percentagem_prestacao_servicos",
+                  $event.target.value
+                )
+              }
+            }
+          })
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", [
+      _c("h5", [_vm._v("Duração do contrato (em meses)")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteProfessor.duracao,
+            expression: "propostaProponenteProfessor.duracao"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          placeholder: "Insira um valor positivo e inteiro"
+        },
+        domProps: { value: _vm.propostaProponenteProfessor.duracao },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(
+              _vm.propostaProponenteProfessor,
+              "duracao",
+              $event.target.value
+            )
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", [
+      _c("h5", [_vm._v("Data de inicio do contrato")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteProfessor.data_inicio_contrato,
+            expression: "propostaProponenteProfessor.data_inicio_contrato"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "date",
+          placeholder: "Selecione a data de inicio de contrato"
+        },
+        domProps: {
+          value: _vm.propostaProponenteProfessor.data_inicio_contrato
+        },
+        on: {
+          change: function($event) {
+            return _vm.setDataFimContrato(
+              _vm.propostaProponenteProfessor.duracao
+            )
+          },
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(
+              _vm.propostaProponenteProfessor,
+              "data_inicio_contrato",
+              $event.target.value
+            )
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", [
+      _c("h5", [_vm._v("Data de fim do contrato")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.dataFimContratoText,
+            expression: "dataFimContratoText"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "text", readonly: "" },
+        domProps: { value: _vm.dataFimContratoText },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.dataFimContratoText = $event.target.value
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("br")
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-success",
+        attrs: { type: "button" },
+        on: {
+          click: function($event) {
+            return _vm.criarPropostaProponenteProfessor(
+              _vm.propostaProponenteProfessor
+            )
+          }
+        }
+      },
+      [_vm._v("Finalizar")]
+    )
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [_c("div", [_vm._v("TESTE PROPONENTE PROFESSOR")])])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
