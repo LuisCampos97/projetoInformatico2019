@@ -178,7 +178,8 @@ module.exports = {
         unidade_organica: "",
         nome_completo: "",
         role: "",
-        data_de_assinatura_coordenador_departamento: ""
+        data_de_assinatura_coordenador_departamento: "",
+        data_de_assinatura_coordenador_de_curso: ""
       },
       unidadeCurricular: {
         nome_unidade_curricular: "",
@@ -209,15 +210,15 @@ module.exports = {
 
       axios.post("/api/propostaProponente/", this.proposta).then(response => {
         this.idParaUcsPropostaProponente = response.data.id;
-      });
-      this.unidadesCurriculares.forEach(unidadeCurricular => {
-        unidadeCurricular.id = this.idParaUcsPropostaProponente;
-      });
-
-      this.unidadesCurriculares.forEach(unidadeCurricular => {
-        axios
-          .post("/api/ucsPropostaProponente/", unidadeCurricular)
-          .then(response => {});
+        this.unidadesCurriculares.forEach(unidadeCurricular => {
+          unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+        });
+        console.log(this.unidadesCurriculares);
+        this.unidadesCurriculares.forEach(unidadeCurricular => {
+          axios
+            .post("/api/ucsPropostaProponente/", unidadeCurricular)
+            .then(response => {});
+        });
       });
     },
 

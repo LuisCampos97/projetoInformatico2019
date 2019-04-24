@@ -1986,7 +1986,8 @@ module.exports = {
         unidade_organica: "",
         nome_completo: "",
         role: "",
-        data_de_assinatura_coordenador_departamento: ""
+        data_de_assinatura_coordenador_departamento: "",
+        data_de_assinatura_coordenador_de_curso: ""
       },
       unidadeCurricular: {
         nome_unidade_curricular: "",
@@ -2016,12 +2017,16 @@ module.exports = {
       this.roleSelecionado = proposta.role;
       axios.post("/api/propostaProponente/", this.proposta).then(function (response) {
         _this.idParaUcsPropostaProponente = response.data.id;
-      });
-      this.unidadesCurriculares.forEach(function (unidadeCurricular) {
-        unidadeCurricular.id = _this.idParaUcsPropostaProponente;
-      });
-      this.unidadesCurriculares.forEach(function (unidadeCurricular) {
-        axios.post("/api/ucsPropostaProponente/", unidadeCurricular).then(function (response) {});
+
+        _this.unidadesCurriculares.forEach(function (unidadeCurricular) {
+          unidadeCurricular.proposta_proponente_id = _this.idParaUcsPropostaProponente;
+        });
+
+        console.log(_this.unidadesCurriculares);
+
+        _this.unidadesCurriculares.forEach(function (unidadeCurricular) {
+          axios.post("/api/ucsPropostaProponente/", unidadeCurricular).then(function (response) {});
+        });
       });
     },
     getUcsDeDepartamento: function getUcsDeDepartamento(dep_id) {
