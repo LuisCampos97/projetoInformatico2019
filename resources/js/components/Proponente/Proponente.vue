@@ -169,8 +169,8 @@
     </div>
     <br>
     <proposta-proponente-professor :idParaUcsPropostaProponente="idParaUcsPropostaProponente" v-if="roleSelecionado == 'professor'"></proposta-proponente-professor>
-    <proposta-proponente-assistente v-if="roleSelecionado == 'assistente'"></proposta-proponente-assistente>
-    <proposta-proponente-monitor v-if="roleSelecionado == 'monitor'"></proposta-proponente-monitor>
+    <proposta-proponente-assistente :idParaUcsPropostaProponente="idParaUcsPropostaProponente" v-if="roleSelecionado == 'assistente'"></proposta-proponente-assistente>
+    <proposta-proponente-monitor :idParaUcsPropostaProponente="idParaUcsPropostaProponente" v-if="roleSelecionado == 'monitor'"></proposta-proponente-monitor>
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
   </div>
 </template>

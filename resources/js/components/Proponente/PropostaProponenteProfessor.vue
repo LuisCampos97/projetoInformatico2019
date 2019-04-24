@@ -82,7 +82,7 @@
       type="button"
       class="btn btn-success"
       v-on:click="criarPropostaProponenteProfessor(propostaProponenteProfessor)"
-    >Finalizar</button>
+    >Finalizar e criar proposta</button>
   </div>
 </template>
 <script>
@@ -97,7 +97,7 @@ module.exports = {
         duracao: "",
         data_inicio_contrato: "",
         data_fim_contrato: "",
-        proposta_proponente_id: "",
+        proposta_proponente_id: ""
       },
       dataFimContratoText: ""
     };
@@ -131,15 +131,13 @@ module.exports = {
         this.propostaProponenteProfessor.regime_prestacao_servicos == "" ||
         this.propostaProponenteProfessor.duracao == "" ||
         this.propostaProponenteProfessor.data_inicio_contrato == "" ||
-        this.propostaProponenteProfessor.data_fim_contrato == ""
+        this.propostaProponenteProfessor.data_fim_contrato == "" ||
+        this.propostaProponenteProfessor.proposta_proponente_id == ""
       ) {
         console.log("ERROR!!! Validar ainda nas caixas correspondentes");
       } else {
         axios
-          .post(
-            "/api/propostaProponenteProfessor",
-            propostaProponenteProfessor
-          )
+          .post("/api/propostaProponenteProfessor", propostaProponenteProfessor)
           .then(response => {});
       }
     }

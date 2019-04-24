@@ -21,6 +21,7 @@ class PropostaProponenteMonitor extends JsonResource
             'duracao' => $this->duracao,
             'data_inicio_contrato' => $this->data_inicio_contrato,
             'data_fim_contrato' => $this->data_fim_contrato,
+            'proposta_proponente_id' => $this->proposta_proponente_id,
         ];
     }
 }

@@ -39,3 +39,6 @@ Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
 
 //----------------------Proposta Proponente Professor-------------------------------------------
 Route::post('/propostaProponenteProfessor', 'PropostaProponenteProfessorController@store');
+
+//----------------------Proposta Proponente Assistente---------------------------------------------
+Route::post('/propostaProponenteAssistente', 'PropostaProponenteAssistenteController@store');
