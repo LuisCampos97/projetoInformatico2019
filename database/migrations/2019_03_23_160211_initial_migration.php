@@ -84,7 +84,7 @@ class InitialMigration extends Migration
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
-            $table->integer('percentagem_prestacao_servicos')->unsigned();
+            $table->integer('percentagem_prestacao_servicos')->nullable();
             $table->integer('duracao')->unsigned();
             $table->datetime('data_inicio_contrato');
             $table->datetime('data_fim_contrato');
@@ -99,7 +99,7 @@ class InitialMigration extends Migration
         Schema::create('proposta_proponente_monitor', function (Blueprint $table){
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial']);
-            $table->integer('percentagem_prestacao_servicos')->unsigned();
+            $table->integer('percentagem_prestacao_servicos');
             $table->integer('duracao')->unsigned();
             $table->datetime('data_inicio_contrato');
             $table->datetime('data_fim_contrato');

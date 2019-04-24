@@ -2235,11 +2235,100 @@ module.exports = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 module.exports = {
+  props: ["idParaUcsPropostaProponente"],
   data: function data() {
-    return {};
+    return {
+      propostaProponenteMonitor: {
+        regime_prestacao_servicos: "",
+        percentagem_prestacao_servicos: "",
+        duracao: "",
+        data_inicio_contrato: "",
+        data_fim_contrato: "",
+        proposta_proponente_id: ""
+      },
+      dataFimContratoText: ""
+    };
   },
-  methods: {}
+  methods: {
+    setDataFimContrato: function setDataFimContrato(duracao) {
+      this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
+      var array = this.propostaProponenteMonitor.data_inicio_contrato.split("-");
+      console.log(array[2], array[1], array[0]);
+      var data = new Date(parseInt(array[0]), parseInt(array[1]) - 1, parseInt(array[2]));
+      data.setMonth(data.getUTCMonth() + parseInt(duracao));
+      var dia = data.getDate();
+      var mes = data.getMonth() + 1;
+      var ano = data.getFullYear();
+      this.dataFimContratoText = dia + "/" + mes + "/" + ano;
+      this.propostaProponenteMonitor.data_fim_contrato = new Date(data).toISOString().slice(0, 19).replace("T", " ");
+      console.log(this.propostaProponenteMonitor.data_fim_contrato);
+    },
+    criarpropostaProponenteMonitor: function criarpropostaProponenteMonitor(propostaProponenteMonitor) {
+      if (this.propostaProponenteMonitor.regime_prestacao_servicos == "" || this.propostaProponenteMonitor.duracao == "" || this.propostaProponenteMonitor.data_inicio_contrato == "" || this.propostaProponenteMonitor.data_fim_contrato == "" || this.propostaProponenteMonitor.proposta_proponente_id == "") {
+        console.log("ERROR!!! Validar ainda nas caixas correspondentes");
+      } else {
+        axios.post("/api/propostaProponenteMonitor", propostaProponenteMonitor).then(function (response) {});
+      }
+    }
+  }
 };
 
 /***/ }),
@@ -39369,20 +39458,219 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("h2", [_vm._v("Proponente (Monitor)")]),
+  return _c("div", [
+    _c("h2", [_vm._v("Proponente (Monitor)")]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("h5", [_vm._v("Regime de prestação de serviços:")]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", { staticClass: "radio", attrs: { id: "radio_regime" } }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteMonitor.regime_prestacao_servicos,
+            expression: "propostaProponenteMonitor.regime_prestacao_servicos"
+          }
+        ],
+        attrs: { type: "radio", value: "Tempo Parcial" },
+        domProps: {
+          checked: _vm._q(
+            _vm.propostaProponenteMonitor.regime_prestacao_servicos,
+            "Tempo Parcial"
+          )
+        },
+        on: {
+          change: function($event) {
+            return _vm.$set(
+              _vm.propostaProponenteMonitor,
+              "regime_prestacao_servicos",
+              "Tempo Parcial"
+            )
+          }
+        }
+      }),
+      _vm._v(" Tempo Parcial\n    "),
+      _c("br")
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _vm.propostaProponenteMonitor.regime_prestacao_servicos == "Tempo Parcial"
+      ? _c("span", [
+          _c("h5", [_vm._v("Percentagem de tempo parcial:")]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value:
+                  _vm.propostaProponenteMonitor.percentagem_prestacao_servicos,
+                expression:
+                  "propostaProponenteMonitor.percentagem_prestacao_servicos"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: {
+              type: "number",
+              placeholder: "Insira um valor entre 1 e 100"
+            },
+            domProps: {
+              value:
+                _vm.propostaProponenteMonitor.percentagem_prestacao_servicos
+            },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(
+                  _vm.propostaProponenteMonitor,
+                  "percentagem_prestacao_servicos",
+                  $event.target.value
+                )
+              }
+            }
+          })
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", [
+      _c("h5", [_vm._v("Duração do contrato (em meses)")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteMonitor.duracao,
+            expression: "propostaProponenteMonitor.duracao"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "text",
+          placeholder: "Insira um valor positivo e inteiro"
+        },
+        domProps: { value: _vm.propostaProponenteMonitor.duracao },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(
+              _vm.propostaProponenteMonitor,
+              "duracao",
+              $event.target.value
+            )
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", [
+      _c("h5", [_vm._v("Data de inicio do contrato")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.propostaProponenteMonitor.data_inicio_contrato,
+            expression: "propostaProponenteMonitor.data_inicio_contrato"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: {
+          type: "date",
+          placeholder: "Selecione a data de inicio de contrato"
+        },
+        domProps: { value: _vm.propostaProponenteMonitor.data_inicio_contrato },
+        on: {
+          change: function($event) {
+            return _vm.setDataFimContrato(_vm.propostaProponenteMonitor.duracao)
+          },
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(
+              _vm.propostaProponenteMonitor,
+              "data_inicio_contrato",
+              $event.target.value
+            )
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _vm._v(" "),
+    _c("div", [
+      _c("h5", [_vm._v("Data de fim do contrato")]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.dataFimContratoText,
+            expression: "dataFimContratoText"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "text", readonly: "" },
+        domProps: { value: _vm.dataFimContratoText },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.dataFimContratoText = $event.target.value
+          }
+        }
+      }),
       _vm._v(" "),
       _c("br")
-    ])
-  }
-]
+    ]),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-success",
+        attrs: { type: "button" },
+        on: {
+          click: function($event) {
+            return _vm.criarpropostaProponenteMonitor(
+              _vm.propostaProponenteMonitor
+            )
+          }
+        }
+      },
+      [_vm._v("Finalizar e criar proposta")]
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
