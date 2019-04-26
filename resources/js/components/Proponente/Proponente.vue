@@ -5,13 +5,23 @@
     <h5>Que tipo de proposta pretende efetuar?</h5>
     <br>
     <div id="radiotipo_contrato" class="radio">
-      <input type="radio" v-model="proposta.tipo_contrato" value="Contratacao Inicial"> Contratacao Inicial
+      <input
+        name="Tipo Contrato"
+        v-validate="'required'"
+        type="radio"
+        v-model="proposta.tipo_contrato"
+        value="Contratacao Inicial"
+      >Contratacao Inicial
       <br>
-      <input type="radio" v-model="proposta.tipo_contrato" value="Renovacao"> Renovação
+      <input name="Tipo Contrato" type="radio" v-model="proposta.tipo_contrato" value="Renovacao"> Renovação
       <br>
-      <input type="radio" v-model="proposta.tipo_contrato" value="Alteracao"> Alteração
+      <input name="Tipo Contrato" type="radio" v-model="proposta.tipo_contrato" value="Alteracao"> Alteração
       <br>
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Tipo Contrato')"
+    >{{ errors.first('Tipo Contrato') }}</div>
     <br>
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
@@ -19,31 +29,73 @@
       <h5>Para que unidade organica será o docente contratado?</h5>
       <br>
       <div id="radiounidade_organica" class="radio">
-        <input type="radio" v-model="proposta.unidade_organica" value="ESECS"> ESECS
+        <input
+          name="unidade organica"
+          v-validate="'required'"
+          type="radio"
+          v-model="proposta.unidade_organica"
+          value="ESECS"
+        > ESECS
         <br>
-        <input type="radio" v-model="proposta.unidade_organica" value="ESTG"> ESTG
+        <input
+          name="unidade organica"
+          type="radio"
+          v-model="proposta.unidade_organica"
+          value="ESTG"
+        > ESTG
         <br>
-        <input type="radio" v-model="proposta.unidade_organica" value="ESSLei"> ESSLei
+        <input
+          name="unidade organica"
+          type="radio"
+          v-model="proposta.unidade_organica"
+          value="ESSLei"
+        > ESSLei
         <br>
-        <input type="radio" v-model="proposta.unidade_organica" value="ESTM"> ESTM
+        <input
+          name="unidade organica"
+          type="radio"
+          v-model="proposta.unidade_organica"
+          value="ESTM"
+        > ESTM
         <br>
-        <input type="radio" v-model="proposta.unidade_organica" value="ESAD.CR"> ESAD.CR
+        <input
+          name="unidade organica"
+          type="radio"
+          v-model="proposta.unidade_organica"
+          value="ESAD.CR"
+        > ESAD.CR
         <br>
       </div>
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('unidade organica')"
+      >{{ errors.first('unidade organica') }}</div>
       <br>
-      <div class="form-group" id="departamento">
+      <div class="form-group">
         <h5>Nome completo</h5>
         <input
           type="text"
           class="form-control"
           placeholder="Insira o nome completo do docente"
+          name="nome"
+          v-validate="'required'"
           v-model="proposta.nome_completo"
         >
+        <div
+          class="help-block alert alert-danger"
+          v-show="errors.has('nome')"
+        >{{ errors.first('nome') }}</div>
+        <br>
+      </div>
+      <div class="jumbotron" id="ucs">
+        <h5>Unidades Curriculares</h5>
         <br>
         <h5>Departamento</h5>
         <select
           class="custom-select"
           v-model="unidadeCurricular.departamento_id"
+          name="departamento"
+          v-validate="'required'"
           @change="getUcsDeDepartamento(unidadeCurricular.departamento_id)"
         >
           <option
@@ -52,29 +104,33 @@
             v-bind:key="dep.id"
           >{{dep.nome_departamento}}</option>
         </select>
+        <div
+          class="help-block alert alert-danger"
+          v-show="errors.has('departamento')"
+        >{{ errors.first('departamento') }}</div>
         <br>
-      </div>
-      <div class="jumbotron" id="ucs">
-        <h5>Unidades Curriculares</h5>
-        <br>
-        <!-- A COLODAR NA DIV ANTERIOR??
-        v-for="unidadeCurricular in unidadesCurriculares"
-        v-bind:key="unidadeCurricular.id"
-        -->
-
         <h5>Nome unidade curricular</h5>
         <select
           class="custom-select"
           v-model="unidadeCurricular.nome_unidade_curricular"
+          name="unidade_curricular"
+          v-validate="'required'"
           @change="getRegimes(unidadeCurricular.nome_unidade_curricular)"
         >
           <option v-for="uc in ucsDeDepartamento" :value="uc.nome" v-bind:key="uc.nome">{{uc.nome}}</option>
         </select>
+        <div
+          v-if="unidadesCurriculares.length == 0"
+          class="help-block alert alert-danger"
+          v-show="errors.has('unidade_curricular')"
+        >{{ errors.first('unidade_curricular') }}</div>
         <br>
         <h5>Regime unidade curricular</h5>
         <select
           class="custom-select"
           v-model="unidadeCurricular.regime"
+          name="regime"
+          v-validate="'required'"
           @change="getTurnos(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.regime)"
         >
           <option
@@ -83,11 +139,18 @@
             v-bind:key="regime.regime"
           >{{regime.regime}}</option>
         </select>
+        <div
+          v-if="unidadesCurriculares.length == 0"
+          class="help-block alert alert-danger"
+          v-show="errors.has('regime')"
+        >{{ errors.first('regime') }}</div>
         <br>
         <h5>Turno</h5>
         <select
           class="custom-select"
           v-model="unidadeCurricular.turno"
+          name="turno"
+          v-validate="'required'"
           @change="getTipo(unidadeCurricular.nome_unidade_curricular)"
         >
           <option
@@ -96,22 +159,42 @@
             v-bind:key="turno.turno"
           >{{turno.turno}}</option>
         </select>
+        <div
+          v-if="unidadesCurriculares.length == 0"
+          class="help-block alert alert-danger"
+          v-show="errors.has('turno')"
+        >{{ errors.first('turno') }}</div>
         <br>
         <h5>Numero de horas</h5>
         <input
           type="text"
           class="form-control"
           placeholder="Numero de horas semanais"
+          name="horas"
+          v-validate="'required|min_value:1'"
           v-model="unidadeCurricular.horas"
         >
+        <div
+          v-if="unidadesCurriculares.length == 0"
+          class="help-block alert alert-danger"
+          v-show="errors.has('horas')"
+        >{{ errors.first('horas') }}</div>
         <br>
         <h5>Numero de horas (semestrais)</h5>
         <input
           type="text"
           class="form-control"
+          name="horas_semestrais"
+          v-validate="'required|min_value:1'"
           placeholder="Numero de horas semestrais"
           v-model="unidadeCurricular.horas_semestrais"
         >
+        <div
+          v-if="unidadesCurriculares.length == 0"
+          class="help-block alert alert-danger"
+          v-show="errors.has('horas_semestrais')"
+        >{{ errors.first('horas_semestrais') }}</div>
+        <br>
         <button type="button" class="btn btn-success" @click="adicionarOutraUC">Adicionar UC</button>
         <br>
         <span v-if="unidadesCurriculares.length">
@@ -148,18 +231,29 @@
           </table>
         </span>
       </div>
-
       <br>
       <h5>Qual será o papel a desempenhar pelo docente a ser contratado?</h5>
       <br>
       <div id="radioRole" class="radio">
-        <input type="radio" v-model="proposta.role" value="professor"> Professor
+        <input
+          name="papel"
+          v-validate="'required'"
+          type="radio"
+          v-model="proposta.role"
+          value="professor"
+        > Professor
         <br>
-        <input type="radio" v-model="proposta.role" value="assistente"> Assistente
+        <input name="papel" type="radio" v-model="proposta.role" value="assistente"> Assistente
         <br>
-        <input type="radio" v-model="proposta.role" value="monitor"> Monitor
+        <input name="papel" type="radio" v-model="proposta.role" value="monitor"> Monitor
         <br>
       </div>
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('papel')"
+      >{{ errors.first('papel') }}</div>
+      <br>
+      <br>
       <button
         type="button"
         class="btn btn-success"
@@ -168,9 +262,18 @@
       >Seguinte</button>
     </div>
     <br>
-    <proposta-proponente-professor :idParaUcsPropostaProponente="idParaUcsPropostaProponente" v-if="roleSelecionado == 'professor'"></proposta-proponente-professor>
-    <proposta-proponente-assistente :idParaUcsPropostaProponente="idParaUcsPropostaProponente" v-if="roleSelecionado == 'assistente'"></proposta-proponente-assistente>
-    <proposta-proponente-monitor :idParaUcsPropostaProponente="idParaUcsPropostaProponente" v-if="roleSelecionado == 'monitor'"></proposta-proponente-monitor>
+    <proposta-proponente-professor
+      :idParaUcsPropostaProponente="idParaUcsPropostaProponente"
+      v-if="roleSelecionado == 'professor' && isFinalized"
+    ></proposta-proponente-professor>
+    <proposta-proponente-assistente
+      :idParaUcsPropostaProponente="idParaUcsPropostaProponente"
+      v-if="roleSelecionado == 'assistente' && isFinalized"
+    ></proposta-proponente-assistente>
+    <proposta-proponente-monitor
+      :idParaUcsPropostaProponente="idParaUcsPropostaProponente"
+      v-if="roleSelecionado == 'monitor' && isFinalized"
+    ></proposta-proponente-monitor>
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
   </div>
 </template>
@@ -203,7 +306,8 @@ module.exports = {
       regimesParaUC: [],
       turnosParaUCeRegime: [],
       idParaUcsPropostaProponente: "",
-      isClicked: true
+      isClicked: true,
+      isFinalized: false
     };
   },
   methods: {
@@ -213,30 +317,29 @@ module.exports = {
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
       this.roleSelecionado = proposta.role;
-      if (
-        this.unidadesCurriculares.length == 0 ||
-        this.proposta.tipo_contrato == "" ||
-        this.proposta.unidade_organica == "" ||
-        this.proposta.nome_completo == "" ||
-        this.proposta.role == ""
-        //this.proposta.data_de_assinatura_coordenador_departamento == ""
-      ) {
-        console.log("ERROR!!! Validar ainda nas caixas correspondentes");
-      } else {
-        axios.post("/api/propostaProponente/", this.proposta).then(response => {
-          console.log(response.data);
-          this.idParaUcsPropostaProponente = response.data.id;
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-          });
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            axios
-              .post("/api/ucsPropostaProponente/", unidadeCurricular)
-              .then(response => {});
-          });
-        });
-        this.isClicked = false;
-      }
+
+      this.$validator.validateAll().then(() => {
+        if (this.unidadesCurriculares.length > 0) {
+          axios
+            .post("/api/propostaProponente/", this.proposta)
+            .then(response => {
+              this.idParaUcsPropostaProponente = response.data.id;
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                axios
+                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
+                  .then(response => {});
+                axios
+                  .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+                  .then(response => {});
+                this.isClicked = false;
+                this.isFinalized = true;
+              });
+            });
+        }
+      });
     },
 
     getUcsDeDepartamento(dep_id) {

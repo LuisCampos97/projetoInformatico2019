@@ -9,7 +9,14 @@
         type="radio"
         v-model="propostaProponenteMonitor.regime_prestacao_servicos"
         value="Tempo Parcial"
+        name="Regime Prestação Serviços"
+        v-validate="'required'"
       > Tempo Parcial
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('Regime Prestação Serviços')"
+      >{{ errors.first('Regime Prestação Serviços') }}</div>
+      <br>
       <br>
     </div>
     <br>
@@ -20,8 +27,14 @@
         type="number"
         class="form-control"
         placeholder="Insira um valor entre 1 e 100"
+        name="Percentagem Prestação Serviços"
+        v-validate="'required|min_value:1|max_value:100'"
         v-model="propostaProponenteMonitor.percentagem_prestacao_servicos"
       >
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('Percentagem Prestação Serviços')"
+      >{{ errors.first('Percentagem Prestação Serviços') }}</div>
     </span>
     <br>
     <br>
@@ -33,7 +46,13 @@
         class="form-control"
         placeholder="Insira um valor positivo e inteiro"
         v-model="propostaProponenteMonitor.duracao"
+        name="Duração Contrato"
+        v-validate="'required|min_value:1'"
       >
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('Duração Contrato')"
+      >{{ errors.first('Duração Contrato') }}</div>
     </div>
     <br>
     <div>
@@ -44,9 +63,15 @@
         class="form-control"
         placeholder="Selecione a data de inicio de contrato"
         v-model="propostaProponenteMonitor.data_inicio_contrato"
+        name="Data Inicio Contrato"
+        v-validate="'required'"
         @change="setDataFimContrato(propostaProponenteMonitor.duracao)"
       >
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Data Inicio Contrato')"
+    >{{ errors.first('Data Inicio Contrato') }}</div>
     <br>
     <div>
       <h5>Data de fim do contrato</h5>
@@ -102,22 +127,11 @@ module.exports = {
       console.log(this.propostaProponenteMonitor.data_fim_contrato);
     },
     criarpropostaProponenteMonitor(propostaProponenteMonitor) {
-      if (
-        this.propostaProponenteMonitor.regime_prestacao_servicos == "" ||
-        this.propostaProponenteMonitor.duracao == "" ||
-        this.propostaProponenteMonitor.data_inicio_contrato == "" ||
-        this.propostaProponenteMonitor.data_fim_contrato == ""||
-        this.propostaProponenteMonitor.proposta_proponente_id == ""
-      ) {
-        console.log("ERROR!!! Validar ainda nas caixas correspondentes");
-      } else {
+      this.$validator.validateAll().then(() => {
         axios
-          .post(
-            "/api/propostaProponenteMonitor",
-            propostaProponenteMonitor
-          )
+          .post("/api/propostaProponenteMonitor", propostaProponenteMonitor)
           .then(response => {});
-      }
+      });
     }
   }
 };

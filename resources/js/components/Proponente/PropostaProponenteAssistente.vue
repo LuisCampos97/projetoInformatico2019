@@ -9,21 +9,29 @@
         type="radio"
         v-model="propostaProponenteAssistente.regime_prestacao_servicos"
         value="Tempo Integral"
+        name="Regime Prestação Serviços"
+        v-validate="'required'"
       > Tempo Integral
       <br>
       <input
         type="radio"
         v-model="propostaProponenteAssistente.regime_prestacao_servicos"
         value="Tempo Parcial"
+        name="Regime Prestação Serviços"
       > Tempo Parcial
       <br>
       <input
         type="radio"
         v-model="propostaProponenteAssistente.regime_prestacao_servicos"
         value="Dedicação Exclusiva"
+        name="Regime Prestação Serviços"
       > Dedicação Exclusiva
       <br>
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Regime Prestação Serviços')"
+    >{{ errors.first('Regime Prestação Serviços') }}</div>
     <br>
     <span v-if="propostaProponenteAssistente.regime_prestacao_servicos == 'Tempo Parcial'">
       <h5>Percentagem de tempo parcial:</h5>
@@ -32,8 +40,14 @@
         type="number"
         class="form-control"
         placeholder="Insira um valor entre 1 e 100"
+        name="Percentagem Prestação Serviços"
+        v-validate="'nullable|min_value:1|max_value:100'"
         v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
       >
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('Percentagem Prestação Serviços')"
+      >{{ errors.first('Percentagem Prestação Serviços') }}</div>
     </span>
     <br>
     <br>
@@ -45,8 +59,14 @@
         class="form-control"
         placeholder="Insira um valor positivo e inteiro"
         v-model="propostaProponenteAssistente.duracao"
+        name="Duração Contrato"
+        v-validate="'required|min_value:1'"
       >
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Duração Contrato')"
+    >{{ errors.first('Duração Contrato') }}</div>
     <br>
     <div>
       <h5>Data de inicio do contrato</h5>
@@ -56,17 +76,33 @@
         class="form-control"
         placeholder="Selecione a data de inicio de contrato"
         v-model="propostaProponenteAssistente.data_inicio_contrato"
+        name="Data Inicio Contrato"
+        v-validate="'required'"
         @change="setDataFimContrato(propostaProponenteAssistente.duracao)"
       >
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Data Inicio Contrato')"
+    >{{ errors.first('Data Inicio Contrato') }}</div>
     <br>
     <div>
       <h5>Data de fim do contrato</h5>
       <br>
-      <input type="text" class="form-control" v-model="dataFimContratoText" readonly>
+      <input
+        type="text"
+        class="form-control"
+        v-model="dataFimContratoText"
+        name="Data Fim Contrato"
+        readonly
+      >
       <br>
     </div>
-
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Data Fim Contrato')"
+    >{{ errors.first('Data Fim Contrato') }}</div>
+    <br>
     <button
       type="button"
       class="btn btn-success"
@@ -114,22 +150,14 @@ module.exports = {
       console.log(this.propostaProponenteAssistente.data_fim_contrato);
     },
     criarPropostaProponenteAssistente(propostaProponenteAssistente) {
-      if (
-        this.propostaProponenteAssistente.regime_prestacao_servicos == "" ||
-        this.propostaProponenteAssistente.duracao == "" ||
-        this.propostaProponenteAssistente.data_inicio_contrato == "" ||
-        this.propostaProponenteAssistente.data_fim_contrato == ""||
-        this.propostaProponenteAssistente.proposta_proponente_id == ""
-      ) {
-        console.log("ERROR!!! Validar ainda nas caixas correspondentes");
-      } else {
+     this.$validator.validateAll().then(() => {
         axios
           .post(
             "/api/propostaProponenteAssistente",
             propostaProponenteAssistente
           )
           .then(response => {});
-      }
+     });
     }
   }
 };

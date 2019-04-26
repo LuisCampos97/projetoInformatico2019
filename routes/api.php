@@ -31,6 +31,7 @@ Route::get('/unidadesCurricularesDoDepartamentoSelecionado/{dep_id}', 'UnidadeCu
 Route::get('/unidadesCurriculares/regime/{uc_name}', 'UnidadeCurricularController@getRegimesParaUC');
 Route::get('/unidadesCurriculares/{uc_name}/{uc_regime}', 'UnidadeCurricularController@getTurnosParaUCNomeeRegime');
 Route::get('/tiposUnidadesCurriculares/{uc_name}', 'UnidadeCurricularController@getTipoUC');
+
 //-----------------------Proposta Proponente----------------------------------------
 Route::post('/propostaProponente', 'PropostaProponenteController@store');
 
@@ -45,4 +46,7 @@ Route::post('/propostaProponenteAssistente', 'PropostaProponenteAssistenteContro
 
 //----------------------PropostaProponenteMonitor------------------------------------------------
 Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@store');
+
+//-----------------------Proposta-------------------------------------------------------------
+Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
 

@@ -5,47 +5,81 @@
     <h5>Qual será o role_professor específico do professor a ser contratado?</h5>
     <br>
     <div id="radio_role_professor" class="radio">
-      <input type="radio" v-model="propostaProponenteProfessor.role_professor" value="Coordenador"> Coordenador
+      <input
+        name="Role"
+        v-validate="'required'"
+        type="radio"
+        v-model="propostaProponenteProfessor.role_professor"
+        value="Coordenador"
+      > Coordenador
       <br>
-      <input type="radio" v-model="propostaProponenteProfessor.role_professor" value="Adjunto"> Adjunto
+      <input
+        name="Role"
+        type="radio"
+        v-model="propostaProponenteProfessor.role_professor"
+        value="Adjunto"
+      > Adjunto
       <br>
-      <input type="radio" v-model="propostaProponenteProfessor.role_professor" value="Visitante"> Visitante
+      <input
+        name="Role"
+        type="radio"
+        v-model="propostaProponenteProfessor.role_professor"
+        value="Visitante"
+      > Visitante
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Role')"
+    >{{ errors.first('Role') }}</div>
     <br>
     <div>
       <h5>Regime de prestação de serviços:</h5>
       <br>
       <div id="radio_regime" class="radio">
         <input
+          name="Regime Prestação Serviços"
+          v-validate="'required'"
           type="radio"
           v-model="propostaProponenteProfessor.regime_prestacao_servicos"
           value="Tempo Integral"
         > Tempo Integral
         <br>
         <input
+          name="Regime Prestação Serviços"
           type="radio"
           v-model="propostaProponenteProfessor.regime_prestacao_servicos"
           value="Tempo Parcial"
         > Tempo Parcial
         <br>
         <input
+          name="Regime Prestação Serviços"
           type="radio"
           v-model="propostaProponenteProfessor.regime_prestacao_servicos"
           value="Dedicação Exclusiva"
         > Dedicação Exclusiva
         <br>
       </div>
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('Regime Prestação Serviços')"
+      >{{ errors.first('Regime Prestação Serviços') }}</div>
     </div>
     <br>
     <span v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'Tempo Parcial'">
       <h5>Percentagem de tempo parcial:</h5>
       <br>
       <input
+        name="Percentagem Prestação Serviços"
+        v-validate="'nullable|min_value:1|max_value:100'"
         type="number"
         class="form-control"
         placeholder="Insira um valor entre 1 e 100"
         v-model="propostaProponenteProfessor.percentagem_prestacao_servicos"
       >
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('Percentagem Prestação Serviços')"
+      >{{ errors.first('Percentagem Prestação Serviços') }}</div>
     </span>
     <br>
     <div>
@@ -56,8 +90,14 @@
         class="form-control"
         placeholder="Insira um valor positivo e inteiro"
         v-model="propostaProponenteProfessor.duracao"
+        name="Duração Contrato"
+        v-validate="'required|min_value:1'"
       >
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Duração Contrato')"
+    >{{ errors.first('Duração Contrato') }}</div>
     <br>
     <div>
       <h5>Data de inicio do contrato</h5>
@@ -67,9 +107,15 @@
         class="form-control"
         placeholder="Selecione a data de inicio de contrato"
         v-model="propostaProponenteProfessor.data_inicio_contrato"
+        name="Data Inicio Contrato"
+        v-validate="'required'"
         @change="setDataFimContrato(propostaProponenteProfessor.duracao)"
       >
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Data Inicio Contrato')"
+    >{{ errors.first('Data Inicio Contrato') }}</div>
     <br>
     <div>
       <h5>Data de fim do contrato</h5>
@@ -126,20 +172,11 @@ module.exports = {
       console.log(this.propostaProponenteProfessor.data_fim_contrato);
     },
     criarPropostaProponenteProfessor(propostaProponenteProfessor) {
-      if (
-        this.propostaProponenteProfessor.role_professor == "" ||
-        this.propostaProponenteProfessor.regime_prestacao_servicos == "" ||
-        this.propostaProponenteProfessor.duracao == "" ||
-        this.propostaProponenteProfessor.data_inicio_contrato == "" ||
-        this.propostaProponenteProfessor.data_fim_contrato == "" ||
-        this.propostaProponenteProfessor.proposta_proponente_id == ""
-      ) {
-        console.log("ERROR!!! Validar ainda nas caixas correspondentes");
-      } else {
+      this.$validator.validateAll().then(() => {
         axios
           .post("/api/propostaProponenteProfessor", propostaProponenteProfessor)
           .then(response => {});
-      }
+      });
     }
   }
 };
