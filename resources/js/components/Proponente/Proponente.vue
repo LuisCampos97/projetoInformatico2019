@@ -263,15 +263,18 @@
     </div>
     <br>
     <proposta-proponente-professor
-      :idParaUcsPropostaProponente="idParaUcsPropostaProponente"
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
       v-if="roleSelecionado == 'professor' && isFinalized"
     ></proposta-proponente-professor>
     <proposta-proponente-assistente
-      :idParaUcsPropostaProponente="idParaUcsPropostaProponente"
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
       v-if="roleSelecionado == 'assistente' && isFinalized"
     ></proposta-proponente-assistente>
     <proposta-proponente-monitor
-      :idParaUcsPropostaProponente="idParaUcsPropostaProponente"
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
       v-if="roleSelecionado == 'monitor' && isFinalized"
     ></proposta-proponente-monitor>
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
@@ -305,7 +308,6 @@ module.exports = {
       roleSelecionado: "",
       regimesParaUC: [],
       turnosParaUCeRegime: [],
-      idParaUcsPropostaProponente: "",
       isClicked: true,
       isFinalized: false
     };
@@ -319,26 +321,8 @@ module.exports = {
       this.roleSelecionado = proposta.role;
 
       this.$validator.validateAll().then(() => {
-        if (this.unidadesCurriculares.length > 0) {
-          axios
-            .post("/api/propostaProponente/", this.proposta)
-            .then(response => {
-              this.idParaUcsPropostaProponente = response.data.id;
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-              });
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                axios
-                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
-                  .then(response => {});
-                axios
-                  .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-                  .then(response => {});
-                this.isClicked = false;
-                this.isFinalized = true;
-              });
-            });
-        }
+        this.isClicked = false;
+        this.isFinalized = true;
       });
     },
 

@@ -133,7 +133,7 @@
 </template>
 <script>
 module.exports = {
-  props: ["idParaUcsPropostaProponente"],
+  props: ["proposta", "unidadesCurriculares"],
   data() {
     return {
       propostaProponenteProfessor: {
@@ -145,16 +145,15 @@ module.exports = {
         data_fim_contrato: "",
         proposta_proponente_id: ""
       },
-      dataFimContratoText: ""
+      dataFimContratoText: "",
+      idParaUcsPropostaProponente: "",
     };
   },
   methods: {
     setDataFimContrato(duracao) {
-      this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
       var array = this.propostaProponenteProfessor.data_inicio_contrato.split(
         "-"
       );
-      console.log(array[2], array[1], array[0]);
       let data = new Date(
         parseInt(array[0]),
         parseInt(array[1]) - 1,
@@ -169,13 +168,35 @@ module.exports = {
         .toISOString()
         .slice(0, 19)
         .replace("T", " ");
-      console.log(this.propostaProponenteProfessor.data_fim_contrato);
     },
     criarPropostaProponenteProfessor(propostaProponenteProfessor) {
       this.$validator.validateAll().then(() => {
-        axios
-          .post("/api/propostaProponenteProfessor", propostaProponenteProfessor)
-          .then(response => {});
+        if (this.unidadesCurriculares.length > 0) {
+          axios
+            .post("/api/propostaProponente/", this.proposta)
+            .then(response => {
+              this.idParaUcsPropostaProponente = response.data.id;
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                axios
+                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
+                  .then(response => {});
+                this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
+
+                axios
+                  .post(
+                    "/api/propostaProponenteProfessor",
+                    propostaProponenteProfessor
+                  )
+                  .then(response => {});
+              });
+              axios
+                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+                .then(response => {});
+            });
+        }
       });
     }
   }

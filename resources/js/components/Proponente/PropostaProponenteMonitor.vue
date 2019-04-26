@@ -89,7 +89,7 @@
 </template>
 <script>
 module.exports = {
-  props: ["idParaUcsPropostaProponente"],
+  props: ["proposta", "unidadesCurriculares"],
   data() {
     return {
       propostaProponenteMonitor: {
@@ -100,16 +100,16 @@ module.exports = {
         data_fim_contrato: "",
         proposta_proponente_id: ""
       },
-      dataFimContratoText: ""
+      dataFimContratoText: "",
+      idParaUcsPropostaProponente: "",
     };
   },
   methods: {
     setDataFimContrato(duracao) {
-      this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
+//      this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
       var array = this.propostaProponenteMonitor.data_inicio_contrato.split(
         "-"
       );
-      console.log(array[2], array[1], array[0]);
       let data = new Date(
         parseInt(array[0]),
         parseInt(array[1]) - 1,
@@ -124,13 +124,35 @@ module.exports = {
         .toISOString()
         .slice(0, 19)
         .replace("T", " ");
-      console.log(this.propostaProponenteMonitor.data_fim_contrato);
     },
     criarpropostaProponenteMonitor(propostaProponenteMonitor) {
       this.$validator.validateAll().then(() => {
-        axios
-          .post("/api/propostaProponenteMonitor", propostaProponenteMonitor)
-          .then(response => {});
+        if (this.unidadesCurriculares.length > 0) {
+          axios
+            .post("/api/propostaProponente/", this.proposta)
+            .then(response => {
+              this.idParaUcsPropostaProponente = response.data.id;
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                axios
+                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
+                  .then(response => {});
+                this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
+
+                axios
+                  .post(
+                    "/api/propostaProponenteMonitor",
+                    propostaProponenteMonitor
+                  )
+                  .then(response => {});
+              });
+              axios
+                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+                .then(response => {});
+            });
+        }
       });
     }
   }
