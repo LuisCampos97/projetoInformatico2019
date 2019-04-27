@@ -67,6 +67,7 @@
         v-validate="'required'"
         @change="setDataFimContrato(propostaProponenteMonitor.duracao)"
       >
+      <br>
     </div>
     <div
       class="help-block alert alert-danger"
@@ -85,6 +86,13 @@
       class="btn btn-success"
       v-on:click="criarpropostaProponenteMonitor(propostaProponenteMonitor)"
     >Finalizar e criar proposta</button>
+    <br>
+    <resumo-proposta
+      v-if="avancar" 
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
+      :propostaProponenteMonitor="propostaProponenteMonitor"
+    ></resumo-proposta>
   </div>
 </template>
 <script>
@@ -101,12 +109,11 @@ module.exports = {
         proposta_proponente_id: ""
       },
       dataFimContratoText: "",
-      idParaUcsPropostaProponente: "",
+      avancar: false
     };
   },
   methods: {
     setDataFimContrato(duracao) {
-//      this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
       var array = this.propostaProponenteMonitor.data_inicio_contrato.split(
         "-"
       );
@@ -127,32 +134,7 @@ module.exports = {
     },
     criarpropostaProponenteMonitor(propostaProponenteMonitor) {
       this.$validator.validateAll().then(() => {
-        if (this.unidadesCurriculares.length > 0) {
-          axios
-            .post("/api/propostaProponente/", this.proposta)
-            .then(response => {
-              this.idParaUcsPropostaProponente = response.data.id;
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-              });
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                axios
-                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
-                  .then(response => {});
-                this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
-
-                axios
-                  .post(
-                    "/api/propostaProponenteMonitor",
-                    propostaProponenteMonitor
-                  )
-                  .then(response => {});
-              });
-              axios
-                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-                .then(response => {});
-            });
-        }
+        this.avancar = true;
       });
     }
   }

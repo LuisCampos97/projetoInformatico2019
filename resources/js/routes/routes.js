@@ -13,6 +13,7 @@ const proponente = Vue.component('proponente', require('../components/Proponente
 const propostaProponenteProfessor = Vue.component('propostaProponenteProfessor', require('../components/Proponente/PropostaProponenteProfessor.vue').default);
 const propostaProponenteAssistente = Vue.component('propostaProponenteAssistente', require('../components/Proponente/PropostaProponenteAssistente').default);
 const propostaProponenteMonitor = Vue.component('propostaProponenteMonitor', require('../components/Proponente/PropostaProponenteMonitor').default);
+const resumoProposta = Vue.component('resumoProposta', require('../components/Proponente/ResumoProposta.vue').default);
 const routes = [
   //---------------Auth----------------------
   {
@@ -51,6 +52,11 @@ const routes = [
     path: '/propostaProponenteMonitor',
     component: propostaProponenteMonitor,
     name: 'propostaProponenteMonitor',
+  },
+  {
+    path: '/resumoProposta',
+    component: resumoProposta,
+    name: 'resumoProposta',
   },
 ];
 

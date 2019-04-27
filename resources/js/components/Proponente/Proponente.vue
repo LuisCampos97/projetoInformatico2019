@@ -105,6 +105,7 @@
           >{{dep.nome_departamento}}</option>
         </select>
         <div
+          v-if="unidadesCurriculares.length ==0"
           class="help-block alert alert-danger"
           v-show="errors.has('departamento')"
         >{{ errors.first('departamento') }}</div>
@@ -257,7 +258,7 @@
       <button
         type="button"
         class="btn btn-success"
-        v-on:click="verificarErrosOuAvançar(proposta, unidadesCurriculares)"
+        v-on:click="avancar(proposta, unidadesCurriculares)"
         v-if="isClicked"
       >Seguinte</button>
     </div>
@@ -265,17 +266,17 @@
     <proposta-proponente-professor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
-      v-if="roleSelecionado == 'professor' && isFinalized"
+      v-if="roleSelecionado == 'professor' && isFinalized && unidadesCurriculares.length > 0"
     ></proposta-proponente-professor>
     <proposta-proponente-assistente
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
-      v-if="roleSelecionado == 'assistente' && isFinalized"
+      v-if="roleSelecionado == 'assistente' && isFinalized && unidadesCurriculares.length > 0"
     ></proposta-proponente-assistente>
     <proposta-proponente-monitor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
-      v-if="roleSelecionado == 'monitor' && isFinalized"
+      v-if="roleSelecionado == 'monitor' && isFinalized && unidadesCurriculares.length > 0 "
     ></proposta-proponente-monitor>
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
   </div>
@@ -313,16 +314,18 @@ module.exports = {
     };
   },
   methods: {
-    verificarErrosOuAvançar: function(proposta, unidadesCurriculares) {
+    avancar: function(proposta, unidadesCurriculares) {
       this.proposta.data_de_assinatura_coordenador_departamento = new Date()
         .toISOString()
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
       this.roleSelecionado = proposta.role;
-
+      console.log(this.errors);
       this.$validator.validateAll().then(() => {
-        this.isClicked = false;
-        this.isFinalized = true;
+        if (this.unidadesCurriculares.length > 0) {
+          this.isFinalized = true;
+          this.isClicked = false;
+        }
       });
     },
 

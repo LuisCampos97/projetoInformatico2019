@@ -106,8 +106,15 @@
     <button
       type="button"
       class="btn btn-success"
-      v-on:click="criarPropostaProponenteAssistente(propostaProponenteAssistente)"
-    >Finalizar e criar proposta</button>
+      v-on:click="continuar"
+    >Seguinte</button>
+    <br>
+    <resumo-proposta
+      v-if="avancar" 
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
+      :propostaProponenteAssistente="propostaProponenteAssistente"
+    ></resumo-proposta>
   </div>
 </template>
 <script>
@@ -123,7 +130,8 @@ module.exports = {
         data_fim_contrato: "",
         proposta_proponente_id: ""
       },
-      dataFimContratoText: ""
+      dataFimContratoText: "",
+      avancar:false,
     };
   },
   methods: {
@@ -132,7 +140,6 @@ module.exports = {
       var array = this.propostaProponenteAssistente.data_inicio_contrato.split(
         "-"
       );
-      console.log(array[2], array[1], array[0]);
       let data = new Date(
         parseInt(array[0]),
         parseInt(array[1]) - 1,
@@ -147,37 +154,11 @@ module.exports = {
         .toISOString()
         .slice(0, 19)
         .replace("T", " ");
-      console.log(this.propostaProponenteAssistente.data_fim_contrato);
     },
-    criarPropostaProponenteAssistente(propostaProponenteAssistente) {
+    continuar() {
     this.$validator.validateAll().then(() => {
-        if (this.unidadesCurriculares.length > 0) {
-          axios
-            .post("/api/propostaProponente/", this.proposta)
-            .then(response => {
-              this.idParaUcsPropostaProponente = response.data.id;
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-              });
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                axios
-                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
-                  .then(response => {});
-                this.propostaProponenteAssistente.proposta_proponente_id = this.idParaUcsPropostaProponente;
-
-                axios
-                  .post(
-                    "/api/propostaProponenteAssistente",
-                    propostaProponenteAssistente
-                  )
-                  .then(response => {});
-              });
-              axios
-                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-                .then(response => {});
-            });
-        }
       });
+      this.avancar=true;
     }
   }
 };

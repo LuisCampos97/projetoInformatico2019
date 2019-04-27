@@ -2,7 +2,7 @@
   <div>
     <h2>Proponente (Professor)</h2>
     <br>
-    <h5>Qual será o role_professor específico do professor a ser contratado?</h5>
+    <h5>Qual será o role específico do professor a ser contratado?</h5>
     <br>
     <div id="radio_role_professor" class="radio">
       <input
@@ -124,11 +124,14 @@
       <br>
     </div>
     <br>
-    <button
-      type="button"
-      class="btn btn-success"
-      v-on:click="criarPropostaProponenteProfessor(propostaProponenteProfessor)"
-    >Finalizar e criar proposta</button>
+    <button type="button" class="btn btn-success" v-on:click="continuar">Continuar</button>
+    <br>
+    <resumo-proposta
+      v-if="avancar"
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
+      :propostaProponenteProfessor="propostaProponenteProfessor"
+    ></resumo-proposta>
   </div>
 </template>
 <script>
@@ -146,7 +149,7 @@ module.exports = {
         proposta_proponente_id: ""
       },
       dataFimContratoText: "",
-      idParaUcsPropostaProponente: "",
+      avancar: false
     };
   },
   methods: {
@@ -169,35 +172,9 @@ module.exports = {
         .slice(0, 19)
         .replace("T", " ");
     },
-    criarPropostaProponenteProfessor(propostaProponenteProfessor) {
-      this.$validator.validateAll().then(() => {
-        if (this.unidadesCurriculares.length > 0) {
-          axios
-            .post("/api/propostaProponente/", this.proposta)
-            .then(response => {
-              this.idParaUcsPropostaProponente = response.data.id;
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-              });
-              this.unidadesCurriculares.forEach(unidadeCurricular => {
-                axios
-                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
-                  .then(response => {});
-                this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
-
-                axios
-                  .post(
-                    "/api/propostaProponenteProfessor",
-                    propostaProponenteProfessor
-                  )
-                  .then(response => {});
-              });
-              axios
-                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-                .then(response => {});
-            });
-        }
-      });
+    continuar() {
+      this.$validator.validateAll().then(() => {});
+      this.avancar = true;
     }
   }
 };
