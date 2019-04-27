@@ -88,22 +88,22 @@
       <div v-if="propostaProponenteProfessor">
         <h5>
           <strong>Percentagem de prestação de serviços:</strong>
-          {{ propostaProponenteProfessor.percentagem_prestacao_servicos }}
         </h5>
+        {{ propostaProponenteProfessor.percentagem_prestacao_servicos }}
       </div>
-      
+
       <div v-if="propostaProponenteMonitor">
         <h5>
           <strong>Percentagem de prestação de serviços:</strong>
-          {{ propostaProponenteMonitor.percentagem_prestacao_servicos }}
         </h5>
+        {{ propostaProponenteMonitor.percentagem_prestacao_servicos }}
       </div>
-      
+
       <div v-if="propostaProponenteAssistente">
         <h5>
           <strong>Percentagem de prestação de serviços:</strong>
-          {{ propostaProponenteAssistente.percentagem_prestacao_servicos }}
         </h5>
+        {{ propostaProponenteAssistente.percentagem_prestacao_servicos }}
       </div>
       <h5>
         <strong>Duração do contrato:</strong>
@@ -183,35 +183,57 @@ module.exports = {
     };
   },
   methods: {
-    doStuff(){
-      console.log("1 "+"'"+this.propostaProponenteProfessor.percentagem_prestacao_servicos+"'");
-            console.log("2"+"'"+this.propostaProponenteAssisntente.percentagem_prestacao_servicos+"'");
-                  console.log("3"+"'"+this.propostaProponenteMonitor.percentagem_prestacao_servicos+"'");
+    doStuff() {
+      console.log(
+        "1 " +
+          "'" +
+          this.propostaProponenteProfessor.percentagem_prestacao_servicos +
+          "'"
+      );
+      console.log(
+        "2" +
+          "'" +
+          this.propostaProponenteAssisntente.percentagem_prestacao_servicos +
+          "'"
+      );
+      console.log(
+        "3" +
+          "'" +
+          this.propostaProponenteMonitor.percentagem_prestacao_servicos +
+          "'"
+      );
     },
     submeterPropostaProfessor(propostaProponenteProfessor) {
-      if (this.unidadesCurriculares.length > 0) {
-        axios.post("/api/propostaProponente/", this.proposta).then(response => {
-          this.idParaUcsPropostaProponente = response.data.id;
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-          });
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            axios
-              .post("/api/ucsPropostaProponente/", unidadeCurricular)
-              .then(response => {});
-            this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
-
-            axios
-              .post(
-                "/api/propostaProponenteProfessor",
-                propostaProponenteProfessor
-              )
-              .then(response => {});
-          });
+      let confirmacao = confirm(
+        "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
+      );
+      if (confirmacao) {
+        if (this.unidadesCurriculares.length > 0) {
           axios
-            .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-            .then(response => {});
-        });
+            .post("/api/propostaProponente/", this.proposta)
+            .then(response => {
+              this.idParaUcsPropostaProponente = response.data.id;
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                axios
+                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
+                  .then(response => {});
+                this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
+
+                axios
+                  .post(
+                    "/api/propostaProponenteProfessor",
+                    propostaProponenteProfessor
+                  )
+                  .then(response => {});
+              });
+              axios
+                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+                .then(response => {});
+            });
+        }
       }
     },
     submeterPropostaAssistente(propostaProponenteAssistente) {
