@@ -7,8 +7,23 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
 
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.btn-dark {
+  color: #fff;
+  background-color: $backgroud_color;
+  border-color: $backgroud_color;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #1f1f1f;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
 }

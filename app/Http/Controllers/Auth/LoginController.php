@@ -52,6 +52,8 @@ class LoginController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             //dd(\Adldap\Laravel\Facades\Adldap::search()->find($request->email));
+            // $user = \Adldap::search()->users()->find('jdoe');
+            // dd($user->getAttributes());
             $token = Str::random(60);
             $response = compact('token');
             $response['user'] = Auth::user();

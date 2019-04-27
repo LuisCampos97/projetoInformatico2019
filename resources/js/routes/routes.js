@@ -13,6 +13,8 @@ const proponente = Vue.component('proponente', require('../components/Proponente
 const propostaProponenteProfessor = Vue.component('propostaProponenteProfessor', require('../components/Proponente/PropostaProponenteProfessor.vue').default);
 const propostaProponenteAssistente = Vue.component('propostaProponenteAssistente', require('../components/Proponente/PropostaProponenteAssistente').default);
 const propostaProponenteMonitor = Vue.component('propostaProponenteMonitor', require('../components/Proponente/PropostaProponenteMonitor').default);
+const separator_table = Vue.component('separator-table', require('../components/utils/Separator_Table.vue').default);
+
 const routes = [
   //---------------Auth----------------------
   {

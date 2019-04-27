@@ -1,16 +1,21 @@
 <template>
   <div class="grid-container">
-    <ul class="navbar">
-      <li class="navbar-logo" href="#">
-        <img src="https://ead.ipleiria.pt/2018-19/theme/image.php/ead/theme/1554110091/logo-white">
-      </li>
-      <li>
-        <div class="navbar-name">Plataforma de Gestão de Contratações</div>
-      </li>
-      <li>
-        <a class="navbar-user" v-on:click.prevent="logout">Logout</a>
-      </li>
-    </ul>
+      <b-navbar toggleable="lg" type="light" variant="light">
+        <b-navbar-brand>
+          <img src="../../assets/logo.svg">Plataforma de Gestão de Contratações
+        </b-navbar-brand>
+        
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item-dropdown right>
+              <template slot="button-content">User</template>
+              <b-dropdown-item v-on:click.prevent="logout">Logout</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
     <div class="sidebar">
       <div class="sidebar-item active">PROPONENTE</div>
       <div class="sidebar-item">DIRETOR DA UO</div>
@@ -19,7 +24,7 @@
       <div class="sidebar-item">RECURSOS HUMANOS</div>
     </div>
     <div class="main">
-      <proponente></proponente>
+      <separator-table></separator-table>
     </div>
   </div>
 </template>
@@ -47,7 +52,9 @@ module.exports = {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import "../../sass/app.scss";
+
 body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -60,14 +67,15 @@ body {
   grid-template-areas:
     "navbar navbar"
     "sidebar main";
-  grid-template-columns: 20% auto;
+  grid-template-columns: 24rem auto;
   grid-template-rows: auto;
 }
 
 /* NAVBAR */
 .navbar {
   grid-area: navbar;
-  background-color: #1b1b1b;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid gray;
 }
 
 ul.navbar {
@@ -80,49 +88,57 @@ ul.navbar {
 li a {
   padding: 14px 16px;
   text-decoration: none;
-  color: white;
+  color: #1a1a1a;
 }
 
-/* Change the link color to #111 (black) on hover */
 li a:hover {
-  background-color: #111;
+  background-color: #f5f5f5;
   text-decoration: none;
-  color: white;
 }
 
-.navbar-logo img {
+li.logo {
+  background-color: #f5f5f5;
+  list-style-type: none;
+  border-bottom: 1px solid gray;
+}
+
+.logo img {
   padding: 20px 0px 20px 25px;
 }
 
 div.navbar-name {
-  color: white;
   font-size: 30px;
-  font-weight: 600;
+  font-weight: 300;
+  padding-left: 18rem;
 }
 
 a.navbar-user {
-  font-size: 15px;
-  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 15px;
+  color: #1a1a1a;
 }
 
 /* SIDEBAR */
 .sidebar {
   grid-area: sidebar;
-  background-color: #676a6c;
+  background-color: #f5f5f5;
 }
 
 .sidebar-item {
-  color: white;
+  color: #1f1f1f;
+  font-weight: 600;
   font-size: 20px;
   vertical-align: middle;
   text-align: center;
   padding: 75px;
   border-bottom: 1px solid white;
-  border-top: 1px solid white;
 }
 
 .sidebar-item.active {
-  background-color: #1b1b1b;
+  background-color: $backgroud-color;
+  color: white;
 }
 
 .main {

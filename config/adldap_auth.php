@@ -165,6 +165,7 @@ return [
     'sync_attributes' => [
 
         'name' => 'cn',
+        'role' => 'title'
 
     ],
 

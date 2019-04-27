@@ -1,49 +1,39 @@
 <template>
-  <div id="wrapper">
-    <div id="welcome">
-      <h1 id="logo">
-        <a>
-          <img
-            src="https://ead.ipleiria.pt/2018-19/theme/image.php/ead/theme/1554110091/logo-white"
-            alt="Politécnico de Leiria"
-            width="260"
-            height="80"
-          >
-        </a>
-      </h1>
-      <div id="app-name">
-        <div>Plataforma de</div>
-        <div class="main-title">Gestão de Contrações</div>
-        <div></div>
-        <div class="year">2018.19</div>
+  <div class="wrapper row">
+    <div class="col-md-6 welcome">
+      <div class="wrapper row align-items-center">
+        <div class="col">
+          <a>
+            <img
+              src="https://ead.ipleiria.pt/2018-19/theme/image.php/ead/theme/1554110091/logo-white"
+              alt="Politécnico de Leiria"
+              width="260"
+              height="80"
+            >
+          </a>
+          <div class="app-name pt-5">
+            <div class="font-weight-lighter">Plataforma de</div>
+            <div class="font-weight-bold">Gestão de Contrações</div>
+            <div class="font-weight-bold">2018.19</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="login-form">
-      <div class="form-label">
-        <label for="inputEmail">Nome de utilizador</label>
+    <div class="col-md-6">
+      <div class="wrapper row align-items-center">
+        <div class="col-md-6 login_form">
+          <div class="form-group">
+            <label for="inputEmail" class="font-weight-bold" >Nome de utilizador</label>
+            <b-form-input id="inputEmail" v-model="user.email" trim></b-form-input>
+          </div>
+          <div class="form-group">
+            <label for="inputPassword" class="font-weight-bold">Senha</label>
+            <b-form-input type="password" id="inputPassword" v-model="user.password" trim></b-form-input>
+          </div>
+          <b-button class="col-md-12" variant="dark" v-on:click.prevent="login">Entrar</b-button>
+        </div>
       </div>
-      <div class="form-input">
-        <input type="email" name="email" v-model.trim="user.email" id="inputEmail">
-      </div>
-      <div class="clearer"></div>
-      <div class="form-label">
-        <label for="inputPassword">Senha</label>
-      </div>
-      <div class="form-input">
-        <input type="password" name="password" id="inputPassword" v-model.trim="user.password">
-      </div>
-      <div class="clearer"></div>
-      <input id="anchor" type="hidden" name="anchor" value>
-      <input type="hidden" name="logintoken" value="xXmFcR9IcSorlXUxa11eH1rHtkJ13afg">
-      <input type="submit" id="loginbtn" value="Entrar" v-on:click.prevent="login">
     </div>
-
-    <!-- <button
-      type="button"
-      class="btn btn-success"
-      style="float:right"
-      @click="showProponenteView"
-    >Proponente</button>-->
   </div>
 </template>
 
@@ -78,110 +68,46 @@ module.exports = {
 </script>
 
 <style>
-#wrapper {
-  display: table;
-  overflow: hidden;
-  position: absolute;
+.wrapper {
   width: 100%;
   height: 100%;
-}
+  position: absolute;
+  align-self: center;
 
-body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
-  line-height: 18px;
-  color: #676a6c;
-}
-
-#welcome,
-#login-form {
-  display: table-cell;
-  width: 50%;
-  height: 100%;
-  vertical-align: top;
 }
 
 /* Welcome */
-#welcome {
+.welcome {
   background-color: #1a1a1a;
   background-size: cover;
   color: white;
-  vertical-align: middle;
+  text-align: center;
 }
 
-#app_name,
-#logo {
-  padding: 20px 0 0;
-  position: relative;
-  text-align: center;
-  margin: 0;
-}
-
-#app-name {
-  text-align: center;
+.app-name {
   line-height: 3.5rem;
   font-size: 2.2rem;
-  letter-spacing: 0.5rem; /* Retificar para ver como fica melhor */
-  padding: 70px 0 60px;
-}
-
-.main-title,
-.year {
-  font-weight: 700;
+  letter-spacing: 0.5rem;
 }
 
 /* Login Form */
-#login-form {
-  max-width: 400px;
-  margin: 0 auto;
-  width: 100%;
-  vertical-align: middle;
-  text-align: center;
+.login_form {
+  margin: 0 14vw;
 }
 
-.form-input,
-.form-label {
-  float: none;
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #1a1a1a;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
 }
 
-input {
-  border: 1px solid #ccc;
-  width: 45%;
-  font-weight: 400;
-  vertical-align: middle;
-}
-
-.form-label label {
-  font-weight: 700;
-}
-
-.clearer {
-  background: 0 0;
-  border-width: 0;
-  clear: both;
-  height: 1px;
-  margin: 0;
-  padding: 0;
-}
-
-.form-input input,
-#loginbtn {
-  padding: 10px;
-}
-
-#loginbtn {
-  background: #ef4758;
-  color: #fff;
-  font-weight: 700;
-  text-shadow: none;
-  cursor: pointer;
-  margin-top: 15px;
-}
-
-label {
-  margin-bottom: 5px;
-  display: inline-block;
-  float: none;
-  margin-top: 15px;
+.btn-dark {
+    color: #fff;
+    background-color: #1a1a1a;
+    border-color: #1a1a1a;
 }
 </style>
