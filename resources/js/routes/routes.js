@@ -15,6 +15,7 @@ const propostaProponenteAssistente = Vue.component('propostaProponenteAssistente
 const propostaProponenteMonitor = Vue.component('propostaProponenteMonitor', require('../components/Proponente/PropostaProponenteMonitor').default);
 const separator_table = Vue.component('separator-table', require('../components/utils/Separator_Table.vue').default);
 
+const resumoProposta = Vue.component('resumoProposta', require('../components/Proponente/ResumoProposta.vue').default);
 const routes = [
   //---------------Auth----------------------
   {
@@ -53,6 +54,11 @@ const routes = [
     path: '/propostaProponenteMonitor',
     component: propostaProponenteMonitor,
     name: 'propostaProponenteMonitor',
+  },
+  {
+    path: '/resumoProposta',
+    component: resumoProposta,
+    name: 'resumoProposta',
   },
 ];
 

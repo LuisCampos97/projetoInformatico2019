@@ -22,6 +22,7 @@ class PropostaProponenteAssistente extends JsonResource
             'data_inicio_contrato' => $this->data_inicio_contrato,
             'data_fim_contrato' => $this->data_fim_contrato,
             'avaliacao_periodo_anterior' => $this->avaliacao_periodo_anterior,
+            'proposta_proponente_id' => $this->proposta_proponente_id
         ];
     }
 }

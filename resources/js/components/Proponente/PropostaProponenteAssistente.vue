@@ -1,18 +1,165 @@
 <template>
   <div>
-    <div>
-      PROPOSTEA PROPONENTE ASSISTENTE
+    <h2>Proponente (Assistente)</h2>
+    <br>
+    <h5>Regime de prestação de serviços:</h5>
+    <br>
+    <div id="radio_regime" class="radio">
+      <input
+        type="radio"
+        v-model="propostaProponenteAssistente.regime_prestacao_servicos"
+        value="Tempo Integral"
+        name="Regime Prestação Serviços"
+        v-validate="'required'"
+      > Tempo Integral
+      <br>
+      <input
+        type="radio"
+        v-model="propostaProponenteAssistente.regime_prestacao_servicos"
+        value="Tempo Parcial"
+        name="Regime Prestação Serviços"
+      > Tempo Parcial
+      <br>
+      <input
+        type="radio"
+        v-model="propostaProponenteAssistente.regime_prestacao_servicos"
+        value="Dedicação Exclusiva"
+        name="Regime Prestação Serviços"
+      > Dedicação Exclusiva
+      <br>
     </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Regime Prestação Serviços')"
+    >{{ errors.first('Regime Prestação Serviços') }}</div>
+    <br>
+    <span v-if="propostaProponenteAssistente.regime_prestacao_servicos == 'Tempo Parcial'">
+      <h5>Percentagem de tempo parcial:</h5>
+      <br>
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Insira um valor entre 1 e 100"
+        name="Percentagem Prestação Serviços"
+        v-validate="'nullable|min_value:1|max_value:100'"
+        v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
+      >
+      <div
+        class="help-block alert alert-danger"
+        v-show="errors.has('Percentagem Prestação Serviços')"
+      >{{ errors.first('Percentagem Prestação Serviços') }}</div>
+    </span>
+    <br>
+    <br>
+    <div>
+      <h5>Duração do contrato (em meses)</h5>
+      <br>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Insira um valor positivo e inteiro"
+        v-model="propostaProponenteAssistente.duracao"
+        name="Duração Contrato"
+        v-validate="'required|min_value:1'"
+      >
+    </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Duração Contrato')"
+    >{{ errors.first('Duração Contrato') }}</div>
+    <br>
+    <div>
+      <h5>Data de inicio do contrato</h5>
+      <br>
+      <input
+        type="date"
+        class="form-control"
+        placeholder="Selecione a data de inicio de contrato"
+        v-model="propostaProponenteAssistente.data_inicio_contrato"
+        name="Data Inicio Contrato"
+        v-validate="'required'"
+        @change="setDataFimContrato(propostaProponenteAssistente.duracao)"
+      >
+    </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Data Inicio Contrato')"
+    >{{ errors.first('Data Inicio Contrato') }}</div>
+    <br>
+    <div>
+      <h5>Data de fim do contrato</h5>
+      <br>
+      <input
+        type="text"
+        class="form-control"
+        v-model="dataFimContratoText"
+        name="Data Fim Contrato"
+        readonly
+      >
+      <br>
+    </div>
+    <div
+      class="help-block alert alert-danger"
+      v-show="errors.has('Data Fim Contrato')"
+    >{{ errors.first('Data Fim Contrato') }}</div>
+    <br>
+    <button
+      type="button"
+      class="btn btn-success"
+      v-on:click="continuar"
+    >Seguinte</button>
+    <br>
+    <resumo-proposta
+      v-if="avancar" 
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
+      :propostaProponenteAssistente="propostaProponenteAssistente"
+    ></resumo-proposta>
   </div>
 </template>
 <script>
 module.exports = {
+  props: ["proposta", "unidadesCurriculares"],
   data() {
     return {
-        
+      propostaProponenteAssistente: {
+        regime_prestacao_servicos: "",
+        percentagem_prestacao_servicos: "",
+        duracao: "",
+        data_inicio_contrato: "",
+        data_fim_contrato: "",
+        proposta_proponente_id: ""
+      },
+      dataFimContratoText: "",
+      avancar:false,
     };
   },
   methods: {
+    setDataFimContrato(duracao) {
+      //this.propostaProponenteAssistente.proposta_proponente_id = this.idParaUcsPropostaProponente;
+      var array = this.propostaProponenteAssistente.data_inicio_contrato.split(
+        "-"
+      );
+      let data = new Date(
+        parseInt(array[0]),
+        parseInt(array[1]) - 1,
+        parseInt(array[2])
+      );
+      data.setMonth(data.getUTCMonth() + parseInt(duracao));
+      let dia = data.getDate();
+      let mes = data.getMonth() + 1;
+      let ano = data.getFullYear();
+      this.dataFimContratoText = dia + "/" + mes + "/" + ano;
+      this.propostaProponenteAssistente.data_fim_contrato = new Date(data)
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+    },
+    continuar() {
+    this.$validator.validateAll().then(() => {
+      });
+      this.avancar=true;
+    }
   }
 };
 </script>
