@@ -1,92 +1,49 @@
 <template>
   <div>
-    <h2>Vista de Proponente</h2>
-    <br>
-    <h5>Que tipo de proposta pretende efetuar?</h5>
-    <br>
-    <div id="radiotipo_contrato" class="radio">
-      <input
-        name="Tipo Contrato"
-        v-validate="'required'"
-        type="radio"
-        v-model="proposta.tipo_contrato"
-        value="Contratacao Inicial"
-      >Contratacao Inicial
-      <br>
-      <input name="Tipo Contrato" type="radio" v-model="proposta.tipo_contrato" value="Renovacao"> Renovação
-      <br>
-      <input name="Tipo Contrato" type="radio" v-model="proposta.tipo_contrato" value="Alteracao"> Alteração
-      <br>
-    </div>
+    <h2 class="pb-4">Nova Proposta</h2>
+    <b-form-group label="Que tipo de proposta pretende efetuar?">
+      <b-form-radio v-model="proposta.tipo_contrato" value="Contratacao Inicial">Contratação Inicial</b-form-radio>
+      <b-form-radio v-model="proposta.tipo_contrato" value="Renovacao">Renovação</b-form-radio>
+      <b-form-radio v-model="proposta.tipo_contrato" value="Alteracao">Alteração</b-form-radio>
+    </b-form-group>
     <div
       class="help-block alert alert-danger"
       v-show="errors.has('Tipo Contrato')"
-    >{{ errors.first('Tipo Contrato') }}</div>
-    <br>
+    >{{ errors.first('Tipo Contrato') }}</div> 
+
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
     <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
-      <h5>Para que unidade organica será o docente contratado?</h5>
-      <br>
-      <div id="radiounidade_organica" class="radio">
-        <input
-          name="unidade organica"
-          v-validate="'required'"
-          type="radio"
-          v-model="proposta.unidade_organica"
-          value="ESECS"
-        > ESECS
-        <br>
-        <input
-          name="unidade organica"
-          type="radio"
-          v-model="proposta.unidade_organica"
-          value="ESTG"
-        > ESTG
-        <br>
-        <input
-          name="unidade organica"
-          type="radio"
-          v-model="proposta.unidade_organica"
-          value="ESSLei"
-        > ESSLei
-        <br>
-        <input
-          name="unidade organica"
-          type="radio"
-          v-model="proposta.unidade_organica"
-          value="ESTM"
-        > ESTM
-        <br>
-        <input
-          name="unidade organica"
-          type="radio"
-          v-model="proposta.unidade_organica"
-          value="ESAD.CR"
-        > ESAD.CR
-        <br>
-      </div>
+      <b-form-group label="Para que unidade organica será o docente contratado?">
+        <b-form-radio v-model="proposta.unidade_organica" value="ESECS">ESECS</b-form-radio>
+        <b-form-radio v-model="proposta.unidade_organica" value="ESTG">ESTG</b-form-radio>
+        <b-form-radio v-model="proposta.unidade_organica" value="ESSLei">ESSLei</b-form-radio>
+        <b-form-radio v-model="proposta.unidade_organica" value="ESTM">ESTM</b-form-radio>
+        <b-form-radio v-model="proposta.unidade_organica" value="ESAD.CR">SAD.CR</b-form-radio>
+      </b-form-group>
       <div
         class="help-block alert alert-danger"
         v-show="errors.has('unidade organica')"
       >{{ errors.first('unidade organica') }}</div>
       <br>
       <div class="form-group">
-        <h5>Nome completo</h5>
-        <input
+        <label class="label" for="inputNomeCompleto">Nome completo</label>
+        <b-form-input
+          id="inputNomeCompleto"
           type="text"
           class="form-control"
           placeholder="Insira o nome completo do docente"
           name="nome"
           v-validate="'required'"
           v-model="proposta.nome_completo"
-        >
+        ></b-form-input>
         <div
           class="help-block alert alert-danger"
           v-show="errors.has('nome')"
         >{{ errors.first('nome') }}</div>
         <br>
       </div>
+      
       <div class="jumbotron" id="ucs">
         <h5>Unidades Curriculares</h5>
         <br>
@@ -278,6 +235,12 @@
       :unidadesCurriculares="unidadesCurriculares"
       v-if="roleSelecionado == 'monitor' && isFinalized && unidadesCurriculares.length > 0 "
     ></proposta-proponente-monitor>
+    <b-progress class="mt-3" :max="progresso.max" height="2rem">
+      <b-progress-bar :value="progresso.valor" variant="success">
+        Progresso:
+        <strong>{{ progresso.valor }} / {{ progresso.max }}</strong>
+      </b-progress-bar>
+    </b-progress>
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
   </div>
 </template>
@@ -310,7 +273,11 @@ module.exports = {
       regimesParaUC: [],
       turnosParaUCeRegime: [],
       isClicked: true,
-      isFinalized: false
+      isFinalized: false,
+      progresso: {
+        valor: 1,
+        max: 3
+      }
     };
   },
   methods: {
@@ -327,6 +294,7 @@ module.exports = {
           this.isClicked = false;
         }
       });
+      this.progresso.valor++;
     },
 
     getUcsDeDepartamento(dep_id) {
@@ -385,3 +353,21 @@ module.exports = {
   }
 };
 </script>
+
+<style >
+ .col-form-label, .label {
+  font-size: 20px;
+}
+
+.form-control:focus, .custom-select:focus {
+  color: #1a1a1a;
+  background-color: #fff;
+  border-color: #1a1a1a;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255,0);
+}
+
+.custom-control-label::after {
+  
+}
+</style>

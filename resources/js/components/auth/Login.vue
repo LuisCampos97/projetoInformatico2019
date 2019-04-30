@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapper row">
+  <div class="wrapper row no-gutters">
     <div class="col-md-6 welcome">
-      <div class="wrapper row align-items-center">
+      <div class="wrapper row no-gutters align-items-center">
         <div class="col">
           <a>
             <img
@@ -20,10 +20,11 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="wrapper row align-items-center">
+      <div class="wrapper row no-gutters align-items-center">
         <div class="col-md-6 login_form">
+          <b-alert show variant="dark" v-show="error">{{ errorMessage }}</b-alert>
           <div class="form-group">
-            <label for="inputEmail" class="font-weight-bold" >Nome de utilizador</label>
+            <label for="inputEmail" class="font-weight-bold">Nome de utilizador</label>
             <b-form-input id="inputEmail" v-model="user.email" trim></b-form-input>
           </div>
           <div class="form-group">
@@ -41,6 +42,8 @@
 module.exports = {
   data: function() {
     return {
+      error: false,
+      errorMessage: '',
       user: {
         email: "",
         password: ""
@@ -57,7 +60,9 @@ module.exports = {
           this.$router.push({ name: "dashboard" });
         })
         .catch(error => {
-          console.log(error);
+          this.error = true;
+          this.errorMessage = "Credencias Inválidas";
+          console.log(error.data);
         });
     },
     showProponenteView() {
@@ -67,7 +72,7 @@ module.exports = {
 };
 </script>
 
-<style>
+<style scoped>
 .wrapper {
   width: 100%;
   height: 100%;
@@ -106,8 +111,12 @@ module.exports = {
 }
 
 .btn-dark {
-    color: #fff;
-    background-color: #1a1a1a;
-    border-color: #1a1a1a;
+  color: #fff;
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+label {
+  font-size: 13px;
 }
 </style>
