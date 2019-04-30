@@ -11,6 +11,9 @@ import store from './store/global-store';
 
 const app = new Vue({
     el: '#app',
-    router : router,
-    store
+    router: router,
+    store,
+    created() {
+        this.$store.commit('loadTokenAndUserFromSession');
+    }
 });
