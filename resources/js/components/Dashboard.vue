@@ -10,7 +10,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right>
-            <template slot="button-content">{{user.name}}</template>
+            <template slot="button-content">user.name</template>
             <b-dropdown-item v-on:click.prevent="logout">
               <i class="fas fa-sign-out-alt"></i> Logout
             </b-dropdown-item>
@@ -31,7 +31,7 @@
           <button class="btn btn-success mb-4 font-weight-bold" v-on:click.prevent="novaProposta" v-if="isDashboardVisible">
             <i class="fas fa-plus"></i> Nova Proposta
           </button>
-          <separator-table v-if="isDashboardVisible"></separator-table>
+          <!-- <separator-table v-if="isDashboardVisible"></separator-table> -->
           <proponente v-if="isNovaPropostaVisible"></proponente>
         </div>
       </div>
@@ -65,12 +65,6 @@ module.exports = {
   computed: {
     user() {
       return this.$store.state.user;
-    }
-  },
-  mounted() {
-    console.log("Teste");
-    if(user == null) {
-      console.log("Teste");
     }
   },
 };

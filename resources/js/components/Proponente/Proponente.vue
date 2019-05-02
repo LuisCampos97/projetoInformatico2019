@@ -2,54 +2,24 @@
   <div>
     <h2 class="pb-4">Nova Proposta</h2>
     <b-form-group label="Que tipo de proposta pretende efetuar?">
-      <b-form-radio
-        name="Tipo Contrato"
-        v-model="proposta.tipo_contrato"
-        value="Contratacao Inicial"
-      >Contratação Inicial</b-form-radio>
-      <b-form-radio
-        name="Tipo Contrato"
-        v-model="proposta.tipo_contrato"
-        value="Renovacao"
-      >Renovação</b-form-radio>
-      <b-form-radio
-        name="Tipo Contrato"
-        v-model="proposta.tipo_contrato"
-        value="Alteracao"
-      >Alteração</b-form-radio>
+      <b-form-radio-group v-model="proposta.tipo_contrato" :options="tipoContratosArray" stacked></b-form-radio-group>
     </b-form-group>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Tipo Contrato')"
-    >{{ errors.first('Tipo Contrato') }}</div>
 
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
     <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
       <b-form-group label="Para que unidade organica será o docente contratado?">
-        <b-form-radio
-          name="Unidade Organica"
+        <b-form-radio-group
           v-model="proposta.unidade_organica"
-          value="ESECS"
-        >ESECS</b-form-radio>
-        <b-form-radio name="Unidade Organica" v-model="proposta.unidade_organica" value="ESTG">ESTG</b-form-radio>
-        <b-form-radio
-          name="Unidade Organica"
-          v-model="proposta.unidade_organica"
-          value="ESSLei"
-        >ESSLei</b-form-radio>
-        <b-form-radio name="Unidade Organica" v-model="proposta.unidade_organica" value="ESTM">ESTM</b-form-radio>
-        <b-form-radio
-          name="Unidade Organica"
-          v-model="proposta.unidade_organica"
-          value="ESAD.CR"
-        >ESAD.CR</b-form-radio>
+          :options="unidadesOrganicasArray"
+          :state="$v.proposta.unidade_organica.$dirty ? !$v.proposta.unidade_organica.$error : null"
+          stacked
+        ></b-form-radio-group>
+        <b-form-invalid-feedback
+          id="input-1-live-feedback"
+        >A seleção de uma unidade orgânica é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('Unidade Organica')"
-      >{{ errors.first('Unidade Organica') }}</div>
-      <br>
+
       <div class="form-group">
         <label class="label" for="inputNomeCompleto">Nome completo</label>
         <b-form-input
@@ -58,19 +28,14 @@
           class="form-control"
           placeholder="Insira o nome completo do docente"
           name="nome"
-          v-validate="'required'"
+          :state="$v.proposta.nome_completo.$dirty ? !$v.proposta.nome_completo.$error : null"
           v-model="proposta.nome_completo"
         ></b-form-input>
-        <div
-          class="help-block alert alert-danger"
-          v-show="errors.has('nome')"
-        >{{ errors.first('nome') }}</div>
-        <br>
+        <b-form-invalid-feedback id="input-1-live-feedback">O Nome completo é obrigatório!</b-form-invalid-feedback>
       </div>
 
       <div class="jumbotron" id="ucs">
-        <h5>Unidades Curriculares</h5>
-        <br>
+        <h3 class="pb-4">Unidades Curriculares</h3>
         <h5>Curso</h5>
         <select
           class="custom-select"
@@ -178,7 +143,7 @@
           v-show="errors.has('horas_semestrais')"
         >{{ errors.first('horas_semestrais') }}</div>
         <br>
-        <button type="button" class="btn btn-success" @click="adicionarOutraUC">Adicionar UC</button>
+        <button type="button" class="btn btn-success" @click="adicionarUC">Adicionar UC</button>
         <br>
         <span v-if="unidadesCurriculares.length">
           <table class="table">
@@ -218,20 +183,14 @@
       <div class="jumbotron">
         <h5>Habilitações Literarias</h5>
         <b-form-group label="Grau">
-          <b-form-radio name="Grau" v-model="proposta.grau" value="Licenciatura">Licenciatura</b-form-radio>
-          <b-form-radio name="Grau" v-model="proposta.grau" value="Pos-Graduacao">Pós-Graduação</b-form-radio>
-          <b-form-radio name="Grau" v-model="proposta.grau" value="Mestrado">Mestrado</b-form-radio>
-          <b-form-radio
-            name="Grau"
+          <b-form-radio-group
             v-model="proposta.grau"
-            value="Ensino Secundario"
-          >Ensino Secundário</b-form-radio>
-          <b-form-radio name="Grau" v-model="proposta.grau" value="Doutoramento">Doutoramento</b-form-radio>
+            :options="grausArray"
+            :state="$v.proposta.grau.$dirty ? !$v.proposta.grau.$error : null"
+            stacked
+          ></b-form-radio-group>
+          <b-form-invalid-feedback id="input-1-live-feedback">A seleção do grau é obrigatória!</b-form-invalid-feedback>
         </b-form-group>
-        <div
-          class="help-block alert alert-danger"
-          v-show="errors.has('Grau')"
-        >{{ errors.first('Grau') }}</div>
         <br>
         <div class="form-group">
           <label class="label" for="Curso Habilitacoes">Curso</label>
@@ -322,9 +281,31 @@
   </div>
 </template>
 <script>
-module.exports = {
+import { required } from "vuelidate/lib/validators";
+
+export default {
   data() {
     return {
+      //? Array de Objetos para Radio Buttons
+      tipoContratosArray: [
+        { text: "Contratação Inicial", value: "Contratacao Inicial" },
+        { text: "Renovação", value: "Renovacao" },
+        { text: "Alteração", value: "Alteracao" }
+      ],
+      unidadesOrganicasArray: [
+        { text: "ESECS", value: "ESECS" },
+        { text: "ESTG", value: "ESTG" },
+        { text: "ESSLei", value: "ESSLei" },
+        { text: "ESTM", value: "ESTM" },
+        { text: "ESAD.CR", value: "ESAD.CR" }
+      ],
+      grausArray: [
+        { text: "Licenciatura", value: "Licenciatura" },
+        { text: "Pós-Graduação", value: "Pos-Graduacao" },
+        { text: "Mestrado", value: "Mestrado" },
+        { text: "Ensino Secundário", value: "Ensino Secundario" },
+        { text: "Doutoramento", value: "Doutoramento" }
+      ],
       proposta: {
         tipo_contrato: "",
         unidade_organica: "",
@@ -362,6 +343,14 @@ module.exports = {
       }
     };
   },
+  //? Validations Vuelidate
+  validations: {
+    proposta: {
+      unidade_organica: { required },
+      nome_completo: { required },
+      grau: { required }
+    }
+  },
   methods: {
     avancar: function(proposta, unidadesCurriculares) {
       this.proposta.data_de_assinatura_coordenador_departamento = new Date()
@@ -369,18 +358,12 @@ module.exports = {
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
       this.roleSelecionado = proposta.role;
-      this.$validator
-        .validateAll()
-        .then(response => {
-          if (this.unidadesCurriculares.length > 0) {
-            this.isFinalized = true;
-            this.isClicked = false;
-            this.progresso.valor++;
-          }
-        })
-        .catch(error => {
-          console.log("Error" + error);
-        });
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.isFinalized = true;
+        this.isClicked = false;
+        this.progresso.valor++;
+      }
     },
 
     getUcsDeCurso(curso_id) {
@@ -427,7 +410,7 @@ module.exports = {
         this.unidadeCurricular.tipo = response.data[0].tipo;
       });
     },
-    adicionarOutraUC() {
+    adicionarUC() {
       if (
         this.unidadeCurricular.nome == "" ||
         this.unidadeCurricular.regime == "" ||

@@ -14,6 +14,7 @@ Vue.component('propostaProponenteProfessor', require('../components/Proponente/P
 Vue.component('propostaProponenteAssistente', require('../components/Proponente/PropostaProponenteAssistente').default);
 Vue.component('propostaProponenteMonitor', require('../components/Proponente/PropostaProponenteMonitor').default);
 Vue.component('resumoProposta', require('../components/Proponente/ResumoProposta.vue').default);
+Vue.component('separator-table', require('../components/utils/Separator_Table.vue').default);
 const diretorUOProposta = Vue.component('diretor', require('../components/DiretorUO/DiretorUOProposta.vue').default);
 const routes = [
   //---------------Auth----------------------
