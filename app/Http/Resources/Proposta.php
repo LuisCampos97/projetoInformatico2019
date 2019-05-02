@@ -19,7 +19,8 @@ class Proposta extends JsonResource
             'proposta_diretor_uo_id' => $this->proposta_diretor_uo_id,
             'proposta_ctc_id' => $this->proposta_ctc_id,
             'proposta_secretariado_direcao_id' => $this->proposta_secretariado_direcao_id,
-            'proposta_recursos_humanos_id' => $this->proposta_recursos_humanos_id
+            'proposta_recursos_humanos_id' => $this->proposta_recursos_humanos_id,
+            'status' => $this->status
         ];
     }
 }

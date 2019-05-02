@@ -2,7 +2,7 @@
   <div>
     <h2>Proponente (Professor)</h2>
     <br>
-    <h5>Qual será o role específico do professor a ser contratado?</h5>
+    <h5>Qual será a categoria específica do professor a ser contratado?</h5>
     <br>
     <div id="radio_role_professor" class="radio">
       <input
@@ -83,15 +83,14 @@
     </span>
     <br>
     <div>
-      <h5>Duração do contrato (em meses)</h5>
+      <h5>Duração do contrato</h5>
       <br>
       <input
         type="text"
         class="form-control"
-        placeholder="Insira um valor positivo e inteiro"
         v-model="propostaProponenteProfessor.duracao"
         name="Duração Contrato"
-        v-validate="'required|min_value:1'"
+        v-validate="'required'"
       >
     </div>
     <div
@@ -100,30 +99,22 @@
     >{{ errors.first('Duração Contrato') }}</div>
     <br>
     <div>
-      <h5>Data de inicio do contrato</h5>
+      <h5>Periodo</h5>
       <br>
       <input
-        type="date"
+        type="text"
         class="form-control"
-        placeholder="Selecione a data de inicio de contrato"
-        v-model="propostaProponenteProfessor.data_inicio_contrato"
-        name="Data Inicio Contrato"
+        v-model="propostaProponenteProfessor.periodo"
+        name="Periodo"
         v-validate="'required'"
-        @change="setDataFimContrato(propostaProponenteProfessor.duracao)"
       >
     </div>
     <div
       class="help-block alert alert-danger"
-      v-show="errors.has('Data Inicio Contrato')"
-    >{{ errors.first('Data Inicio Contrato') }}</div>
+      v-show="errors.has('Periodo')"
+    >{{ errors.first('Periodo') }}</div>
     <br>
-    <div>
-      <h5>Data de fim do contrato</h5>
-      <br>
-      <input type="text" class="form-control" v-model="dataFimContratoText" readonly>
-      <br>
-    </div>
-    <br>
+    
     <button type="button" class="btn btn-success" v-on:click="continuar">Continuar</button>
     <br>
     <resumo-proposta
@@ -144,8 +135,7 @@ module.exports = {
         regime_prestacao_servicos: "",
         percentagem_prestacao_servicos: "",
         duracao: "",
-        data_inicio_contrato: "",
-        data_fim_contrato: "",
+        periodo: "",
         proposta_proponente_id: ""
       },
       dataFimContratoText: "",
@@ -153,28 +143,11 @@ module.exports = {
     };
   },
   methods: {
-    setDataFimContrato(duracao) {
-      var array = this.propostaProponenteProfessor.data_inicio_contrato.split(
-        "-"
-      );
-      let data = new Date(
-        parseInt(array[0]),
-        parseInt(array[1]) - 1,
-        parseInt(array[2])
-      );
-      data.setMonth(data.getUTCMonth() + parseInt(duracao));
-      let dia = data.getDate();
-      let mes = data.getMonth() + 1;
-      let ano = data.getFullYear();
-      this.dataFimContratoText = dia + "/" + mes + "/" + ano;
-      this.propostaProponenteProfessor.data_fim_contrato = new Date(data)
-        .toISOString()
-        .slice(0, 19)
-        .replace("T", " ");
-    },
+    
     continuar() {
-      this.$validator.validateAll().then(() => {});
-      this.avancar = true;
+      this.$validator.validateAll().then(() => {
+        this.avancar = true;
+      });
     }
   }
 };

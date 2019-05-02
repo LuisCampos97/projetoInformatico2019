@@ -41,7 +41,7 @@
         class="form-control"
         placeholder="Insira um valor entre 1 e 100"
         name="Percentagem Prestação Serviços"
-        v-validate="'nullable|min_value:1|max_value:100'"
+        v-validate="'nullable'"
         v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
       >
       <div
@@ -52,15 +52,14 @@
     <br>
     <br>
     <div>
-      <h5>Duração do contrato (em meses)</h5>
+      <h5>Duração do contrato</h5>
       <br>
       <input
         type="text"
         class="form-control"
-        placeholder="Insira um valor positivo e inteiro"
         v-model="propostaProponenteAssistente.duracao"
         name="Duração Contrato"
-        v-validate="'required|min_value:1'"
+        v-validate="'required'"
       >
     </div>
     <div
@@ -69,48 +68,25 @@
     >{{ errors.first('Duração Contrato') }}</div>
     <br>
     <div>
-      <h5>Data de inicio do contrato</h5>
+      <h5>Periodo</h5>
       <br>
       <input
         type="date"
         class="form-control"
-        placeholder="Selecione a data de inicio de contrato"
-        v-model="propostaProponenteAssistente.data_inicio_contrato"
-        name="Data Inicio Contrato"
+        v-model="propostaProponenteAssistente.periodo"
+        name="Periodo"
         v-validate="'required'"
-        @change="setDataFimContrato(propostaProponenteAssistente.duracao)"
       >
     </div>
     <div
       class="help-block alert alert-danger"
-      v-show="errors.has('Data Inicio Contrato')"
-    >{{ errors.first('Data Inicio Contrato') }}</div>
+      v-show="errors.has('Periodo')"
+    >{{ errors.first('Periodo') }}</div>
     <br>
-    <div>
-      <h5>Data de fim do contrato</h5>
-      <br>
-      <input
-        type="text"
-        class="form-control"
-        v-model="dataFimContratoText"
-        name="Data Fim Contrato"
-        readonly
-      >
-      <br>
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Data Fim Contrato')"
-    >{{ errors.first('Data Fim Contrato') }}</div>
-    <br>
-    <button
-      type="button"
-      class="btn btn-success"
-      v-on:click="continuar"
-    >Seguinte</button>
+    <button type="button" class="btn btn-success" v-on:click="continuar">Seguinte</button>
     <br>
     <resumo-proposta
-      v-if="avancar" 
+      v-if="avancar"
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
       :propostaProponenteAssistente="propostaProponenteAssistente"
@@ -126,39 +102,18 @@ module.exports = {
         regime_prestacao_servicos: "",
         percentagem_prestacao_servicos: "",
         duracao: "",
-        data_inicio_contrato: "",
-        data_fim_contrato: "",
+        periodo:"",
         proposta_proponente_id: ""
       },
       dataFimContratoText: "",
-      avancar:false,
+      avancar: false,
     };
   },
   methods: {
-    setDataFimContrato(duracao) {
-      //this.propostaProponenteAssistente.proposta_proponente_id = this.idParaUcsPropostaProponente;
-      var array = this.propostaProponenteAssistente.data_inicio_contrato.split(
-        "-"
-      );
-      let data = new Date(
-        parseInt(array[0]),
-        parseInt(array[1]) - 1,
-        parseInt(array[2])
-      );
-      data.setMonth(data.getUTCMonth() + parseInt(duracao));
-      let dia = data.getDate();
-      let mes = data.getMonth() + 1;
-      let ano = data.getFullYear();
-      this.dataFimContratoText = dia + "/" + mes + "/" + ano;
-      this.propostaProponenteAssistente.data_fim_contrato = new Date(data)
-        .toISOString()
-        .slice(0, 19)
-        .replace("T", " ");
-    },
     continuar() {
-    this.$validator.validateAll().then(() => {
+      this.$validator.validateAll().then(() => {
+        this.avancar = true;
       });
-      this.avancar=true;
     }
   }
 };
