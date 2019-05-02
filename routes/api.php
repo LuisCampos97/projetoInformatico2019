@@ -23,14 +23,14 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 //---------------Departamentos------------------------------------
-Route::get('/departamentos', 'DepartamentoController@all');
+Route::get('/departamento/{userDepName}', 'DepartamentoController@departamentoUserLogado');
 
 //--------------------Unidades Curriculares-----------------------
 
 Route::get('/unidadesCurriculares', 'UnidadeCurricularController@all');
-Route::get('/unidadesCurricularesDoDepartamentoSelecionado/{dep_id}', 'UnidadeCurricularController@getUcsParaDepartamento');
-Route::get('/unidadesCurriculares/regime/{uc_name}', 'UnidadeCurricularController@getRegimesParaUC');
-Route::get('/unidadesCurriculares/{uc_name}/{uc_regime}', 'UnidadeCurricularController@getTurnosParaUCNomeeRegime');
+Route::get('/unidadesCurricularesDoCursoSelecionado/{curso_id}/{dep_id}', 'UnidadeCurricularController@getUcsParaCurso');
+Route::get('/unidadesCurriculares/regime/{uc_name}/{curso_id}', 'UnidadeCurricularController@getRegimesParaUC');
+Route::get('/unidadesCurriculares/{uc_name}/{uc_regime}/{curso_id}', 'UnidadeCurricularController@getTurnosParaUCNomeeRegime');
 Route::get('/tiposUnidadesCurriculares/{uc_name}', 'UnidadeCurricularController@getTipoUC');
 
 //-----------------------Proposta Proponente----------------------------------------
@@ -51,3 +51,5 @@ Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@s
 //-----------------------Proposta-------------------------------------------------------------
 Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
 
+//-----------------------Cursos---------------------------------------------------------------
+Route::get('/cursosDisponiveis/{dep_id}', 'CursoController@getUcsDisponiveisParaUserLogado');

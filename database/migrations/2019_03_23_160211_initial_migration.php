@@ -40,7 +40,8 @@ class InitialMigration extends Migration
 
         Schema::create('curso', function(Blueprint $table){
             $table->increments('id');
-            $table->string('name');
+            $table->string('nome_curso');
+            $table->string('sigla');
             $table->integer('departamento_id')->unsigned();
             $table->foreign('departamento_id')->references('id')->on('departamento');
         });
@@ -48,6 +49,8 @@ class InitialMigration extends Migration
         Schema::create('unidade_curricular', function (Blueprint $table){
             $table->increments('id');
             $table->string('nome');
+            $table->integer('curso_id')->unsigned();
+            $table->foreign('curso_id')->references('id')->on('curso');
             $table->integer('departamento_id')->unsigned();
             $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->enum('regime', ['Diurno', 'Pos-Laboral']);
@@ -62,6 +65,9 @@ class InitialMigration extends Migration
             $table->dateTime('data_de_assinatura_coordenador_departamento')->nullable();
             $table->dateTime('data_de_assinatura_coordenador_de_curso')->nullable();
             $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
+            $table->enum('grau', ['Doutoramento', 'Pos-Graduacao', 'Licenciatura', 'Ensino Secundario', 'Mestrado']);
+            $table->string('curso');
+            $table->string('area_cientifica');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -71,9 +77,8 @@ class InitialMigration extends Migration
             $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
             $table->integer('percentagem_prestacao_servicos')->nullable(); //em caso de tempo parcial??
-            $table->integer('duracao')->unsigned();
-            $table->datetime('data_inicio_contrato');
-            $table->datetime('data_fim_contrato');
+            $table->string('periodo');
+            $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa'])->nullable();
             //Signature???
             $table->integer('proposta_proponente_id')->unsigned();
@@ -86,9 +91,8 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
             $table->integer('percentagem_prestacao_servicos')->nullable();
-            $table->integer('duracao')->unsigned();
-            $table->datetime('data_inicio_contrato');
-            $table->datetime('data_fim_contrato');
+            $table->string('periodo');
+            $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa']);
             $table->integer('proposta_proponente_id')->unsigned();
             $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
@@ -101,9 +105,8 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial']);
             $table->integer('percentagem_prestacao_servicos');
-            $table->integer('duracao')->unsigned();
-            $table->datetime('data_inicio_contrato');
-            $table->datetime('data_fim_contrato');
+            $table->string('periodo');
+            $table->string('duracao');
             $table->integer('proposta_proponente_id')->unsigned();
             $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
             $table->softDeletes();
@@ -190,6 +193,7 @@ class InitialMigration extends Migration
             $table->foreign('proposta_secretariado_direcao_id')->references('id')->on('proposta_secretariado_direcao');
             $table->integer('proposta_recursos_humanos_id')->unsigned()->nullable();
             $table->foreign('proposta_recursos_humanos_id')->references('id')->on('proposta_recursos_humanos');
+            $table->enum('status', ['pendente', 'recusada', 'finalizada']);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -19,8 +19,7 @@ class PropostaProponenteMonitor extends JsonResource
             'regime_prestacao_servicos' => $this->regime_prestacao_servicos,
             'percentagem_prestacao_servicos' => $this->percentagem_prestacao_servicos,
             'duracao' => $this->duracao,
-            'data_inicio_contrato' => $this->data_inicio_contrato,
-            'data_fim_contrato' => $this->data_fim_contrato,
+            'periodo' => $this->periodo,
             'proposta_proponente_id' => $this->proposta_proponente_id,
         ];
     }

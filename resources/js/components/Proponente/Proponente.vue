@@ -2,29 +2,53 @@
   <div>
     <h2 class="pb-4">Nova Proposta</h2>
     <b-form-group label="Que tipo de proposta pretende efetuar?">
-      <b-form-radio v-model="proposta.tipo_contrato" value="Contratacao Inicial">Contratação Inicial</b-form-radio>
-      <b-form-radio v-model="proposta.tipo_contrato" value="Renovacao">Renovação</b-form-radio>
-      <b-form-radio v-model="proposta.tipo_contrato" value="Alteracao">Alteração</b-form-radio>
+      <b-form-radio
+        name="Tipo Contrato"
+        v-model="proposta.tipo_contrato"
+        value="Contratacao Inicial"
+      >Contratação Inicial</b-form-radio>
+      <b-form-radio
+        name="Tipo Contrato"
+        v-model="proposta.tipo_contrato"
+        value="Renovacao"
+      >Renovação</b-form-radio>
+      <b-form-radio
+        name="Tipo Contrato"
+        v-model="proposta.tipo_contrato"
+        value="Alteracao"
+      >Alteração</b-form-radio>
     </b-form-group>
     <div
       class="help-block alert alert-danger"
       v-show="errors.has('Tipo Contrato')"
-    >{{ errors.first('Tipo Contrato') }}</div> 
+    >{{ errors.first('Tipo Contrato') }}</div>
 
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
     <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
       <b-form-group label="Para que unidade organica será o docente contratado?">
-        <b-form-radio v-model="proposta.unidade_organica" value="ESECS">ESECS</b-form-radio>
-        <b-form-radio v-model="proposta.unidade_organica" value="ESTG">ESTG</b-form-radio>
-        <b-form-radio v-model="proposta.unidade_organica" value="ESSLei">ESSLei</b-form-radio>
-        <b-form-radio v-model="proposta.unidade_organica" value="ESTM">ESTM</b-form-radio>
-        <b-form-radio v-model="proposta.unidade_organica" value="ESAD.CR">SAD.CR</b-form-radio>
+        <b-form-radio
+          name="Unidade Organica"
+          v-model="proposta.unidade_organica"
+          value="ESECS"
+        >ESECS</b-form-radio>
+        <b-form-radio name="Unidade Organica" v-model="proposta.unidade_organica" value="ESTG">ESTG</b-form-radio>
+        <b-form-radio
+          name="Unidade Organica"
+          v-model="proposta.unidade_organica"
+          value="ESSLei"
+        >ESSLei</b-form-radio>
+        <b-form-radio name="Unidade Organica" v-model="proposta.unidade_organica" value="ESTM">ESTM</b-form-radio>
+        <b-form-radio
+          name="Unidade Organica"
+          v-model="proposta.unidade_organica"
+          value="ESAD.CR"
+        >ESAD.CR</b-form-radio>
       </b-form-group>
       <div
         class="help-block alert alert-danger"
-        v-show="errors.has('unidade organica')"
-      >{{ errors.first('unidade organica') }}</div>
+        v-show="errors.has('Unidade Organica')"
+      >{{ errors.first('Unidade Organica') }}</div>
       <br>
       <div class="form-group">
         <label class="label" for="inputNomeCompleto">Nome completo</label>
@@ -43,29 +67,29 @@
         >{{ errors.first('nome') }}</div>
         <br>
       </div>
-      
+
       <div class="jumbotron" id="ucs">
         <h5>Unidades Curriculares</h5>
         <br>
-        <h5>Departamento</h5>
+        <h5>Curso</h5>
         <select
           class="custom-select"
-          v-model="unidadeCurricular.departamento_id"
-          name="departamento"
+          v-model="unidadeCurricular.curso_id"
+          name="curso"
           v-validate="'required'"
-          @change="getUcsDeDepartamento(unidadeCurricular.departamento_id)"
+          @click.prevent="getUcsDeCurso(unidadeCurricular.curso_id)"
         >
           <option
-            v-for="dep in departamentos"
-            :value="dep.id"
-            v-bind:key="dep.id"
-          >{{dep.nome_departamento}}</option>
+            v-for="curso in cursos"
+            :value="curso.id"
+            v-bind:key="curso.id"
+          >{{curso.nome_curso}}</option>
         </select>
         <div
           v-if="unidadesCurriculares.length ==0"
           class="help-block alert alert-danger"
-          v-show="errors.has('departamento')"
-        >{{ errors.first('departamento') }}</div>
+          v-show="errors.has('curso')"
+        >{{ errors.first('curso') }}</div>
         <br>
         <h5>Nome unidade curricular</h5>
         <select
@@ -73,7 +97,7 @@
           v-model="unidadeCurricular.nome_unidade_curricular"
           name="unidade_curricular"
           v-validate="'required'"
-          @change="getRegimes(unidadeCurricular.nome_unidade_curricular)"
+          @click.prevent="getRegimes(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.curso_id)"
         >
           <option v-for="uc in ucsDeDepartamento" :value="uc.nome" v-bind:key="uc.nome">{{uc.nome}}</option>
         </select>
@@ -89,7 +113,8 @@
           v-model="unidadeCurricular.regime"
           name="regime"
           v-validate="'required'"
-          @change="getTurnos(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.regime)"
+          @click.prevent="getTurnos(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.regime,
+          unidadeCurricular.curso_id)"
         >
           <option
             v-for="regime in regimesParaUC"
@@ -109,7 +134,7 @@
           v-model="unidadeCurricular.turno"
           name="turno"
           v-validate="'required'"
-          @change="getTipo(unidadeCurricular.nome_unidade_curricular)"
+          @click.prevent="getTipo(unidadeCurricular.nome_unidade_curricular)"
         >
           <option
             v-for="turno in turnosParaUCeRegime"
@@ -190,6 +215,58 @@
         </span>
       </div>
       <br>
+      <div class="jumbotron">
+        <h5>Habilitações Literarias</h5>
+        <b-form-group label="Grau">
+          <b-form-radio name="Grau" v-model="proposta.grau" value="Licenciatura">Licenciatura</b-form-radio>
+          <b-form-radio name="Grau" v-model="proposta.grau" value="Pos-Graduacao">Pós-Graduação</b-form-radio>
+          <b-form-radio name="Grau" v-model="proposta.grau" value="Mestrado">Mestrado</b-form-radio>
+          <b-form-radio
+            name="Grau"
+            v-model="proposta.grau"
+            value="Ensino Secundario"
+          >Ensino Secundário</b-form-radio>
+          <b-form-radio name="Grau" v-model="proposta.grau" value="Doutoramento">Doutoramento</b-form-radio>
+        </b-form-group>
+        <div
+          class="help-block alert alert-danger"
+          v-show="errors.has('Grau')"
+        >{{ errors.first('Grau') }}</div>
+        <br>
+        <div class="form-group">
+          <label class="label" for="Curso Habilitacoes">Curso</label>
+          <b-form-input
+            id="Curso Habilitacoes"
+            type="text"
+            class="form-control"
+            name="Curso Habilitacoes"
+            v-validate="'required'"
+            v-model="proposta.curso"
+          ></b-form-input>
+          <div
+            class="help-block alert alert-danger"
+            v-show="errors.has('Curso Habilitacoes')"
+          >{{ errors.first('Curso Habilitacoes') }}</div>
+          <br>
+        </div>
+        <div class="form-group">
+          <label class="label" for="Area Cientifica">Área Científica</label>
+          <b-form-input
+            id="Area Cientifica"
+            type="text"
+            class="form-control"
+            name="Area Cientifica"
+            v-validate="'required'"
+            v-model="proposta.area_cientifica"
+          ></b-form-input>
+          <div
+            class="help-block alert alert-danger"
+            v-show="errors.has('Area Cientifica')"
+          >{{ errors.first('Area Cientifica') }}</div>
+          <br>
+        </div>
+      </div>
+      <br>
       <h5>Qual será o papel a desempenhar pelo docente a ser contratado?</h5>
       <br>
       <div id="radioRole" class="radio">
@@ -254,7 +331,10 @@ module.exports = {
         nome_completo: "",
         role: "",
         data_de_assinatura_coordenador_departamento: "",
-        data_de_assinatura_coordenador_de_curso: ""
+        data_de_assinatura_coordenador_de_curso: "",
+        grau: "",
+        area_cientifica: "",
+        curso: ""
       },
       unidadeCurricular: {
         nome_unidade_curricular: "",
@@ -262,12 +342,14 @@ module.exports = {
         horas: "",
         horas_semestrais: "",
         departamento_id: "",
+        curso_id: "",
         turno: "",
         proposta_proponente_id: "",
         tipo: ""
       },
       unidadesCurriculares: [],
-      departamentos: [],
+      departamento_id: "",
+      cursos: [],
       ucsDeDepartamento: [],
       roleSelecionado: "",
       regimesParaUC: [],
@@ -287,33 +369,55 @@ module.exports = {
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
       this.roleSelecionado = proposta.role;
-      console.log(this.errors);
-      this.$validator.validateAll().then(() => {
-        if (this.unidadesCurriculares.length > 0) {
-          this.isFinalized = true;
-          this.isClicked = false;
-        }
-      });
-      this.progresso.valor++;
+      this.$validator
+        .validateAll()
+        .then(response => {
+          if (this.unidadesCurriculares.length > 0) {
+            this.isFinalized = true;
+            this.isClicked = false;
+            this.progresso.valor++;
+          }
+        })
+        .catch(error => {
+          console.log("Error" + error);
+        });
     },
 
-    getUcsDeDepartamento(dep_id) {
+    getUcsDeCurso(curso_id) {
+      this.ucsDeDepartamento = [];
+      this.regimesParaUC = [];
+      this.turnosParaUCeRegime = [];
       axios
-        .get("/api/unidadesCurricularesDoDepartamentoSelecionado/" + dep_id)
+        .get(
+          "/api/unidadesCurricularesDoCursoSelecionado/" +
+            curso_id +
+            "/" +
+            this.departamento_id
+        )
         .then(response => {
           this.ucsDeDepartamento = response.data;
         });
     },
-    getRegimes(uc_name) {
+    getRegimes(uc_name, curso_id) {
+      this.regimesParaUC = [];
+      this.turnosParaUCeRegime = [];
       axios
-        .get("/api/unidadesCurriculares/regime/" + uc_name)
+        .get("/api/unidadesCurriculares/regime/" + uc_name + "/" + curso_id)
         .then(response => {
           this.regimesParaUC = response.data;
         });
     },
-    getTurnos(uc_name, uc_regime) {
+    getTurnos(uc_name, uc_regime, curso_id) {
+      this.turnosParaUCeRegime = [];
       axios
-        .get("/api/unidadesCurriculares/" + uc_name + "/" + uc_regime)
+        .get(
+          "/api/unidadesCurriculares/" +
+            uc_name +
+            "/" +
+            uc_regime +
+            "/" +
+            curso_id
+        )
         .then(response => {
           this.turnosParaUCeRegime = response.data;
         });
@@ -334,11 +438,12 @@ module.exports = {
         console.log("ERROR!!!!");
       } else {
         this.unidadesCurriculares.push(this.unidadeCurricular);
-        this.unidadeCurricular = {};
+        /* this.unidadeCurricular = {};
         this.ucsDeDepartamento = [];
         this.regimesParaUC = [];
         this.turnosParaUCeRegime = [];
         this.unidadeCurricular.departamento_id = [];
+        */
       }
     },
     removerUC(index) {
@@ -346,28 +451,35 @@ module.exports = {
       this.unidadesCurriculares.splice(index, 1);
     }
   },
+
   mounted() {
-    axios.get("/api/departamentos").then(response => {
-      this.departamentos = response.data;
-    });
+    axios
+      .get("/api/departamento/" + "Coordenador do Departamento de Matematica")
+      .then(response => {
+        this.departamento_id = response.data[0].id;
+        this.unidadeCurricular.departamento_id = this.departamento_id;
+        axios
+          .get("/api/cursosDisponiveis/" + this.departamento_id)
+          .then(response => {
+            this.cursos = response.data;
+          });
+      });
   }
 };
 </script>
 
 <style >
- .col-form-label, .label {
+.col-form-label,
+.label {
   font-size: 20px;
 }
 
-.form-control:focus, .custom-select:focus {
+.form-control:focus,
+.custom-select:focus {
   color: #1a1a1a;
   background-color: #fff;
   border-color: #1a1a1a;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255,0);
-}
-
-.custom-control-label::after {
-  
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0);
 }
 </style>

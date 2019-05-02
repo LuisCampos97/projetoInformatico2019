@@ -9,8 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class DepartamentoController extends Controller
 {
-    public function all(){
-        $departamentos = DB::table('departamento')->get();
-        return $departamentos;
+    public function departamentoUserLogado($userDepName){
+        //$userDepName = "Coordenador deo Departamento de Engenharia Informatica";
+        //var_dump($userDepName);
+        $test = str_replace(substr($userDepName, 0, 15), '', $userDepName);
+        //dd($test);
+        $departamento = DB::table('departamento')->where('nome_departamento','=' ,$test)->get();
+        return $departamento;
     }
 }

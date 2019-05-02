@@ -2,7 +2,6 @@
   <div>
     <h2>
       <strong>Resumo da Proposta de contratação</strong>
-      <button @click="doStuff"></button>
     </h2>
     <br>
     <h4>
@@ -120,32 +119,19 @@
       </div>
       <br>
       <h5>
-        <strong>Data início contrato:</strong>
+        <strong>Periodo:</strong>
       </h5>
 
       <div v-if="propostaProponenteProfessor">
-        <h5>{{ propostaProponenteProfessor.data_inicio_contrato }}</h5>
+        <h5>{{ propostaProponenteProfessor.periodo }}</h5>
       </div>
       <div v-if="propostaProponenteAssistente">
-        <h5>{{ propostaProponenteAssistente.data_inicio_contrato }}</h5>
+        <h5>{{ propostaProponenteAssistente.periodo }}</h5>
       </div>
       <div v-if="propostaProponenteMonitor">
-        <h5>{{ propostaProponenteMonitor.data_inicio_contrato }}</h5>
+        <h5>{{ propostaProponenteMonitor.periodo }}</h5>
       </div>
       <br>
-      <h5>
-        <strong>Data fim contrato:</strong>
-      </h5>
-
-      <div v-if="propostaProponenteProfessor">
-        <h5>{{ propostaProponenteProfessor.data_fim_contrato }}</h5>
-      </div>
-      <div v-if="propostaProponenteAssistente">
-        <h5>{{ propostaProponenteAssistente.data_fim_contrato }}</h5>
-      </div>
-      <div v-if="propostaProponenteMonitor">
-        <h5>{{ propostaProponenteMonitor.data_fim_contrato }}</h5>
-      </div>
     </div>
 
     <button
