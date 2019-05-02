@@ -50,10 +50,10 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             //dd(\Adldap\Laravel\Facades\Adldap::search()->find($request->email));
-            // $user = \Adldap::search()->users()->find('jdoe');
-            // dd($user->getAttributes());
+            dd(empty($request->email));
             $token = Str::random(60);
             $response = compact('token');
             $response['user'] = Auth::user();
@@ -61,7 +61,8 @@ class LoginController extends Controller
         } else {
             $this->incrementLoginAttempts($request);
             return response()->json([
-                'errorMessage' => 'Credentials are invalid.'
+                'errorMessage' => 'As credenciais estão inválidas. Por
+                favor tente novamente'
             ], 401);
         }
 

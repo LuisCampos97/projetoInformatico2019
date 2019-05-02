@@ -61,8 +61,7 @@ module.exports = {
         })
         .catch(error => {
           this.error = true;
-          this.errorMessage = "Credencias Inválidas";
-          console.log(error.data);
+          this.errorMessage = Object.values(error.response.data)[0];
         });
     },
     showProponenteView() {
@@ -100,6 +99,7 @@ module.exports = {
 /* Login Form */
 .login_form {
   margin: 0 14vw;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .form-control:focus {
@@ -118,5 +118,10 @@ module.exports = {
 
 label {
   font-size: 13px;
+}
+
+.alert-dark {
+  text-align: center;
+  padding: 25px;
 }
 </style>
