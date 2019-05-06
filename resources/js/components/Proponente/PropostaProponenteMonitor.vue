@@ -1,85 +1,60 @@
 <template>
   <div>
-    <h2>Proponente (Monitor)</h2>
-    <br>
+    <h2 class="pb-4">Proponente (Monitor)</h2>
     <h5>Regime de prestação de serviços:</h5>
-    <br>
-    <div id="radio_regime" class="radio">
-      <input
-        type="radio"
+    <b-form-group label="Regime de prestação de serviços">
+      <b-form-radio-group
         v-model="propostaProponenteMonitor.regime_prestacao_servicos"
-        value="Tempo Parcial"
-        name="Regime Prestação Serviços"
-        v-validate="'required'"
-      > Tempo Parcial
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('Regime Prestação Serviços')"
-      >{{ errors.first('Regime Prestação Serviços') }}</div>
-      <br>
-      <br>
-    </div>
-    <br>
-    <span v-if="propostaProponenteMonitor.regime_prestacao_servicos == 'Tempo Parcial'">
-      <h5>Percentagem de tempo parcial:</h5>
-      <br>
-      <input
-        type="number"
-        class="form-control"
-        placeholder="Insira um valor entre 1 e 100"
-        name="Percentagem Prestação Serviços"
-        v-validate="'required|min_value:1|max_value:100'"
-        v-model="propostaProponenteMonitor.percentagem_prestacao_servicos"
-      >
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('Percentagem Prestação Serviços')"
-      >{{ errors.first('Percentagem Prestação Serviços') }}</div>
-    </span>
-    <br>
-    <br>
-    <div>
-      <h5>Duração do contrato</h5>
-      <br>
-      <input
-        type="text"
-        class="form-control"
-        v-model="propostaProponenteMonitor.duracao"
-        name="Duração Contrato"
-        v-validate="'required|min_value:1'"
-      >
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('Duração Contrato')"
-      >{{ errors.first('Duração Contrato') }}</div>
-    </div>
-    <br>
-    <div>
-      <h5>Periodo</h5>
-      <br>
-      <input
-        type="text"
-        class="form-control"
-        v-model="propostaProponenteMonitor.periodo"
-        name="Periodo"
-        v-validate="'required'"
-      >
-      <br>
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Periodo')"
-    >{{ errors.first('Periodo') }}</div>
-    <br>
+        :options="regimePrestacaoServicosArray"
+        :state="$v.propostaProponenteMonitor.regime_prestacao_servicos.$dirty ? !$v.propostaProponenteMonitor.regime_prestacao_servicos.$error : null"
+        stacked
+      ></b-form-radio-group>
+      <b-form-invalid-feedback
+        id="input-1-live-feedback"
+      >A seleção do regime de prestaões de serviço é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
 
-    <button
-      type="button"
-      class="btn btn-success"
-      v-on:click="seguir(propostaProponenteMonitor)"
-    >Finalizar e criar proposta</button>
-    <br>
+    <span v-if="propostaProponenteMonitor.regime_prestacao_servicos == 'tempo_parcial'">
+      <b-form-group label="Percentagem de tempo parcial" label-for="inputPercentagemTempoParcial">
+        <b-form-input
+          id="inputPercentagemTempoParcial"
+          type="number"
+          :state="$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$error : null"
+          v-model="propostaProponenteMonitor.percentagem_prestacao_servicos"
+        ></b-form-input>
+        <b-form-invalid-feedback id="input-1-live-feedback">A percentagem deve estar entre 1 e 100%</b-form-invalid-feedback>
+      </b-form-group>
+    </span>
+
+    <b-form-group label="Duração do contrato" label-for="inputDuracaoContrato">
+      <b-form-input
+        id="inputDuracaoContrato"
+        :state="$v.propostaProponenteMonitor.duracao.$dirty ? !$v.propostaProponenteMonitor.duracao.$error : null"
+        v-model="propostaProponenteMonitor.duracao"
+      ></b-form-input>
+      <b-form-invalid-feedback id="input-1-live-feedback">A duração do contrato é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
+
+    <b-form-group label="Periodo" label-for="inputPeriodo">
+      <b-form-input
+        id="inputPeriodo"
+        :state="$v.propostaProponenteMonitor.periodo.$dirty ? !$v.propostaProponenteMonitor.periodo.$error : null"
+        v-model="propostaProponenteMonitor.periodo"
+      ></b-form-input>
+      <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
+    </b-form-group>
+
+    <button class="btn btn-info mt-3 font-weight-bold" v-on:click.prevent="anterior">
+      <i class="fas fa-arrow-left"></i> Anterior
+    </button>
+
+    <button class="btn btn-success mt-3 font-weight-bold" v-on:click.prevent="seguinte">
+      Seguinte
+      <i class="fas fa-arrow-right"></i>
+    </button>
+
     <resumo-proposta
-      v-if="avancar" 
+      v-if="avancar"
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
       :propostaProponenteMonitor="propostaProponenteMonitor"
@@ -91,23 +66,46 @@ module.exports = {
   props: ["proposta", "unidadesCurriculares"],
   data() {
     return {
+      categoriaArray: [
+        { text: "Coordenador", value: "coordenador" },
+        { text: "Adjunto", value: "adjunto" },
+        { text: "Visitante", value: "visitante" }
+      ],
+      regimePrestacaoServicosArray: [
+        { text: "Tempo Integral", value: "tempo_integral" },
+        { text: "Tempo Parcial", value: "tempo_parcial" },
+        { text: "Dedicação Exclusiva", value: "dedicacao_exclusiva" }
+      ],
       propostaProponenteMonitor: {
         regime_prestacao_servicos: "",
         percentagem_prestacao_servicos: "",
         duracao: "",
-        periodo:"",
+        periodo: "",
         proposta_proponente_id: ""
       },
       dataFimContratoText: "",
       avancar: false
     };
   },
+  //? Validations Vuelidate
+  validations: {
+    propostaProponenteMonitor: {
+      regime_prestacao_servicos: { required },
+      percentagem_prestacao_servicos: { between: between(1, 100) },
+      duracao: { required },
+      periodo: { required }
+    }
+  },
   methods: {
-    
-    seguir(propostaProponenteMonitor) {
-      this.$validator.validateAll().then(() => {
+    seguinte() {
+      //* Mudar para o componente Resumo Proposta
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
         this.avancar = true;
-      });
+      }
+    },
+    anterior() {
+      //* Mudar para o componente Proponente
     }
   }
 };

@@ -1,90 +1,55 @@
 <template>
   <div>
-    <h2>Proponente (Assistente)</h2>
-    <br>
-    <h5>Regime de prestação de serviços:</h5>
-    <br>
-    <div id="radio_regime" class="radio">
-      <input
-        type="radio"
+    <h2 class="pb-4">Proponente (Assistente)</h2>
+    <b-form-group label="Regime de prestação de serviços">
+      <b-form-radio-group
         v-model="propostaProponenteAssistente.regime_prestacao_servicos"
-        value="Tempo Integral"
-        name="Regime Prestação Serviços"
-        v-validate="'required'"
-      > Tempo Integral
-      <br>
-      <input
-        type="radio"
-        v-model="propostaProponenteAssistente.regime_prestacao_servicos"
-        value="Tempo Parcial"
-        name="Regime Prestação Serviços"
-      > Tempo Parcial
-      <br>
-      <input
-        type="radio"
-        v-model="propostaProponenteAssistente.regime_prestacao_servicos"
-        value="Dedicação Exclusiva"
-        name="Regime Prestação Serviços"
-      > Dedicação Exclusiva
-      <br>
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Regime Prestação Serviços')"
-    >{{ errors.first('Regime Prestação Serviços') }}</div>
-    <br>
-    <span v-if="propostaProponenteAssistente.regime_prestacao_servicos == 'Tempo Parcial'">
-      <h5>Percentagem de tempo parcial:</h5>
-      <br>
-      <input
-        type="number"
-        class="form-control"
-        placeholder="Insira um valor entre 1 e 100"
-        name="Percentagem Prestação Serviços"
-        v-validate="'nullable'"
-        v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
-      >
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('Percentagem Prestação Serviços')"
-      >{{ errors.first('Percentagem Prestação Serviços') }}</div>
+        :options="regimePrestacaoServicosArray"
+        :state="$v.propostaProponenteAssistente.regime_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.regime_prestacao_servicos.$error : null"
+        stacked
+      ></b-form-radio-group>
+      <b-form-invalid-feedback
+        id="input-1-live-feedback"
+      >A seleção do regime de prestaões de serviço é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
+    <span v-if="propostaProponenteAssistente.regime_prestacao_servicos == 'tempo_parcial'">
+      <b-form-group label="Percentagem de tempo parcial" label-for="inputPercentagemTempoParcial">
+        <b-form-input
+          id="inputPercentagemTempoParcial"
+          type="number"
+          :state="$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error : null"
+          v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
+        ></b-form-input>
+        <b-form-invalid-feedback id="input-1-live-feedback">A percentagem deve estar entre 1 e 100%</b-form-invalid-feedback>
+      </b-form-group>
     </span>
-    <br>
-    <br>
-    <div>
-      <h5>Duração do contrato</h5>
-      <br>
-      <input
-        type="text"
-        class="form-control"
+
+    <b-form-group label="Duração do contrato" label-for="inputDuracaoContrato">
+      <b-form-input
+        id="inputDuracaoContrato"
+        :state="$v.propostaProponenteAssistente.duracao.$dirty ? !$v.propostaProponenteAssistente.duracao.$error : null"
         v-model="propostaProponenteAssistente.duracao"
-        name="Duração Contrato"
-        v-validate="'required'"
-      >
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Duração Contrato')"
-    >{{ errors.first('Duração Contrato') }}</div>
-    <br>
-    <div>
-      <h5>Periodo</h5>
-      <br>
-      <input
-        type="date"
-        class="form-control"
+      ></b-form-input>
+      <b-form-invalid-feedback id="input-1-live-feedback">A duração do contrato é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
+
+    <b-form-group label="Periodo" label-for="inputPeriodo">
+      <b-form-input
+        id="inputPeriodo"
+        :state="$v.propostaProponenteAssistente.periodo.$dirty ? !$v.propostaProponenteAssistente.periodo.$error : null"
         v-model="propostaProponenteAssistente.periodo"
-        name="Periodo"
-        v-validate="'required'"
-      >
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Periodo')"
-    >{{ errors.first('Periodo') }}</div>
-    <br>
-    <button type="button" class="btn btn-success" v-on:click="continuar">Seguinte</button>
-    <br>
+      ></b-form-input>
+      <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
+    </b-form-group>
+
+    <button class="btn btn-info mt-3 font-weight-bold" v-on:click.prevent="anterior">
+      <i class="fas fa-arrow-left"></i> Anterior
+    </button>
+
+    <button class="btn btn-success mt-3 font-weight-bold" v-on:click.prevent="seguinte">
+      Seguinte
+      <i class="fas fa-arrow-right"></i>
+    </button>
     <resumo-proposta
       v-if="avancar"
       :proposta="proposta"
@@ -94,26 +59,52 @@
   </div>
 </template>
 <script>
-module.exports = {
+import { required, between } from "vuelidate/lib/validators";
+
+export default {
   props: ["proposta", "unidadesCurriculares"],
   data() {
     return {
+      categoriaArray: [
+        { text: "Coordenador", value: "coordenador" },
+        { text: "Adjunto", value: "adjunto" },
+        { text: "Visitante", value: "visitante" }
+      ],
+      regimePrestacaoServicosArray: [
+        { text: "Tempo Integral", value: "tempo_integral" },
+        { text: "Tempo Parcial", value: "tempo_parcial" },
+        { text: "Dedicação Exclusiva", value: "dedicacao_exclusiva" }
+      ],
       propostaProponenteAssistente: {
         regime_prestacao_servicos: "",
         percentagem_prestacao_servicos: "",
         duracao: "",
-        periodo:"",
+        periodo: "",
         proposta_proponente_id: ""
       },
       dataFimContratoText: "",
-      avancar: false,
+      avancar: false
     };
   },
+  //? Validations Vuelidate
+  validations: {
+    propostaProponenteAssistente: {
+      regime_prestacao_servicos: { required },
+      percentagem_prestacao_servicos: { between: between(1, 100) },
+      duracao: { required },
+      periodo: { required }
+    }
+  },
   methods: {
-    continuar() {
-      this.$validator.validateAll().then(() => {
+    seguinte() {
+      //* Mudar para o componente Resumo Proposta
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
         this.avancar = true;
-      });
+      }
+    },
+    anterior() {
+      //* Mudar para o componente Proponente
     }
   }
 };

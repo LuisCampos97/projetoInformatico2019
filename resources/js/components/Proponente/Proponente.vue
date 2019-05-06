@@ -1,14 +1,14 @@
 <template>
   <div>
     <h2 class="pb-4">Nova Proposta</h2>
-    <b-form-group label="Que tipo de proposta pretende efetuar?">
+    <b-form-group label="Tipo de Proposta">
       <b-form-radio-group v-model="proposta.tipo_contrato" :options="tipoContratosArray" stacked></b-form-radio-group>
     </b-form-group>
 
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
     <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
-      <b-form-group label="Para que unidade organica será o docente contratado?">
+      <b-form-group label="Unidade Orgânica">
         <b-form-radio-group
           v-model="proposta.unidade_organica"
           :options="unidadesOrganicasArray"
@@ -20,240 +20,210 @@
         >A seleção de uma unidade orgânica é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
 
-      <div class="form-group">
-        <label class="label" for="inputNomeCompleto">Nome completo</label>
+      <b-form-group label="Nome completo" label-for="inputNomeCompleto">
         <b-form-input
           id="inputNomeCompleto"
-          type="text"
-          class="form-control"
-          placeholder="Insira o nome completo do docente"
-          name="nome"
           :state="$v.proposta.nome_completo.$dirty ? !$v.proposta.nome_completo.$error : null"
           v-model="proposta.nome_completo"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">O Nome completo é obrigatório!</b-form-invalid-feedback>
-      </div>
+      </b-form-group>
 
-      <div class="jumbotron" id="ucs">
-        <h3 class="pb-4">Unidades Curriculares</h3>
-        <h5>Curso</h5>
-        <select
-          class="custom-select"
-          v-model="unidadeCurricular.curso_id"
-          name="curso"
-          v-validate="'required'"
-          @click.prevent="getUcsDeCurso(unidadeCurricular.curso_id)"
-        >
-          <option
-            v-for="curso in cursos"
-            :value="curso.id"
-            v-bind:key="curso.id"
-          >{{curso.nome_curso}}</option>
-        </select>
-        <div
-          v-if="unidadesCurriculares.length ==0"
-          class="help-block alert alert-danger"
-          v-show="errors.has('curso')"
-        >{{ errors.first('curso') }}</div>
-        <br>
-        <h5>Nome unidade curricular</h5>
-        <select
-          class="custom-select"
-          v-model="unidadeCurricular.nome_unidade_curricular"
-          name="unidade_curricular"
-          v-validate="'required'"
-          @click.prevent="getRegimes(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.curso_id)"
-        >
-          <option v-for="uc in ucsDeDepartamento" :value="uc.nome" v-bind:key="uc.nome">{{uc.nome}}</option>
-        </select>
-        <div
-          v-if="unidadesCurriculares.length == 0"
-          class="help-block alert alert-danger"
-          v-show="errors.has('unidade_curricular')"
-        >{{ errors.first('unidade_curricular') }}</div>
-        <br>
-        <h5>Regime unidade curricular</h5>
-        <select
-          class="custom-select"
-          v-model="unidadeCurricular.regime"
-          name="regime"
-          v-validate="'required'"
-          @click.prevent="getTurnos(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.regime,
-          unidadeCurricular.curso_id)"
-        >
-          <option
-            v-for="regime in regimesParaUC"
-            :value="regime.regime"
-            v-bind:key="regime.regime"
-          >{{regime.regime}}</option>
-        </select>
-        <div
-          v-if="unidadesCurriculares.length == 0"
-          class="help-block alert alert-danger"
-          v-show="errors.has('regime')"
-        >{{ errors.first('regime') }}</div>
-        <br>
-        <h5>Turno</h5>
-        <select
-          class="custom-select"
-          v-model="unidadeCurricular.turno"
-          name="turno"
-          v-validate="'required'"
-          @click.prevent="getTipo(unidadeCurricular.nome_unidade_curricular)"
-        >
-          <option
-            v-for="turno in turnosParaUCeRegime"
-            :value="turno.turno"
-            v-bind:key="turno.turno"
-          >{{turno.turno}}</option>
-        </select>
-        <div
-          v-if="unidadesCurriculares.length == 0"
-          class="help-block alert alert-danger"
-          v-show="errors.has('turno')"
-        >{{ errors.first('turno') }}</div>
-        <br>
-        <h5>Numero de horas</h5>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Numero de horas semanais"
-          name="horas"
-          v-validate="'required|min_value:1'"
-          v-model="unidadeCurricular.horas"
-        >
-        <div
-          v-if="unidadesCurriculares.length == 0"
-          class="help-block alert alert-danger"
-          v-show="errors.has('horas')"
-        >{{ errors.first('horas') }}</div>
-        <br>
-        <h5>Numero de horas (semestrais)</h5>
-        <input
-          type="text"
-          class="form-control"
-          name="horas_semestrais"
-          v-validate="'required|min_value:1'"
-          placeholder="Numero de horas semestrais"
-          v-model="unidadeCurricular.horas_semestrais"
-        >
-        <div
-          v-if="unidadesCurriculares.length == 0"
-          class="help-block alert alert-danger"
-          v-show="errors.has('horas_semestrais')"
-        >{{ errors.first('horas_semestrais') }}</div>
-        <br>
-        <button type="button" class="btn btn-success" @click="adicionarUC">Adicionar UC</button>
-        <br>
-        <span v-if="unidadesCurriculares.length">
-          <table class="table">
-            <thead>
-              <th>Nome</th>
-              <th>Regime</th>
-              <th>Turno</th>
-              <th>Departamento</th>
-              <th>Horas</th>
-              <th>Horas Semestrais</th>
-              <th>Tipo</th>
-              <th>Ações</th>
-            </thead>
-            <tbody>
-              <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
-                <td>{{ucAUX.nome_unidade_curricular}}</td>
-                <td>{{ucAUX.regime}}</td>
-                <td>{{ucAUX.turno}}</td>
-                <td>{{ucAUX.departamento_id}}</td>
-                <td>{{ucAUX.horas}}</td>
-                <td>{{ucAUX.horas_semestrais}}</td>
-                <td>{{ucAUX.tipo}}</td>
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-danger"
-                    v-if="isClicked"
-                    v-on:click="removerUC(ucAUX, index)"
-                  >Remover UC</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </span>
-      </div>
-      <br>
-      <div class="jumbotron">
-        <h5>Habilitações Literarias</h5>
-        <b-form-group label="Grau">
-          <b-form-radio-group
-            v-model="proposta.grau"
-            :options="grausArray"
-            :state="$v.proposta.grau.$dirty ? !$v.proposta.grau.$error : null"
-            stacked
-          ></b-form-radio-group>
-          <b-form-invalid-feedback id="input-1-live-feedback">A seleção do grau é obrigatória!</b-form-invalid-feedback>
-        </b-form-group>
-        <br>
-        <div class="form-group">
-          <label class="label" for="Curso Habilitacoes">Curso</label>
-          <b-form-input
-            id="Curso Habilitacoes"
-            type="text"
-            class="form-control"
-            name="Curso Habilitacoes"
-            v-validate="'required'"
-            v-model="proposta.curso"
-          ></b-form-input>
-          <div
-            class="help-block alert alert-danger"
-            v-show="errors.has('Curso Habilitacoes')"
-          >{{ errors.first('Curso Habilitacoes') }}</div>
-          <br>
-        </div>
-        <div class="form-group">
-          <label class="label" for="Area Cientifica">Área Científica</label>
-          <b-form-input
-            id="Area Cientifica"
-            type="text"
-            class="form-control"
-            name="Area Cientifica"
-            v-validate="'required'"
-            v-model="proposta.area_cientifica"
-          ></b-form-input>
-          <div
-            class="help-block alert alert-danger"
-            v-show="errors.has('Area Cientifica')"
-          >{{ errors.first('Area Cientifica') }}</div>
-          <br>
-        </div>
-      </div>
-      <br>
-      <h5>Qual será o papel a desempenhar pelo docente a ser contratado?</h5>
-      <br>
-      <div id="radioRole" class="radio">
-        <input
-          name="papel"
-          v-validate="'required'"
-          type="radio"
+      <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+          <b-button block href="#" v-b-toggle.accordion-1 variant="dark">Unidades Curriculares</b-button>
+        </b-card-header>
+        <b-collapse id="accordion-1" accordion="accordion" role="tabpanel">
+          <b-card-body>
+            <b-card-text>
+              <h3 class="pb-4">Unidades Curriculares</h3>
+
+              <b-form-group label="Curso" label-for="inputCurso">
+                <b-form-select
+                  id="inputCurso"
+                  v-model="unidadeCurricular.curso_id"
+                  :state="$v.unidadeCurricular.curso_id.$dirty ? !$v.unidadeCurricular.curso_id.$error : null"
+                  :options="cursos"
+                  @change="getUcsDeCurso(unidadeCurricular.curso_id)"
+                ></b-form-select>
+                <b-form-invalid-feedback id="input-1-live-feedback">O Curso é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group label="Nome unidade curricular" label-for="inputNomeUC">
+                <b-form-select
+                  id="inputNomeUC"
+                  v-model="unidadeCurricular.nome_unidade_curricular"
+                  :state="$v.unidadeCurricular.nome_unidade_curricular.$dirty ? !$v.unidadeCurricular.nome_unidade_curricular.$error : null"
+                  :options="ucsDeDepartamento"
+                  @change="getRegimes(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.curso_id)"
+                ></b-form-select>
+                <b-form-invalid-feedback
+                  id="input-1-live-feedback"
+                >O Nome da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group label="Regime unidade curricular" label-for="inputRegimeUC">
+                <b-form-select
+                  id="inputRegimeUC"
+                  v-model="unidadeCurricular.regime"
+                  :state="$v.unidadeCurricular.regime.$dirty ? !$v.unidadeCurricular.regime.$error : null"
+                  :options="regimesParaUC"
+                  @change="getTurnos(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.regime, unidadeCurricular.curso_id)"
+                ></b-form-select>
+                <b-form-invalid-feedback
+                  id="input-1-live-feedback"
+                >O Regime da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group label="Turno" label-for="inputTurno">
+                <b-form-select
+                  id="inputTurno"
+                  v-model="unidadeCurricular.turno"
+                  :state="$v.unidadeCurricular.turno.$dirty ? !$v.unidadeCurricular.turno.$error : null"
+                  :options="turnosParaUCeRegime"
+                ></b-form-select>
+                <b-form-invalid-feedback
+                  id="input-1-live-feedback"
+                >O Turno da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group label="Numero de horas" label-for="inputNumeroHoras">
+                <b-form-textarea
+                  id="inputNumeroHoras"
+                  :state="$v.unidadeCurricular.horas.$dirty ? !$v.unidadeCurricular.horas.$error : null"
+                  v-model="unidadeCurricular.horas"
+                  rows="3"
+                ></b-form-textarea>
+                <b-form-invalid-feedback
+                  id="input-1-live-feedback"
+                >O Número de horas semanais é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group
+                label="Numero de horas (semestrais)"
+                label-for="inputNumeroHorasSemestrais"
+              >
+                <b-form-textarea
+                  id="inputNumeroHorasSemestrais"
+                  :state="$v.unidadeCurricular.horas_semestrais.$dirty ? !$v.unidadeCurricular.horas_semestrais.$error : null"
+                  v-model="unidadeCurricular.horas_semestrais"
+                  rows="3"
+                ></b-form-textarea>
+                <b-form-invalid-feedback
+                  id="input-1-live-feedback"
+                >O Número de horas semestrais é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <button
+                class="btn btn-success mt-3 font-weight-bold"
+                v-on:click.prevent="adicionarUC"
+              >
+                <i class="fas fa-plus"></i> Adicionar UC
+              </button>
+
+              <span v-if="unidadesCurriculares.length">
+                <table class="table mt-3">
+                  <thead>
+                    <th>Nome</th>
+                    <th>Regime</th>
+                    <th>Turno</th>
+                    <th>Curso</th>
+                    <th>Horas</th>
+                    <th>Horas Semestrais</th>
+                    <th>Tipo</th>
+                    <th>Ações</th>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
+                      <td>{{ucAUX.nome_unidade_curricular}}</td>
+                      <td>{{ucAUX.regime}}</td>
+                      <td>{{ucAUX.turno}}</td>
+                      <td>{{ucAUX.departamento_id}}</td>
+                      <td>{{ucAUX.horas}}</td>
+                      <td>{{ucAUX.horas_semestrais}}</td>
+                      <td>{{ucAUX.tipo}}</td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          v-if="isClicked"
+                          v-on:click="removerUC(ucAUX, index)"
+                        >Remover UC</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </span>
+            </b-card-text>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
+
+      <b-card no-body class="mb-1">
+        <b-card-header header-tag="header" class="p-1" role="tab">
+          <b-button block href="#" v-b-toggle.accordion-2 variant="dark">Habilitações Literárias</b-button>
+        </b-card-header>
+        <b-collapse id="accordion-2" accordion="accordion" role="tabpanel">
+          <b-card-body>
+            <b-card-text>
+              <h3 class="pb-4">Habilitações Literárias</h3>
+              <b-form-group label="Grau">
+                <b-form-radio-group
+                  v-model="proposta.grau"
+                  :options="grausArray"
+                  :state="$v.proposta.grau.$dirty ? !$v.proposta.grau.$error : null"
+                  stacked
+                ></b-form-radio-group>
+                <b-form-invalid-feedback id="input-1-live-feedback">O Grau é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group label="Curso" label-for="inputCursoHabilitacoesLiterarias">
+                <b-form-input
+                  id="inputCursoHabilitacoesLiterarias"
+                  :state="$v.proposta.curso.$dirty ? !$v.proposta.curso.$error : null"
+                  v-model="proposta.curso"
+                ></b-form-input>
+                <b-form-invalid-feedback id="input-1-live-feedback">O Curso é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group
+                label="Área Científica"
+                label-for="inputAreaCientificaHabilitacoesLiterarias"
+              >
+                <b-form-input
+                  id="inputAreaCientificaHabilitacoesLiterarias"
+                  :state="$v.proposta.area_cientifica.$dirty ? !$v.proposta.area_cientifica.$error : null"
+                  v-model="proposta.area_cientifica"
+                ></b-form-input>
+                <b-form-invalid-feedback id="input-1-live-feedback">A Área Científica é obrigatória!</b-form-invalid-feedback>
+              </b-form-group>
+            </b-card-text>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
+
+      <b-form-group
+        label="Qual será o papel a desempenhar pelo docente a ser contratado?"
+        class="mt-5"
+      >
+        <b-form-radio-group
           v-model="proposta.role"
-          value="professor"
-        > Professor
-        <br>
-        <input name="papel" type="radio" v-model="proposta.role" value="assistente"> Assistente
-        <br>
-        <input name="papel" type="radio" v-model="proposta.role" value="monitor"> Monitor
-        <br>
-      </div>
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('papel')"
-      >{{ errors.first('papel') }}</div>
-      <br>
-      <br>
+          :options="rolesArray"
+          :state="$v.proposta.role.$dirty ? !$v.proposta.role.$error : null"
+          stacked
+        ></b-form-radio-group>
+        <b-form-invalid-feedback
+          id="input-1-live-feedback"
+        >A seleção de uma unidade orgânica é obrigatória!</b-form-invalid-feedback>
+      </b-form-group>
+
       <button
-        type="button"
-        class="btn btn-success"
-        v-on:click="avancar(proposta, unidadesCurriculares)"
-        v-if="isClicked"
-      >Seguinte</button>
+        class="btn btn-success mt-3 font-weight-bold"
+        v-on:click.prevent="avancar(proposta, unidadesCurriculares)"
+      >
+        Seguinte
+        <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
     <br>
     <proposta-proponente-professor
@@ -306,6 +276,11 @@ export default {
         { text: "Ensino Secundário", value: "Ensino Secundario" },
         { text: "Doutoramento", value: "Doutoramento" }
       ],
+      rolesArray: [
+        { text: "Professor", value: "professor" },
+        { text: "Assistente", value: "assistente" },
+        { text: "Monitor", value: "monitor" }
+      ],
       proposta: {
         tipo_contrato: "",
         unidade_organica: "",
@@ -348,7 +323,18 @@ export default {
     proposta: {
       unidade_organica: { required },
       nome_completo: { required },
-      grau: { required }
+      grau: { required },
+      curso: { required },
+      area_cientifica: { required },
+      role: { required }
+    },
+    unidadeCurricular: {
+      curso_id: { required },
+      nome_unidade_curricular: { required },
+      regime: { required },
+      turno: { required },
+      horas: { required },
+      horas_semestrais: { required }
     }
   },
   methods: {
@@ -358,8 +344,8 @@ export default {
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
       this.roleSelecionado = proposta.role;
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
+      this.$v.proposta.$touch();
+      if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
         this.isFinalized = true;
         this.isClicked = false;
         this.progresso.valor++;
@@ -378,7 +364,9 @@ export default {
             this.departamento_id
         )
         .then(response => {
-          this.ucsDeDepartamento = response.data;
+          response.data.forEach(x => {
+            this.ucsDeDepartamento.push({ text: x.nome });
+          });
         });
     },
     getRegimes(uc_name, curso_id) {
@@ -387,7 +375,9 @@ export default {
       axios
         .get("/api/unidadesCurriculares/regime/" + uc_name + "/" + curso_id)
         .then(response => {
-          this.regimesParaUC = response.data;
+          response.data.forEach(x => {
+            this.regimesParaUC.push({ text: x.regime });
+          });
         });
     },
     getTurnos(uc_name, uc_regime, curso_id) {
@@ -402,7 +392,9 @@ export default {
             curso_id
         )
         .then(response => {
-          this.turnosParaUCeRegime = response.data;
+          response.data.forEach(x => {
+            this.turnosParaUCeRegime.push({ text: x.turno });
+          });
         });
     },
     getTipo(uc_name) {
@@ -411,22 +403,12 @@ export default {
       });
     },
     adicionarUC() {
-      if (
-        this.unidadeCurricular.nome == "" ||
-        this.unidadeCurricular.regime == "" ||
-        this.unidadeCurricular.turno == "" ||
-        this.unidadeCurricular.horas == "" ||
-        this.unidadeCurricular.horas_semestrais == ""
-      ) {
-        console.log("ERROR!!!!");
-      } else {
+      this.$v.unidadeCurricular.$touch();
+      if (!this.$v.unidadeCurricular.$invalid) {
         this.unidadesCurriculares.push(this.unidadeCurricular);
-        /* this.unidadeCurricular = {};
-        this.ucsDeDepartamento = [];
-        this.regimesParaUC = [];
-        this.turnosParaUCeRegime = [];
-        this.unidadeCurricular.departamento_id = [];
-        */
+
+        //* Colocar os campos vazios
+        this.$v.unidadeCurricular.$reset();
       }
     },
     removerUC(index) {
@@ -437,14 +419,19 @@ export default {
 
   mounted() {
     axios
-      .get("/api/departamento/" + "Coordenador do Departamento de Matematica")
+      .get(
+        "/api/departamento/" +
+          "Coordenador do Departamento de Engenharia Informática"
+      )
       .then(response => {
         this.departamento_id = response.data[0].id;
         this.unidadeCurricular.departamento_id = this.departamento_id;
         axios
           .get("/api/cursosDisponiveis/" + this.departamento_id)
           .then(response => {
-            this.cursos = response.data;
+            response.data.forEach(x => {
+              this.cursos.push({ value: x.id, text: x.nome_curso });
+            });
           });
       });
   }
@@ -453,8 +440,10 @@ export default {
 
 <style >
 .col-form-label,
-.label {
+.label,
+.d-block {
   font-size: 20px;
+  font-weight: 600;
 }
 
 .form-control:focus,
@@ -464,5 +453,9 @@ export default {
   border-color: #1a1a1a;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0);
+}
+
+.btn-dark {
+  background-color: #1a1a1a;
 }
 </style>

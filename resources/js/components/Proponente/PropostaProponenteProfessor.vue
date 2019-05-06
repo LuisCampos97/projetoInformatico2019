@@ -1,122 +1,72 @@
 <template>
   <div>
-    <h2>Proponente (Professor)</h2>
-    <br>
-    <h5>Qual será a categoria específica do professor a ser contratado?</h5>
-    <br>
-    <div id="radio_role_professor" class="radio">
-      <input
-        name="Role"
-        v-validate="'required'"
-        type="radio"
+    <h2 class="pb-4">Proponente (Professor)</h2>
+    <b-form-group label="Categoria específica do professor a ser contratado">
+      <b-form-radio-group
         v-model="propostaProponenteProfessor.role_professor"
-        value="Coordenador"
-      > Coordenador
-      <br>
-      <input
-        name="Role"
-        type="radio"
-        v-model="propostaProponenteProfessor.role_professor"
-        value="Adjunto"
-      > Adjunto
-      <br>
-      <input
-        name="Role"
-        type="radio"
-        v-model="propostaProponenteProfessor.role_professor"
-        value="Visitante"
-      > Visitante
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Role')"
-    >{{ errors.first('Role') }}</div>
-    <br>
-    <div>
-      <h5>Regime de prestação de serviços:</h5>
-      <br>
-      <div id="radio_regime" class="radio">
-        <input
-          name="Regime Prestação Serviços"
-          v-validate="'required'"
-          type="radio"
-          v-model="propostaProponenteProfessor.regime_prestacao_servicos"
-          value="Tempo Integral"
-        > Tempo Integral
-        <br>
-        <input
-          name="Regime Prestação Serviços"
-          type="radio"
-          v-model="propostaProponenteProfessor.regime_prestacao_servicos"
-          value="Tempo Parcial"
-        > Tempo Parcial
-        <br>
-        <input
-          name="Regime Prestação Serviços"
-          type="radio"
-          v-model="propostaProponenteProfessor.regime_prestacao_servicos"
-          value="Dedicação Exclusiva"
-        > Dedicação Exclusiva
-        <br>
-      </div>
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('Regime Prestação Serviços')"
-      >{{ errors.first('Regime Prestação Serviços') }}</div>
-    </div>
-    <br>
-    <span v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'Tempo Parcial'">
-      <h5>Percentagem de tempo parcial:</h5>
-      <br>
-      <input
-        name="Percentagem Prestação Serviços"
-        v-validate="'nullable|min_value:1|max_value:100'"
-        type="number"
-        class="form-control"
-        placeholder="Insira um valor entre 1 e 100"
-        v-model="propostaProponenteProfessor.percentagem_prestacao_servicos"
-      >
-      <div
-        class="help-block alert alert-danger"
-        v-show="errors.has('Percentagem Prestação Serviços')"
-      >{{ errors.first('Percentagem Prestação Serviços') }}</div>
+        :options="categoriaArray"
+        :state="$v.propostaProponenteProfessor.role_professor.$dirty ? !$v.propostaProponenteProfessor.role_professor.$error : null"
+        stacked
+      ></b-form-radio-group>
+      <b-form-invalid-feedback id="input-1-live-feedback">A seleção de uma categoria é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
+
+    <b-form-group label="Regime de prestação de serviços">
+      <b-form-radio-group
+        v-model="propostaProponenteProfessor.regime_prestacao_servicos"
+        :options="regimePrestacaoServicosArray"
+        :state="$v.propostaProponenteProfessor.regime_prestacao_servicos.$dirty ? !$v.propostaProponenteProfessor.regime_prestacao_servicos.$error : null"
+        stacked
+      ></b-form-radio-group>
+      <b-form-invalid-feedback
+        id="input-1-live-feedback"
+      >A seleção do regime de prestaões de serviço é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
+
+    <span v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'tempo_parcial'">
+      <b-form-group label="Percentagem de tempo parcial" label-for="inputPercentagemTempoParcial">
+        <b-form-input
+          id="inputPercentagemTempoParcial"
+          type="number"
+          :state="$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$error : null"
+          v-model="propostaProponenteProfessor.percentagem_prestacao_servicos"
+        ></b-form-input>
+        <b-form-invalid-feedback id="input-1-live-feedback">A percentagem deve estar entre 1 e 100%</b-form-invalid-feedback>
+      </b-form-group>
     </span>
-    <br>
-    <div>
-      <h5>Duração do contrato</h5>
-      <br>
-      <input
-        type="text"
-        class="form-control"
+
+    <b-form-group label="Duração do contrato" label-for="inputDuracaoContrato">
+      <b-form-input
+        id="inputDuracaoContrato"
+        :state="$v.propostaProponenteProfessor.duracao.$dirty ? !$v.propostaProponenteProfessor.duracao.$error : null"
         v-model="propostaProponenteProfessor.duracao"
-        name="Duração Contrato"
-        v-validate="'required'"
-      >
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Duração Contrato')"
-    >{{ errors.first('Duração Contrato') }}</div>
-    <br>
-    <div>
-      <h5>Periodo</h5>
-      <br>
-      <input
-        type="text"
-        class="form-control"
-        v-model="propostaProponenteProfessor.periodo"
-        name="Periodo"
-        v-validate="'required'"
-      >
-    </div>
-    <div
-      class="help-block alert alert-danger"
-      v-show="errors.has('Periodo')"
-    >{{ errors.first('Periodo') }}</div>
-    <br>
+      ></b-form-input>
+      <b-form-invalid-feedback id="input-1-live-feedback">A duração do contrato é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
     
-    <button type="button" class="btn btn-success" v-on:click="continuar">Continuar</button>
-    <br>
+    <b-form-group label="Periodo" label-for="inputPeriodo">
+      <b-form-input
+        id="inputPeriodo"
+        :state="$v.propostaProponenteProfessor.periodo.$dirty ? !$v.propostaProponenteProfessor.periodo.$error : null"
+        v-model="propostaProponenteProfessor.periodo"
+      ></b-form-input>
+      <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
+    </b-form-group>
+
+    <button
+        class="btn btn-info mt-3 font-weight-bold"
+        v-on:click.prevent="anterior"
+      >
+        <i class="fas fa-arrow-left"></i> Anterior
+      </button>
+
+    <button
+        class="btn btn-success mt-3 font-weight-bold"
+        v-on:click.prevent="seguinte"
+      >
+        Seguinte
+        <i class="fas fa-arrow-right"></i>
+      </button>
     <resumo-proposta
       v-if="avancar"
       :proposta="proposta"
@@ -126,10 +76,22 @@
   </div>
 </template>
 <script>
-module.exports = {
+import { required, between } from "vuelidate/lib/validators";
+
+export default {
   props: ["proposta", "unidadesCurriculares"],
   data() {
     return {
+      categoriaArray: [
+        { text: "Coordenador", value: "coordenador" },
+        { text: "Adjunto", value: "adjunto" },
+        { text: "Visitante", value: "visitante" }
+      ],
+      regimePrestacaoServicosArray: [
+        { text: "Tempo Integral", value: "tempo_integral" },
+        { text: "Tempo Parcial", value: "tempo_parcial" },
+        { text: "Dedicação Exclusiva", value: "dedicacao_exclusiva" }
+      ],
       propostaProponenteProfessor: {
         role_professor: "",
         regime_prestacao_servicos: "",
@@ -142,12 +104,26 @@ module.exports = {
       avancar: false
     };
   },
+  //? Validations Vuelidate
+  validations: {
+    propostaProponenteProfessor: {
+      role_professor: { required },
+      regime_prestacao_servicos: { required },
+      percentagem_prestacao_servicos: { between: between(1, 100) },
+      duracao: { required },
+      periodo: { required }
+    }
+  },
   methods: {
-    
-    continuar() {
-      this.$validator.validateAll().then(() => {
+    seguinte() {
+      //* Mudar para o componente Resumo Proposta
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
         this.avancar = true;
-      });
+      }
+    },
+    anterior() {
+      //* Mudar para o componente Proponente
     }
   }
 };
