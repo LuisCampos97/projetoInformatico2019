@@ -15,10 +15,12 @@ class DiretorUOController extends Controller
       ->whereNull('proposta_diretor_uo_id')
       ->get();
 
-      dd($propostas);
+      //dd($propostas);
 
-      foreach($proposta as $propsotas) {
-
+      foreach($propostas as $proposta) {
+         //var_dump($proposta->proposta_proponente_id);
+         $propostaProponente=DB::table('proposta_proponente')->where('id', '=', $proposta->proposta_proponente_id)->get();
+         dd($propostaProponente);
       }
    }
     

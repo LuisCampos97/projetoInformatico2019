@@ -81,6 +81,7 @@
                   v-model="unidadeCurricular.turno"
                   :state="$v.unidadeCurricular.turno.$dirty ? !$v.unidadeCurricular.turno.$error : null"
                   :options="turnosParaUCeRegime"
+                  @change="getTipo(unidadeCurricular.nome_unidade_curricular)"
                 ></b-form-select>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"

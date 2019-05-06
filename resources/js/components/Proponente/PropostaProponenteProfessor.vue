@@ -83,14 +83,14 @@ export default {
   data() {
     return {
       categoriaArray: [
-        { text: "Coordenador", value: "coordenador" },
-        { text: "Adjunto", value: "adjunto" },
-        { text: "Visitante", value: "visitante" }
+        { text: "Coordenador", value: "Coordenador" },
+        { text: "Adjunto", value: "Adjunto" },
+        { text: "Visitante", value: "Visitante" }
       ],
       regimePrestacaoServicosArray: [
-        { text: "Tempo Integral", value: "tempo_integral" },
-        { text: "Tempo Parcial", value: "tempo_parcial" },
-        { text: "Dedicação Exclusiva", value: "dedicacao_exclusiva" }
+        { text: "Tempo Integral", value: "Tempo Integral" },
+        { text: "Tempo Parcial", value: "Tempo Parcial" },
+        { text: "Dedicação Exclusiva", value: "Dedicacao Exclusiva" }
       ],
       propostaProponenteProfessor: {
         role_professor: "",

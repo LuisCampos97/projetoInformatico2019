@@ -53,3 +53,6 @@ Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inser
 
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis/{dep_id}', 'CursoController@getUcsDisponiveisParaUserLogado');
+
+//-----------------------Diretor UO----------------------------------------------------------
+Route::get('/diretorUO/propostasPendentes', 'DiretorUOController@getPropostasPendentes');
