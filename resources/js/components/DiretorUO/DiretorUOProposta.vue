@@ -1,63 +1,57 @@
 <template>
   <div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-header">Parecer sobre esta proposta</div>
-            <div class="card-body">
-              <h6>Reconhecimento</h6>
-              <div class="checkbox">
-                <label>
-                  <input
-                    type="checkbox"
-                    name="Reconhecimento"
-                    v-model="propostaDiretor.reconhecimento"
-                    v-validate="'required'"
-                  >Reconheço a necessidade de criação/renovação desta proposta
-                </label>
-              </div>
-              <br>
-              <div>
-                <h6>Parecer:</h6>
-                <input
-                  name="Parecer"
-                  type="radio"
-                  v-model="propostaDiretor.parecer"
-                  value="Favoravel"
-                  @change="showValue"
-                > Favorável
-                <br>
-                <input
-                  name="Parecer"
-                  type="radio"
-                  v-model="propostaDiretor.parecer"
-                  value="Desfavoravel"
-                  @change="showValue"
-                > Desfavorável
-                <br>
-              </div>
-            </div>
-            <br>
-          </div>
-        </div>
-      </div>
-    </div>
+    <h2>Reconhecimento e Parecer sobre esta proposta</h2>
+    <b-form-group label="Reconhecimento" class="mt-5">
+      <b-form-checkbox
+        id="checkboxReconhecimento"
+        v-model="propostaDiretor.reconhecimento"
+        name="checkboxReconhecimento"
+        value="true"
+        unchecked-value="false"
+      >Reconheço o interesse e a necessidade da contratação/renovação</b-form-checkbox>
+      <b-form-invalid-feedback id="input-1-live-feedback">Tem de reconhecer a proposta</b-form-invalid-feedback>
+    </b-form-group>
+
+    <b-form-group label="Parecer">
+      <b-form-radio-group v-model="propostaDiretor.parecer" :options="parecerArray"></b-form-radio-group>
+      <b-form-invalid-feedback id="input-1-live-feedback">Selecione a opção do parecer</b-form-invalid-feedback>
+    </b-form-group>
+
+     <button
+        class="btn btn-success mt-3 font-weight-bold"
+        v-on:click.prevent="finalizarParecer(propostaDiretor)"
+      >
+        Finalizar
+        <i class="fas fa-arrow-right"></i>
+      </button>
   </div>
 </template>
 <script>
-module.exports = {
+import { required } from "vuelidate/lib/validators";
+
+export default {
   data() {
     return {
       propostaDiretor: {
         reconhecimento: "",
-        parecer: []
-      }
+        parecer: "",
+      },
+      parecerArray: [
+        { text: "Favoravel", value: "Favoravel" },
+        { text: "Desfavorável", value: "Desfavoravel" }
+      ]
     };
   },
+  validations: {
+    propostaDiretor: {
+      reconhecimento: { required },
+      parecer: { required }
+    }
+  },
+
   methods: {
-    showValue() {
-      console.log(this.propostaDiretor.parecer);
+    finalizarParecer(propostaDiretor){
+      
     }
   }
 };
