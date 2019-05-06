@@ -62,7 +62,9 @@
   </div>
 </template>
 <script>
-module.exports = {
+import { required, between } from "vuelidate/lib/validators";
+
+export default {
   props: ["proposta", "unidadesCurriculares"],
   data() {
     return {

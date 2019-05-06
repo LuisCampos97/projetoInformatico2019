@@ -12,9 +12,15 @@ class PropostaProponenteController extends Controller
         $request->validate([
             'unidade_organica' => 'required',
             'nome_completo' => 'required',
-            'data_de_assinatura_coordenador_departamento' => 'required',
-            'tipo_contrato' => 'required'
+            'tipo_contrato' => 'required',
+            'data_de_assinatura_coordenador_de_curso' => 'nullable',
+            'data_de_assinatura_coordenador_departamento' => 'nullable',
+            'role' => 'required',
+            'grau' => 'required',
+            'curso' => 'required',
+            'area_cientifica' => 'required',
         ]);
+        
         $propostaProponente = new PropostaProponente();
         $propostaProponente->fill($request->all());
         $propostaProponente->save();

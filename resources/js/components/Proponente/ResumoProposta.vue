@@ -195,6 +195,7 @@ module.exports = {
       );
       if (confirmacao) {
         if (this.unidadesCurriculares.length > 0) {
+          console.log(this.proposta);
           axios
             .post("/api/propostaProponente/", this.proposta)
             .then(response => {
