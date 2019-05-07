@@ -8,6 +8,14 @@
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
     <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
+      <b-form-group label="Currículo">
+        <b-form-file
+          v-model="fileCurriculo"
+          :state="Boolean(fileCurriculo)"
+          placeholder="Escolha um ficheiro"
+          drop-placeholder="Arraste para aqui um ficheiro"
+        ></b-form-file>
+      </b-form-group>
       <b-form-group label="Unidade Orgânica">
         <b-form-radio-group
           v-model="proposta.unidade_organica"
@@ -197,11 +205,29 @@
                   v-model="proposta.area_cientifica"
                 ></b-form-input>
                 <b-form-invalid-feedback id="input-1-live-feedback">A Área Científica é obrigatória!</b-form-invalid-feedback>
+
+                <b-form-group label="Certificado de Habilitações" v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
+                  <b-form-file
+                    v-model="certificadoHabilitações"
+                    :state="Boolean(certificadoHabilitações)"
+                    placeholder="Escolha um ficheiro"
+                    drop-placeholder="Arraste para aqui um ficheiro"
+                  ></b-form-file>
+                </b-form-group>
               </b-form-group>
             </b-card-text>
           </b-card-body>
         </b-collapse>
       </b-card>
+
+      <b-form-group label="Relatório dos proponentes">
+        <b-form-file
+          v-model="fileRelatorio"
+          :state="Boolean(fileRelatorio)"
+          placeholder="Escolha um ficheiro"
+          drop-placeholder="Arraste para aqui um ficheiro"
+        ></b-form-file>
+      </b-form-group>
 
       <b-form-group
         label="Qual será o papel a desempenhar pelo docente a ser contratado?"
@@ -316,7 +342,10 @@ export default {
       progresso: {
         valor: 1,
         max: 3
-      }
+      },
+      fileCurriculo: null,
+      fileRelatorio: null,
+      certificadoHabilitações: null
     };
   },
   //? Validations Vuelidate
@@ -415,6 +444,30 @@ export default {
     removerUC(index) {
       delete this.unidadesCurriculares[index];
       this.unidadesCurriculares.splice(index, 1);
+    },
+    /*
+    submitFile(){
+            let formData = new FormData();
+            formData.append('file', this.file);
+
+            axios.post( '/single-file',
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }
+            ).then(function(){
+          console.log('SUCCESS!!');
+        })
+        .catch(function(){
+          console.log('FAILURE!!');
+        });
+      },
+      */
+    handleFileUpload(file) {
+      console.log(file);
+      //this.file = this.$refs.file.files[0];
     }
   },
 

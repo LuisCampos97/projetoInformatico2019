@@ -41,6 +41,15 @@
       <b-form-radio-group v-model="propostaCTC.aprovacao" :options="aprovacaoArray"></b-form-radio-group>
     </b-form-group>
 
+    <b-form-group label="Acta da reunião do Conselho Tecnico-Científico">
+      <b-form-file
+        v-model="ata"
+        :state="Boolean(ata)"
+        placeholder="Escolha um ficheiro"
+        drop-placeholder="Arraste para aqui um ficheiro"
+      ></b-form-file>
+    </b-form-group>
+
     <button
       class="btn btn-success mt-3 font-weight-bold"
       v-on:click.prevent="finalizarAprovacaoCTC(propostaCTC)"
@@ -63,6 +72,8 @@ export default {
         votos_nulos: "",
         aprovacao: ""
       },
+      ata: null,
+
       aprovacaoArray: [
         { text: "Aprovado", value: "aprovado" },
         { text: "Reprovado", value: "reprovado" }
@@ -76,7 +87,8 @@ export default {
       votos_brancos: { required },
       votos_nulos: { required },
       aprovacao: { required }
-    }
+    },
+    ata: { required }
   },
   methods: {
     finalizarAprovacaoCTC(propostaCTC) {

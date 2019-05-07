@@ -33,7 +33,8 @@ class CTCController extends Controller
             'votos_contra' => 'required',
             'votos_brancos' => 'required',
             'votos_nulos' => 'required',
-            'aprovacao' => 'required'
+            'aprovacao' => 'required',
+            'ata' => 'required'
         ]);
         $propostaCTC = new PropostaCTC();
         $propostaCTC->fill($request->all());
