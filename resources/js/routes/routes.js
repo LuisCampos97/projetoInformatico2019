@@ -16,6 +16,7 @@ Vue.component('propostaProponenteMonitor', require('../components/Proponente/Pro
 Vue.component('resumoProposta', require('../components/Proponente/ResumoProposta.vue').default);
 Vue.component('separator-table', require('../components/utils/Separator_Table.vue').default);
 const diretorUOProposta = Vue.component('diretor', require('../components/DiretorUO/DiretorUOProposta.vue').default);
+const ctc = Vue.component('ctc', require('../components/CTC/CTC.vue').default);
 const routes = [
   //---------------Auth----------------------
   {
@@ -45,6 +46,11 @@ const routes = [
     path: '/diretorUOProposta',
     component: diretorUOProposta,
     name: diretorUOProposta
+  },
+  {
+    path: '/ctc',
+    component: ctc,
+    name: ctc
   },
 
 ];

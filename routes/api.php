@@ -56,3 +56,8 @@ Route::get('/cursosDisponiveis/{dep_id}', 'CursoController@getUcsDisponiveisPara
 
 //-----------------------Diretor UO----------------------------------------------------------
 Route::get('/diretorUO/propostasPendentes', 'DiretorUOController@getPropostasPendentes');
+Route::post('/diretorUO/propostaDiretor', 'DiretorUOController@store');
+
+//--------------------------CTC-----------------------------------------------------------
+Route::get('/ctc/propostasPendentes', 'CTCController@getPropostasPendentes');
+Route::post('/ctc/propostaCTC', 'CTCController@store');
