@@ -17,6 +17,12 @@
       <b-form-invalid-feedback id="input-1-live-feedback">Selecione a opção do parecer</b-form-invalid-feedback>
     </b-form-group>
 
+    <b-form-group label="Data assinatura">
+      <b-form-input type="date" v-model="propostaDiretor.data_assinatura"></b-form-input>
+      <b-form-invalid-feedback id="input-1-live-feedback">Selecione a data de assinatura</b-form-invalid-feedback>
+    </b-form-group>
+
+
      <button
         class="btn btn-success mt-3 font-weight-bold"
         v-on:click.prevent="finalizarParecer(propostaDiretor)"
@@ -35,6 +41,7 @@ export default {
       propostaDiretor: {
         reconhecimento: "",
         parecer: "",
+        data_assinatura:"",
       },
       parecerArray: [
         { text: "Favoravel", value: "Favoravel" },
@@ -45,14 +52,22 @@ export default {
   validations: {
     propostaDiretor: {
       reconhecimento: { required },
-      parecer: { required }
+      parecer: { required },
+      data_assinatura: { required },
     }
   },
 
   methods: {
     finalizarParecer(propostaDiretor){
-      
-    }
+      this.$v.propostaDiretor.$touch();
+      if (!this.$v.propostaDiretor.$invalid){
+        axios.post('/api/diretorUO/propostaDiretor/', this.propostaDiretor).then(response=>{
+
+        }).catch(error => {
+          console.log(error);
+        });
+      }
+    },
   }
 };
 </script>

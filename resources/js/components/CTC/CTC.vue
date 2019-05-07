@@ -79,9 +79,17 @@ export default {
     }
   },
   methods: {
-      finalizarAprovacaoCTC(propostaCTC){
-          
+    finalizarAprovacaoCTC(propostaCTC) {
+      this.$v.propostaCTC.$touch();
+      if (!this.$v.propostaCTC.$invalid) {
+        axios
+          .post("/api/ctc/propostaCTC/", this.propostaCTC)
+          .then(response => {})
+          .catch(error => {
+            console.log(error);
+          });
       }
-  },
+    }
+  }
 };
 </script>
