@@ -39,20 +39,24 @@ class InitialMigration extends Migration
         });
 
         Schema::create('curso', function(Blueprint $table){
-            $table->increments('id');
+            $table->increments('codigo');
             $table->string('nome_curso');
             $table->string('sigla');
+        });
+
+        Schema::create('unidade_curricular', function (Blueprint $table){
+            $table->increments('codigo');
+            $table->string('nome');
+            $table->integer('codigo_curso')->unsigned();    
+            $table->foreign('codigo_curso')->references('codigo')->on('curso');
             $table->integer('departamento_id')->unsigned();
             $table->foreign('departamento_id')->references('id')->on('departamento');
         });
 
-        Schema::create('unidade_curricular', function (Blueprint $table){
+        Schema::create('turnos_uc', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome');
-            $table->integer('curso_id')->unsigned();
-            $table->foreign('curso_id')->references('id')->on('curso');
-            $table->integer('departamento_id')->unsigned();
-            $table->foreign('departamento_id')->references('id')->on('departamento');
+            $table->integer('codigo_uc')->unsigned();
+            $table->foreign('codigo_uc')->references('codigo')->on('unidade_curricular');
             $table->enum('regime', ['Diurno', 'Pos-Laboral']);
             $table->enum('tipo', ['Semestral', 'Anual']);
             $table->string('turno');
@@ -65,7 +69,7 @@ class InitialMigration extends Migration
             $table->dateTime('data_de_assinatura_coordenador_departamento')->nullable();
             $table->dateTime('data_de_assinatura_coordenador_de_curso')->nullable();
             $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
-            $table->enum('grau', ['Doutoramento', 'Pos-Graduacao', 'Licenciatura', 'Ensino Secundario', 'Mestrado']);
+            $table->string('grau');
             $table->string('curso');
             $table->string('area_cientifica');
             $table->softDeletes();
@@ -76,7 +80,7 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
-            $table->integer('percentagem_prestacao_servicos')->nullable(); //em caso de tempo parcial??
+            $table->integer('percentagem_prestacao_servicos');
             $table->string('periodo');
             $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa'])->nullable();
@@ -90,7 +94,7 @@ class InitialMigration extends Migration
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
-            $table->integer('percentagem_prestacao_servicos')->nullable();
+            $table->integer('percentagem_prestacao_servicos');
             $table->string('periodo');
             $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa']);

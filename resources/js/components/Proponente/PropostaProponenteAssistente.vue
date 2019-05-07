@@ -13,14 +13,38 @@
       >A seleção do regime de prestaões de serviço é obrigatória!</b-form-invalid-feedback>
     </b-form-group>
     <span v-if="propostaProponenteAssistente.regime_prestacao_servicos == 'tempo_parcial'">
-      <b-form-group label="Percentagem de tempo parcial" label-for="inputPercentagemTempoParcial">
-        <b-form-input
-          id="inputPercentagemTempoParcial"
-          type="number"
-          :state="$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error : null"
+      <b-form-group
+        description="(cfr. acta do CTC - art. 5º, nº3) N.B Contracto e renovações não podem ter duração superior a 4 anos"
+      >
+        <b-form-checkbox
+          v-model="propostaProponenteAssistente.fundamentacao"
+          value="true"
+          unchecked-value="false"
+          description="We'll never share your email with anyone else."
+        >Fundamentação</b-form-checkbox>
+      </b-form-group>
+
+      <b-form-group label="Percentagem de tempo parcial" label-for="inputTempoParcial" v-if="propostaProponenteAssistente.fundamentacao == 'true'">
+        <b-form-select
+          id="inputTempoParcial"
           v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
-        ></b-form-input>
-        <b-form-invalid-feedback id="input-1-live-feedback">A percentagem deve estar entre 1 e 100%</b-form-invalid-feedback>
+          :state="$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error : null"
+          :options="percentagensArrayFundamentacao"
+        ></b-form-select>
+        <b-form-invalid-feedback
+          id="input-1-live-feedback"
+        >A percentagem de tempo parcial é obrigatória!</b-form-invalid-feedback>
+      </b-form-group>
+      <b-form-group label="Percentagem de tempo parcial" label-for="inputTempoParcial" v-if="propostaProponenteAssistente.fundamentacao == 'false' || propostaProponenteAssistente.fundamentacao == null">
+        <b-form-select
+          id="inputTempoParcial"
+          v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
+          :state="$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error : null"
+          :options="percentagensArray"
+        ></b-form-select>
+        <b-form-invalid-feedback
+          id="input-1-live-feedback"
+        >A percentagem de tempo parcial é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
     </span>
 
@@ -65,6 +89,19 @@ export default {
   props: ["proposta", "unidadesCurriculares"],
   data() {
     return {
+      percentagensArray: [
+        { text: "55% (7 horas)", value: "55" },
+        { text: "50% (6 horas)", value: "50" },
+        { text: "40% (5 horas)", value: "40" },
+        { text: "30% (4 horas)", value: "30" },
+        { text: "20% (3 horas)", value: "20" },
+        { text: "15% (2 horas)", value: "15" }
+      ],
+      percentagensArrayFundamentacao: [
+        { text: "80% (10 horas)", value: "80" },
+        { text: "70% (9 horas)", value: "70" },
+        { text: "60% (8 horas)", value: "60" }
+      ],
       categoriaArray: [
         { text: "Coordenador", value: "coordenador" },
         { text: "Adjunto", value: "adjunto" },
@@ -80,7 +117,8 @@ export default {
         percentagem_prestacao_servicos: "",
         duracao: "",
         periodo: "",
-        proposta_proponente_id: ""
+        proposta_proponente_id: "",
+        fundacao: null
       },
       dataFimContratoText: "",
       avancar: false

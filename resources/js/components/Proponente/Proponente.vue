@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isShow">
     <h2 class="pb-4">Nova Proposta</h2>
     <b-form-group label="Tipo de Proposta">
       <b-form-radio-group v-model="proposta.tipo_contrato" :options="tipoContratosArray" stacked></b-form-radio-group>
@@ -89,12 +89,11 @@
               </b-form-group>
 
               <b-form-group label="Numero de horas" label-for="inputNumeroHoras">
-                <b-form-textarea
+                <b-form-input
                   id="inputNumeroHoras"
                   :state="$v.unidadeCurricular.horas.$dirty ? !$v.unidadeCurricular.horas.$error : null"
                   v-model="unidadeCurricular.horas"
-                  rows="3"
-                ></b-form-textarea>
+                ></b-form-input>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
                 >O Número de horas semanais é obrigatório!</b-form-invalid-feedback>
@@ -104,12 +103,11 @@
                 label="Numero de horas (semestrais)"
                 label-for="inputNumeroHorasSemestrais"
               >
-                <b-form-textarea
+                <b-form-input
                   id="inputNumeroHorasSemestrais"
                   :state="$v.unidadeCurricular.horas_semestrais.$dirty ? !$v.unidadeCurricular.horas_semestrais.$error : null"
                   v-model="unidadeCurricular.horas_semestrais"
-                  rows="3"
-                ></b-form-textarea>
+                ></b-form-input>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
                 >O Número de horas semestrais é obrigatório!</b-form-invalid-feedback>
@@ -272,10 +270,9 @@ export default {
       ],
       grausArray: [
         { text: "Licenciatura", value: "Licenciatura" },
-        { text: "Pós-Graduação", value: "Pos-Graduacao" },
         { text: "Mestrado", value: "Mestrado" },
-        { text: "Ensino Secundário", value: "Ensino Secundario" },
-        { text: "Doutoramento", value: "Doutoramento" }
+        { text: "Doutoramento", value: "Doutoramento" },
+        { text: "Outro", value: "Outro"}
       ],
       rolesArray: [
         { text: "Professor", value: "professor" },
@@ -313,6 +310,7 @@ export default {
       turnosParaUCeRegime: [],
       isClicked: true,
       isFinalized: false,
+      isShow: true,
       progresso: {
         valor: 1,
         max: 3
@@ -349,7 +347,8 @@ export default {
       if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
         this.isFinalized = true;
         this.isClicked = false;
-        this.progresso.valor++;
+        this.isShow = false;
+        this.progresso.valor++; 
       }
     },
 

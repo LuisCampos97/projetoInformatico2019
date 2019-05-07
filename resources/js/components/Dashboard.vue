@@ -10,7 +10,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right>
-            <template slot="button-content">user.name</template>
+            <template slot="button-content">{{ user.name }}</template>
             <b-dropdown-item v-on:click.prevent="logout">
               <i class="fas fa-sign-out-alt"></i> Logout
             </b-dropdown-item>

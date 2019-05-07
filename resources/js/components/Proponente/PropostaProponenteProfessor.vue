@@ -23,15 +23,15 @@
       >A seleção do regime de prestaões de serviço é obrigatória!</b-form-invalid-feedback>
     </b-form-group>
 
-    <span v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'tempo_parcial'">
-      <b-form-group label="Percentagem de tempo parcial" label-for="inputPercentagemTempoParcial">
-        <b-form-input
-          id="inputPercentagemTempoParcial"
-          type="number"
-          :state="$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$error : null"
+    <span v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'Tempo Parcial'">
+      <b-form-group label="Percentagem de tempo parcial" label-for="inputTempoParcial">
+        <b-form-select
+          id="inputTempoParcial"
           v-model="propostaProponenteProfessor.percentagem_prestacao_servicos"
-        ></b-form-input>
-        <b-form-invalid-feedback id="input-1-live-feedback">A percentagem deve estar entre 1 e 100%</b-form-invalid-feedback>
+          :state="$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$error : null"
+          :options="percentagensArray"
+        ></b-form-select>
+        <b-form-invalid-feedback id="input-1-live-feedback">A percentagem de tempo parcial é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
     </span>
 
@@ -43,7 +43,7 @@
       ></b-form-input>
       <b-form-invalid-feedback id="input-1-live-feedback">A duração do contrato é obrigatória!</b-form-invalid-feedback>
     </b-form-group>
-    
+
     <b-form-group label="Periodo" label-for="inputPeriodo">
       <b-form-input
         id="inputPeriodo"
@@ -53,20 +53,14 @@
       <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
     </b-form-group>
 
-    <button
-        class="btn btn-info mt-3 font-weight-bold"
-        v-on:click.prevent="anterior"
-      >
-        <i class="fas fa-arrow-left"></i> Anterior
-      </button>
+    <button class="btn btn-info mt-3 font-weight-bold" v-on:click.prevent="anterior">
+      <i class="fas fa-arrow-left"></i> Anterior
+    </button>
 
-    <button
-        class="btn btn-success mt-3 font-weight-bold"
-        v-on:click.prevent="seguinte"
-      >
-        Seguinte
-        <i class="fas fa-arrow-right"></i>
-      </button>
+    <button class="btn btn-success mt-3 font-weight-bold" v-on:click.prevent="seguinte">
+      Seguinte
+      <i class="fas fa-arrow-right"></i>
+    </button>
     <resumo-proposta
       v-if="avancar"
       :proposta="proposta"
@@ -91,6 +85,17 @@ export default {
         { text: "Tempo Integral", value: "Tempo Integral" },
         { text: "Tempo Parcial", value: "Tempo Parcial" },
         { text: "Dedicação Exclusiva", value: "Dedicacao Exclusiva" }
+      ],
+      percentagensArray: [
+        { text: "80% (10 horas)", value: "80" },
+        { text: "70% (9 horas)", value: "70" },
+        { text: "60% (8 horas)", value: "60" },
+        { text: "55% (7 horas)", value: "55" },
+        { text: "50% (6 horas)", value: "50" },
+        { text: "40% (5 horas)", value: "40" },
+        { text: "30% (4 horas)", value: "30" },
+        { text: "20% (3 horas)", value: "20" },
+        { text: "15% (2 horas)", value: "15" }
       ],
       propostaProponenteProfessor: {
         role_professor: "",
@@ -119,6 +124,10 @@ export default {
       //* Mudar para o componente Resumo Proposta
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        if(this.propostaProponenteProfessor.regime_prestacao_servicos == 'Tempo Integral' ||
+        this.propostaProponenteProfessor.regime_prestacao_servicos == 'Dedicacao Exclusiva') {
+          this.propostaProponenteProfessor.percentagem_prestacao_servicos = '100';
+        }
         this.avancar = true;
       }
     },
