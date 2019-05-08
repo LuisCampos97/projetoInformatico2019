@@ -10,8 +10,8 @@
     <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
       <b-form-group label="Currículo">
         <b-form-file
-          v-model="fileCurriculo"
-          :state="Boolean(fileCurriculo)"
+          v-model="ficheiroCurriculo"
+          :state="Boolean(ficheiroCurriculo)"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
         ></b-form-file>
@@ -206,10 +206,13 @@
                 ></b-form-input>
                 <b-form-invalid-feedback id="input-1-live-feedback">A Área Científica é obrigatória!</b-form-invalid-feedback>
 
-                <b-form-group label="Certificado de Habilitações" v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
+                <b-form-group
+                  label="Certificado de Habilitações"
+                  v-if="proposta.tipo_contrato == 'Contratacao Inicial'"
+                >
                   <b-form-file
-                    v-model="certificadoHabilitações"
-                    :state="Boolean(certificadoHabilitações)"
+                    v-model="ficheiroHabilitacoes"
+                    :state="Boolean(ficheiroHabilitacoes)"
                     placeholder="Escolha um ficheiro"
                     drop-placeholder="Arraste para aqui um ficheiro"
                   ></b-form-file>
@@ -222,8 +225,8 @@
 
       <b-form-group label="Relatório dos proponentes">
         <b-form-file
-          v-model="fileRelatorio"
-          :state="Boolean(fileRelatorio)"
+          v-model="ficheiroRelatorio"
+          :state="Boolean(ficheiroRelatorio)"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
         ></b-form-file>
@@ -256,16 +259,19 @@
     <proposta-proponente-professor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
+      :ficheiro="ficheiro"
       v-if="roleSelecionado == 'professor' && isFinalized && unidadesCurriculares.length > 0"
     ></proposta-proponente-professor>
     <proposta-proponente-assistente
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
+      :ficheiro="ficheiro"
       v-if="roleSelecionado == 'assistente' && isFinalized && unidadesCurriculares.length > 0"
     ></proposta-proponente-assistente>
     <proposta-proponente-monitor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
+      :ficheiro="ficheiro"
       v-if="roleSelecionado == 'monitor' && isFinalized && unidadesCurriculares.length > 0 "
     ></proposta-proponente-monitor>
     <b-progress class="mt-3" :max="progresso.max" height="2rem">
@@ -343,9 +349,26 @@ export default {
         valor: 1,
         max: 3
       },
-      fileCurriculo: null,
-      fileRelatorio: null,
-      certificadoHabilitações: null
+      ficheiro: {
+        fileCurriculo: {
+          nome: "",
+          descricao: "Curriculo do docente a ser contratado",
+          proposta_id: ""
+        },
+        fileRelatorio: {
+          nome: "",
+          descricao: "Relatorio dos 2 proponentes",
+          proposta_id: ""
+        },
+        fileHabilitacoes: {
+          nome: "",
+          descricao: "Habilitacoes do docente a ser contratado",
+          proposta_id: ""
+        }
+      },
+      ficheiroCurriculo: "",
+      ficheiroHabilitacoes: "",
+      ficheiroRelatorio: ""
     };
   },
   //? Validations Vuelidate
@@ -365,6 +388,18 @@ export default {
       turno: { required },
       horas: { required },
       horas_semestrais: { required }
+    },
+
+    ficheiro: {
+      fileCurriculo: {
+        nome: { required }
+      },
+      fileRelatorio: {
+        nome: { required }
+      },
+      fileHabilitações: {
+        nome: { required }
+      }
     }
   },
   methods: {
@@ -373,6 +408,9 @@ export default {
         .toISOString()
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
+      this.ficheiro.fileCurriculo.nome = this.ficheiroCurriculo.name;
+      this.ficheiro.fileRelatorio.nome = this.ficheiroRelatorio.name;
+      this.ficheiro.fileHabilitacoes.nome = this.ficheiroHabilitacoes.name;
       this.roleSelecionado = proposta.role;
       this.$v.proposta.$touch();
       if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {

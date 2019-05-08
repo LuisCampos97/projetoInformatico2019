@@ -72,6 +72,7 @@
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
       :propostaProponenteProfessor="propostaProponenteProfessor"
+      :ficheiro="ficheiro"
     ></resumo-proposta>
   </div>
 </template>
@@ -79,7 +80,7 @@
 import { required, between } from "vuelidate/lib/validators";
 
 export default {
-  props: ["proposta", "unidadesCurriculares"],
+  props: ["proposta", "unidadesCurriculares", "ficheiro"],
   data() {
     return {
       categoriaArray: [

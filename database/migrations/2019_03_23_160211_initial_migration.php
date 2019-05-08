@@ -87,16 +87,6 @@ class InitialMigration extends Migration
             $table->timestamps();
         });
 
-        Schema::create('documents', function (Blueprint $table) {
-            $table->increments('id');
-            //$table->enum('type', ['pdf', 'png', 'jpeg']);
-            $table->string('original_name');
-            $table->string('description')->nullable();
-            $table->integer('proposta_id')->unsigned();
-            $table->foreign('proposta_id')->references('proposta')->on('id');
-            $table->timestamp('created_at')->nullable();
-        });
-
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
@@ -206,6 +196,15 @@ class InitialMigration extends Migration
             $table->enum('status', ['pendente', 'recusada', 'finalizada']);
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('ficheiro', function (Blueprint $table) {
+            $table->increments('id');
+            //$table->enum('type', ['pdf', 'png', 'jpeg']);
+            $table->string('nome');
+            $table->string('descricao')->nullable();
+            $table->integer('proposta_id')->unsigned();
+            $table->foreign('proposta_id')->references('id')->on('proposta');
         });
     }
 
