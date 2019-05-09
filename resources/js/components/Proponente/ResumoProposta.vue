@@ -162,7 +162,8 @@ module.exports = {
     "unidadesCurriculares",
     "propostaProponenteProfessor",
     "propostaProponenteAssistente",
-    "propostaProponenteMonitor"
+    "propostaProponenteMonitor",
+    "ficheiro"
   ],
   data() {
     return {
@@ -176,12 +177,14 @@ module.exports = {
       );
       if (confirmacao) {
         if (this.unidadesCurriculares.length > 0) {
+          console.log(this.ficheiro);
           axios
             .post("/api/propostaProponente/", this.proposta)
             .then(response => {
               this.idParaUcsPropostaProponente = response.data.id;
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+                
               });
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 axios
@@ -192,13 +195,29 @@ module.exports = {
                 axios
                   .post(
                     "/api/propostaProponenteProfessor",
-                    propostaProponenteProfessor
+                    this.propostaProponenteProfessor
                   )
                   .then(response => {});
               });
+
               axios
                 .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-                .then(response => {});
+                .then(response => {
+                  this.ficheiro.fileCurriculo.proposta_id = response.data;
+                this.ficheiro.fileHabilitacoes.proposta_id = response.data;
+                this.ficheiro.fileRelatorio.proposta_id = response.data;
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+                    .then(response => {});
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+                    .then(response => {});
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                    .then(response => {});
+                });
             });
         }
       }
@@ -209,6 +228,9 @@ module.exports = {
           this.idParaUcsPropostaProponente = response.data.id;
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+            this.ficheiro.fileCurriculo.proposta_id = this.idParaUcsPropostaProponente;
+            this.ficheiro.fileHabilitacoes.proposta_id = this.idParaUcsPropostaProponente;
+            this.ficheiro.fileRelatorio.proposta_id = this.idParaUcsPropostaProponente;
           });
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             axios
@@ -223,10 +245,22 @@ module.exports = {
               )
               .then(response => {});
           });
+
           axios
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
             .then(response => {});
         });
+
+        axios
+          .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+          .then(response => {});
+
+        axios
+          .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+          .then(response => {});
+        axios
+          .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+          .then(response => {});
       }
     },
     submeterPropostaMonitor(propostaProponenteMonitor) {
@@ -235,6 +269,9 @@ module.exports = {
           this.idParaUcsPropostaProponente = response.data.id;
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+            this.ficheiro.fileCurriculo.proposta_id = this.idParaUcsPropostaProponente;
+            this.ficheiro.fileHabilitacoes.proposta_id = this.idParaUcsPropostaProponente;
+            this.ficheiro.fileRelatorio.proposta_id = this.idParaUcsPropostaProponente;
           });
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             axios
@@ -248,6 +285,16 @@ module.exports = {
           });
           axios
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+            .then(response => {});
+          axios
+            .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+            .then(response => {});
+
+          axios
+            .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+            .then(response => {});
+          axios
+            .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
             .then(response => {});
         });
       }

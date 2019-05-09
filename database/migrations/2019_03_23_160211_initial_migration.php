@@ -202,14 +202,13 @@ class InitialMigration extends Migration
             $table->timestamps();
         });
 
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('ficheiro', function (Blueprint $table) {
             $table->increments('id');
             //$table->enum('type', ['pdf', 'png', 'jpeg']);
-            $table->string('original_name');
-            $table->string('description')->nullable();
+            $table->string('nome');
+            $table->string('descricao')->nullable();
             $table->integer('proposta_id')->unsigned();
             $table->foreign('proposta_id')->references('id')->on('proposta');
-            $table->timestamp('created_at')->nullable();
         });
     }
 

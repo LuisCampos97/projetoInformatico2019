@@ -11,8 +11,8 @@
     <div v-if="proposta.tipo_contrato == 'Contratacao Inicial' && isShow">
       <b-form-group label="Currículo">
         <b-form-file
-          v-model="fileCurriculo"
-          :state="Boolean(fileCurriculo)"
+          v-model="ficheiroCurriculo"
+          :state="Boolean(ficheiroCurriculo)"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
         ></b-form-file>
@@ -210,8 +210,8 @@
                   v-if="proposta.tipo_contrato == 'Contratacao Inicial'"
                 >
                   <b-form-file
-                    v-model="certificadoHabilitações"
-                    :state="Boolean(certificadoHabilitações)"
+                    v-model="ficheiroHabilitacoes"
+                    :state="Boolean(ficheiroHabilitacoes)"
                     placeholder="Escolha um ficheiro"
                     drop-placeholder="Arraste para aqui um ficheiro"
                   ></b-form-file>
@@ -224,8 +224,8 @@
 
       <b-form-group label="Relatório dos proponentes">
         <b-form-file
-          v-model="fileRelatorio"
-          :state="Boolean(fileRelatorio)"
+          v-model="ficheiroRelatorio"
+          :state="Boolean(ficheiroRelatorio)"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
         ></b-form-file>
@@ -281,6 +281,7 @@
       :unidadesCurriculares="unidadesCurriculares"
       v-on:isShow="showComponent"
       v-on:incrementarBarraProgresso="progresso.valor++"
+      :ficheiro="ficheiro"
       v-if="roleSelecionado == 'monitor' && isFinalized && unidadesCurriculares.length > 0 "
     ></proposta-proponente-monitor>
 
@@ -356,9 +357,26 @@ export default {
         valor: 1,
         max: 3
       },
-      fileCurriculo: null,
-      fileRelatorio: null,
-      certificadoHabilitações: null
+      ficheiro: {
+        fileCurriculo: {
+          nome: "",
+          descricao: "Curriculo do docente a ser contratado",
+          proposta_id: ""
+        },
+        fileRelatorio: {
+          nome: "",
+          descricao: "Relatorio dos 2 proponentes",
+          proposta_id: ""
+        },
+        fileHabilitacoes: {
+          nome: "",
+          descricao: "Habilitacoes do docente a ser contratado",
+          proposta_id: ""
+        }
+      },
+      ficheiroCurriculo: "",
+      ficheiroHabilitacoes: "",
+      ficheiroRelatorio: ""
     };
   },
   //? Validations Vuelidate
@@ -378,6 +396,18 @@ export default {
       turno: { required },
       horas: { required },
       horas_semestrais: { required }
+    },
+
+    ficheiro: {
+      fileCurriculo: {
+        nome: { required }
+      },
+      fileRelatorio: {
+        nome: { required }
+      },
+      fileHabilitações: {
+        nome: { required }
+      }
     }
   },
   methods: {
@@ -386,6 +416,9 @@ export default {
         .toISOString()
         .slice(0, 19)
         .replace("T", " "); //Ver tipo de user autenticado
+      this.ficheiro.fileCurriculo.nome = this.ficheiroCurriculo.name;
+      this.ficheiro.fileRelatorio.nome = this.ficheiroRelatorio.name;
+      this.ficheiro.fileHabilitacoes.nome = this.ficheiroHabilitacoes.name;
       this.roleSelecionado = proposta.role;
       this.$v.proposta.$touch();
       if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
