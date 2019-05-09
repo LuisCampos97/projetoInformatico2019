@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Curso extends Model
+class TurnosUC extends Model
 {
-    protected $table = 'curso';
+    protected $table = 'turnos_uc';
 
     protected $fillable = [
-        'codigo', 'nome_curso', 'sigla'
+        'codigo_uc', 'regime', 'turno'
     ];
 }

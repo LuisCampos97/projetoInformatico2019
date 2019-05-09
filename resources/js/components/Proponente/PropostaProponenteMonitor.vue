@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2 class="pb-4">Proponente (Monitor)</h2>
+    <div v-show="isShowMonitor">
+    <h2 class="pb-4">Monitor</h2>
     <h5>Tempo Parcial</h5>
     <b-form-group label="Ciclo do docente a ser contratado">
       <b-form-radio-group
@@ -69,7 +70,7 @@
       Seguinte
       <i class="fas fa-arrow-right"></i>
     </button>
-
+    </div>
     <resumo-proposta
       v-if="avancar"
       :proposta="proposta"
@@ -118,7 +119,8 @@ export default {
         ciclo: ""
       },
       dataFimContratoText: "",
-      avancar: false
+      avancar: false,
+      isShowMonitor: true
     };
   },
   //? Validations Vuelidate
@@ -136,10 +138,14 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.avancar = true;
+        this.isShowMonitor = false;
+        this.$emit("incrementarBarraProgresso");
       }
     },
     anterior() {
       //* Mudar para o componente Proponente
+      this.isShowMonitor = false;
+      this.$emit("isShow");
     }
   }
 };

@@ -28,10 +28,11 @@ Route::get('/departamento/{userDepName}', 'DepartamentoController@departamentoUs
 //--------------------Unidades Curriculares-----------------------
 
 Route::get('/unidadesCurriculares', 'UnidadeCurricularController@all');
-Route::get('/unidadesCurricularesDoCursoSelecionado/{curso_id}/{dep_id}', 'UnidadeCurricularController@getUcsParaCurso');
-Route::get('/unidadesCurriculares/regime/{uc_name}/{curso_id}', 'UnidadeCurricularController@getRegimesParaUC');
-Route::get('/unidadesCurriculares/{uc_name}/{uc_regime}/{curso_id}', 'UnidadeCurricularController@getTurnosParaUCNomeeRegime');
-Route::get('/tiposUnidadesCurriculares/{uc_name}', 'UnidadeCurricularController@getTipoUC');
+Route::get('/unidadeCurricularNome/{codigo_uc}', 'UnidadeCurricularController@getNomeUc');
+Route::get('/unidadesCurricularesDoCursoSelecionado/{codigo_curso}', 'UnidadeCurricularController@getUcsParaCurso');
+Route::get('/unidadesCurriculares/regime/{codigo_uc}', 'UnidadeCurricularController@getRegimesParaUC');
+Route::get('/unidadesCurriculares/turno/{uc_name}/{uc_regime}', 'UnidadeCurricularController@getTurnosParaUCeRegime');
+Route::get('/tiposUnidadesCurriculares/{codigo_uc}', 'UnidadeCurricularController@getTipoUC');
 
 //-----------------------Proposta Proponente----------------------------------------
 Route::post('/propostaProponente', 'PropostaProponenteController@store');
@@ -52,7 +53,7 @@ Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@s
 Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
 
 //-----------------------Cursos---------------------------------------------------------------
-Route::get('/cursosDisponiveis/{dep_id}', 'CursoController@getUcsDisponiveisParaUserLogado');
+Route::get('/cursosDisponiveis/{role}', 'CursoController@getCursosParaUserLogado');
 
 //-----------------------Diretor UO----------------------------------------------------------
 Route::get('/diretorUO/propostasPendentes', 'DiretorUOController@getPropostasPendentes');

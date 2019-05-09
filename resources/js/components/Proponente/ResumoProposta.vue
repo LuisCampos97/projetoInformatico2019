@@ -138,6 +138,7 @@
       type="button"
       class="btn btn-success"
       v-on:click="submeterPropostaProfessor(propostaProponenteProfessor)"
+      @click="makeToast('success')"
       v-if="proposta.role=='professor'"
     >Finalizar</button>
     <button
@@ -169,33 +170,12 @@ module.exports = {
     };
   },
   methods: {
-    doStuff() {
-      console.log(
-        "1 " +
-          "'" +
-          this.propostaProponenteProfessor.percentagem_prestacao_servicos +
-          "'"
-      );
-      console.log(
-        "2" +
-          "'" +
-          this.propostaProponenteAssisntente.percentagem_prestacao_servicos +
-          "'"
-      );
-      console.log(
-        "3" +
-          "'" +
-          this.propostaProponenteMonitor.percentagem_prestacao_servicos +
-          "'"
-      );
-    },
     submeterPropostaProfessor(propostaProponenteProfessor) {
       let confirmacao = confirm(
         "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
       );
       if (confirmacao) {
         if (this.unidadesCurriculares.length > 0) {
-          console.log(this.proposta);
           axios
             .post("/api/propostaProponente/", this.proposta)
             .then(response => {
@@ -271,6 +251,15 @@ module.exports = {
             .then(response => {});
         });
       }
+    },
+    makeToast(variant = null) {
+      this.$bvToast.toast("O Direretor ", {
+        title: `O Diretor da ${
+          this.proposta.unidade_organica
+        } foi notificado via email!`,
+        variant: variant,
+        solid: true
+      });
     }
   }
 };

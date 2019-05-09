@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2 class="pb-4">Proponente (Assistente)</h2>
+    <div v-show="isShowAssistente">
+    <h2 class="pb-4">Assistente</h2>
     <b-form-group label="Regime de prestação de serviços">
       <b-form-radio-group
         v-model="propostaProponenteAssistente.regime_prestacao_servicos"
@@ -13,29 +14,35 @@
       >A seleção do regime de prestaões de serviço é obrigatória!</b-form-invalid-feedback>
     </b-form-group>
     <span v-if="propostaProponenteAssistente.regime_prestacao_servicos == 'tempo_parcial'">
-      <b-form-group
-        description="(cfr. acta do CTC - art. 5º, nº3) N.B Contracto e renovações não podem ter duração superior a 4 anos"
-      >
+      <b-form-group>
         <b-form-checkbox
-          v-model="propostaProponenteAssistente.fundamentacao"
+          v-model="propostaProponenteAssistente.tempoParcialSuperiorA60"
           value="true"
           unchecked-value="false"
           description="We'll never share your email with anyone else."
-        >Fundamentação</b-form-checkbox>
+        >Tempo Parcial igual ou superior a 60%</b-form-checkbox>
       </b-form-group>
 
-      <b-form-group label="Percentagem de tempo parcial" label-for="inputTempoParcial" v-if="propostaProponenteAssistente.fundamentacao == 'true'">
+      <b-form-group
+        label="Percentagem de tempo parcial"
+        label-for="inputTempoParcial"
+        v-if="propostaProponenteAssistente.tempoParcialSuperiorA60 == 'true'"
+      >
         <b-form-select
           id="inputTempoParcial"
           v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
           :state="$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error : null"
-          :options="percentagensArrayFundamentacao"
+          :options="percentagensArraySuperiorA60"
         ></b-form-select>
         <b-form-invalid-feedback
           id="input-1-live-feedback"
         >A percentagem de tempo parcial é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
-      <b-form-group label="Percentagem de tempo parcial" label-for="inputTempoParcial" v-if="propostaProponenteAssistente.fundamentacao == 'false' || propostaProponenteAssistente.fundamentacao == null">
+      <b-form-group
+        label="Percentagem de tempo parcial"
+        label-for="inputTempoParcial"
+        v-if="propostaProponenteAssistente.tempoParcialSuperiorA60 == 'false' || propostaProponenteAssistente.tempoParcialSuperiorA60 == null"
+      >
         <b-form-select
           id="inputTempoParcial"
           v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
@@ -47,6 +54,17 @@
         >A percentagem de tempo parcial é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
     </span>
+
+    <b-form-group
+      label="Fundamentação"
+      description="(cfr. acta do CTC - art. 5º, nº3) N.B Contracto e renovações não podem ter duração superior a 4 anos"
+    >
+      <b-form-textarea
+        v-model="propostaProponenteAssistente.fundamentacao"
+        :state="$v.propostaProponenteAssistente.fundamentacao.$dirty ? !$v.propostaProponenteAssistente.fundamentacao.$error : null"
+      ></b-form-textarea>
+      <b-form-invalid-feedback id="input-1-live-feedback">A fundamentação é obrigatória!</b-form-invalid-feedback>
+    </b-form-group>
 
     <b-form-group label="Duração do contrato" label-for="inputDuracaoContrato">
       <b-form-input
@@ -74,6 +92,7 @@
       Seguinte
       <i class="fas fa-arrow-right"></i>
     </button>
+    </div>
     <resumo-proposta
       v-if="avancar"
       :proposta="proposta"
@@ -97,7 +116,7 @@ export default {
         { text: "20% (3 horas)", value: "20" },
         { text: "15% (2 horas)", value: "15" }
       ],
-      percentagensArrayFundamentacao: [
+      percentagensArraySuperiorA60: [
         { text: "80% (10 horas)", value: "80" },
         { text: "70% (9 horas)", value: "70" },
         { text: "60% (8 horas)", value: "60" }
@@ -115,20 +134,23 @@ export default {
       propostaProponenteAssistente: {
         regime_prestacao_servicos: "",
         percentagem_prestacao_servicos: "",
+        fundamentacao: "",
         duracao: "",
         periodo: "",
         proposta_proponente_id: "",
-        fundacao: null
+        tempoParcialSuperiorA60: null
       },
       dataFimContratoText: "",
-      avancar: false
+      avancar: false,
+      isShowAssistente: true
     };
   },
   //? Validations Vuelidate
   validations: {
     propostaProponenteAssistente: {
       regime_prestacao_servicos: { required },
-      percentagem_prestacao_servicos: { between: between(1, 100) },
+      //percentagem_prestacao_servicos: { required },
+      fundamentacao: { required },
       duracao: { required },
       periodo: { required }
     }
@@ -138,11 +160,24 @@ export default {
       //* Mudar para o componente Resumo Proposta
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        if (
+          this.propostaProponenteAssistente.regime_prestacao_servicos ==
+            "Tempo Integral" ||
+          this.propostaProponenteAssistente.regime_prestacao_servicos ==
+            "Dedicacao Exclusiva"
+        ) {
+          this.propostaProponenteAssistente.percentagem_prestacao_servicos =
+            "100";
+        }
         this.avancar = true;
+        this.isShowAssistente = false;
+        this.$emit("incrementarBarraProgresso");
       }
     },
     anterior() {
       //* Mudar para o componente Proponente
+      this.isShowAssistente = false;
+      this.$emit("isShow");
     }
   }
 };

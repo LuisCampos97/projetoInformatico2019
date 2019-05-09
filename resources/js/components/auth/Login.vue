@@ -57,7 +57,6 @@ module.exports = {
         .then(response => {
           this.$store.commit("setToken", response.data.token);
           this.$store.commit("setUser", response.data.user);
-          console.log(response);
           this.$router.push({ name: "dashboard" });
         })
         .catch(error => {

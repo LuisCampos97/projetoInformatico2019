@@ -11,7 +11,8 @@ Vue.use(Vuelidate);
 export default new Vuex.Store({
     state: {
         token: '',
-        user: null
+        user: null,
+        proposta: null
     },
     getters: {
         loggedIn(state) {
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        //* Informação sobre o USER
         clearUserAndToken: state => {
             state.user = null;
             state.token = '';
@@ -56,6 +58,13 @@ export default new Vuex.Store({
             if (user) {
                 state.user = JSON.parse(user);
             }
+        },
+        //* Informação sobre a PROPOSTA
+        setProposta: (state, proposta) => {
+            state.proposta = proposta;
+        },
+        loadProposta: state => {
+            
         }
     }
 });

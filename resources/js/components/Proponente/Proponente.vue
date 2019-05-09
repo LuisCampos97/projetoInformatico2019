@@ -1,13 +1,14 @@
 <template>
-  <div v-if="isShow">
+  <div>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <h2 class="pb-4">Nova Proposta</h2>
-    <b-form-group label="Tipo de Proposta">
+    <b-form-group label="Tipo de Proposta" v-show="isShow">
       <b-form-radio-group v-model="proposta.tipo_contrato" :options="tipoContratosArray" stacked></b-form-radio-group>
     </b-form-group>
 
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
-    <div v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
+    <div v-if="proposta.tipo_contrato == 'Contratacao Inicial' && isShow">
       <b-form-group label="Currículo">
         <b-form-file
           v-model="fileCurriculo"
@@ -49,10 +50,10 @@
               <b-form-group label="Curso" label-for="inputCurso">
                 <b-form-select
                   id="inputCurso"
-                  v-model="unidadeCurricular.curso_id"
-                  :state="$v.unidadeCurricular.curso_id.$dirty ? !$v.unidadeCurricular.curso_id.$error : null"
+                  v-model="unidadeCurricular.codigo_curso"
+                  :state="$v.unidadeCurricular.codigo_curso.$dirty ? !$v.unidadeCurricular.codigo_curso.$error : null"
                   :options="cursos"
-                  @change="getUcsDeCurso(unidadeCurricular.curso_id)"
+                  @change="getUcsDeCurso(unidadeCurricular.codigo_curso)"
                 ></b-form-select>
                 <b-form-invalid-feedback id="input-1-live-feedback">O Curso é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
@@ -60,10 +61,10 @@
               <b-form-group label="Nome unidade curricular" label-for="inputNomeUC">
                 <b-form-select
                   id="inputNomeUC"
-                  v-model="unidadeCurricular.nome_unidade_curricular"
-                  :state="$v.unidadeCurricular.nome_unidade_curricular.$dirty ? !$v.unidadeCurricular.nome_unidade_curricular.$error : null"
-                  :options="ucsDeDepartamento"
-                  @change="getRegimes(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.curso_id)"
+                  v-model="unidadeCurricular.codigo_uc"
+                  :state="$v.unidadeCurricular.codigo_uc.$dirty ? !$v.unidadeCurricular.codigo_uc.$error : null"
+                  :options="ucs"
+                  @change="getRegimes(unidadeCurricular.codigo_uc, unidadeCurricular.codigo_curso)"
                 ></b-form-select>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
@@ -76,7 +77,7 @@
                   v-model="unidadeCurricular.regime"
                   :state="$v.unidadeCurricular.regime.$dirty ? !$v.unidadeCurricular.regime.$error : null"
                   :options="regimesParaUC"
-                  @change="getTurnos(unidadeCurricular.nome_unidade_curricular, unidadeCurricular.regime, unidadeCurricular.curso_id)"
+                  @change="getTurnos(unidadeCurricular.codigo_uc, unidadeCurricular.regime, unidadeCurricular.curso_id)"
                 ></b-form-select>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
@@ -89,7 +90,7 @@
                   v-model="unidadeCurricular.turno"
                   :state="$v.unidadeCurricular.turno.$dirty ? !$v.unidadeCurricular.turno.$error : null"
                   :options="turnosParaUCeRegime"
-                  @change="getTipo(unidadeCurricular.nome_unidade_curricular)"
+                  @change="getTipo(unidadeCurricular.codigo_uc)"
                 ></b-form-select>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
@@ -131,7 +132,7 @@
               <span v-if="unidadesCurriculares.length">
                 <table class="table mt-3">
                   <thead>
-                    <th>Nome</th>
+                    <th>Código</th>
                     <th>Regime</th>
                     <th>Turno</th>
                     <th>Curso</th>
@@ -142,10 +143,10 @@
                   </thead>
                   <tbody>
                     <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
-                      <td>{{ucAUX.nome_unidade_curricular}}</td>
+                      <td>{{ucAUX.codigo_uc.toString()}}</td>
                       <td>{{ucAUX.regime}}</td>
                       <td>{{ucAUX.turno}}</td>
-                      <td>{{ucAUX.departamento_id}}</td>
+                      <td>{{ucAUX.codigo_curso}}</td>
                       <td>{{ucAUX.horas}}</td>
                       <td>{{ucAUX.horas_semestrais}}</td>
                       <td>{{ucAUX.tipo}}</td>
@@ -204,7 +205,10 @@
                 ></b-form-input>
                 <b-form-invalid-feedback id="input-1-live-feedback">A Área Científica é obrigatória!</b-form-invalid-feedback>
 
-                <b-form-group label="Certificado de Habilitações" v-if="proposta.tipo_contrato == 'Contratacao Inicial'">
+                <b-form-group
+                  label="Certificado de Habilitações"
+                  v-if="proposta.tipo_contrato == 'Contratacao Inicial'"
+                >
                   <b-form-file
                     v-model="certificadoHabilitações"
                     :state="Boolean(certificadoHabilitações)"
@@ -250,22 +254,36 @@
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
-    <br>
-    <proposta-proponente-professor
-      :proposta="proposta"
-      :unidadesCurriculares="unidadesCurriculares"
-      v-if="roleSelecionado == 'professor' && isFinalized && unidadesCurriculares.length > 0"
-    ></proposta-proponente-professor>
+    <transition
+      name="custom-classes-transition"
+      enter-active-class="animated bounceOutRight"
+      leave-active-class="animated bounceOutRight"
+    >
+      <proposta-proponente-professor
+        :proposta="proposta"
+        :unidadesCurriculares="unidadesCurriculares"
+        v-on:isShow="showComponent"
+        v-on:incrementarBarraProgresso="progresso.valor++"
+        v-if="roleSelecionado == 'professor' && isFinalized && unidadesCurriculares.length > 0"
+      ></proposta-proponente-professor>
+    </transition>
+
     <proposta-proponente-assistente
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
+      v-on:isShow="showComponent"
+      v-on:incrementarBarraProgresso="progresso.valor++"
       v-if="roleSelecionado == 'assistente' && isFinalized && unidadesCurriculares.length > 0"
     ></proposta-proponente-assistente>
+
     <proposta-proponente-monitor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
+      v-on:isShow="showComponent"
+      v-on:incrementarBarraProgresso="progresso.valor++"
       v-if="roleSelecionado == 'monitor' && isFinalized && unidadesCurriculares.length > 0 "
     ></proposta-proponente-monitor>
+
     <b-progress class="mt-3" :max="progresso.max" height="2rem">
       <b-progress-bar :value="progresso.valor" variant="success">
         Progresso:
@@ -298,7 +316,7 @@ export default {
         { text: "Licenciatura", value: "Licenciatura" },
         { text: "Mestrado", value: "Mestrado" },
         { text: "Doutoramento", value: "Doutoramento" },
-        { text: "Outro", value: "Outro"}
+        { text: "Outro", value: "Outro" }
       ],
       rolesArray: [
         { text: "Professor", value: "professor" },
@@ -317,20 +335,17 @@ export default {
         curso: ""
       },
       unidadeCurricular: {
-        nome_unidade_curricular: "",
+        codigo_uc: "",
         regime: "",
         horas: "",
         horas_semestrais: "",
-        departamento_id: "",
-        curso_id: "",
+        codigo_curso: "",
         turno: "",
-        proposta_proponente_id: "",
         tipo: ""
       },
       unidadesCurriculares: [],
-      departamento_id: "",
       cursos: [],
-      ucsDeDepartamento: [],
+      ucs: [],
       roleSelecionado: "",
       regimesParaUC: [],
       turnosParaUCeRegime: [],
@@ -357,8 +372,8 @@ export default {
       role: { required }
     },
     unidadeCurricular: {
-      curso_id: { required },
-      nome_unidade_curricular: { required },
+      codigo_curso: { required },
+      codigo_uc: { required },
       regime: { required },
       turno: { required },
       horas: { required },
@@ -374,70 +389,68 @@ export default {
       this.roleSelecionado = proposta.role;
       this.$v.proposta.$touch();
       if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
+        this.$store.commit("setProposta", proposta);
         this.isFinalized = true;
         this.isClicked = false;
         this.isShow = false;
-        this.progresso.valor++; 
+        this.progresso.valor++;
       }
     },
 
-    getUcsDeCurso(curso_id) {
-      this.ucsDeDepartamento = [];
+    getUcsDeCurso(codigo_curso) {
+      this.ucs = [];
       this.regimesParaUC = [];
       this.turnosParaUCeRegime = [];
+
       axios
-        .get(
-          "/api/unidadesCurricularesDoCursoSelecionado/" +
-            curso_id +
-            "/" +
-            this.departamento_id
-        )
+        .get("/api/unidadesCurricularesDoCursoSelecionado/" + codigo_curso)
         .then(response => {
-          response.data.forEach(x => {
-            this.ucsDeDepartamento.push({ text: x.nome });
+          response.data.forEach(uc => {
+            this.ucs.push({ text: uc.nome, value: uc.codigo });
           });
         });
     },
-    getRegimes(uc_name, curso_id) {
+    getRegimes(codigo_uc) {
       this.regimesParaUC = [];
       this.turnosParaUCeRegime = [];
+
       axios
-        .get("/api/unidadesCurriculares/regime/" + uc_name + "/" + curso_id)
+        .get("/api/unidadesCurriculares/regime/" + codigo_uc)
         .then(response => {
-          response.data.forEach(x => {
-            this.regimesParaUC.push({ text: x.regime });
+          response.data.forEach(uc => {
+            this.regimesParaUC.push({ text: uc.regime });
           });
         });
     },
-    getTurnos(uc_name, uc_regime, curso_id) {
+    getTurnos(codigo_uc, uc_regime) {
       this.turnosParaUCeRegime = [];
       axios
-        .get(
-          "/api/unidadesCurriculares/" +
-            uc_name +
-            "/" +
-            uc_regime +
-            "/" +
-            curso_id
-        )
+        .get("/api/unidadesCurriculares/turno/" + codigo_uc + "/" + uc_regime)
         .then(response => {
           response.data.forEach(x => {
             this.turnosParaUCeRegime.push({ text: x.turno });
           });
         });
     },
-    getTipo(uc_name) {
-      axios.get("/api/tiposUnidadesCurriculares/" + uc_name).then(response => {
-        this.unidadeCurricular.tipo = response.data[0].tipo;
-      });
+    getTipo(codigo_uc) {
+      axios
+        .get("/api/tiposUnidadesCurriculares/" + codigo_uc)
+        .then(response => {
+          this.unidadeCurricular.tipo = response.data[0].tipo;
+        });
     },
     adicionarUC() {
       this.$v.unidadeCurricular.$touch();
       if (!this.$v.unidadeCurricular.$invalid) {
         this.unidadesCurriculares.push(this.unidadeCurricular);
 
-        //* Colocar os campos vazios
         this.$v.unidadeCurricular.$reset();
+
+        //* Colocar os campos vazios
+        this.unidadeCurricular = {};
+        this.ucs = [];
+        this.regimesParaUC = [];
+        this.turnosParaUCeRegime = [];
       }
     },
     removerUC(index) {
@@ -467,25 +480,21 @@ export default {
     handleFileUpload(file) {
       console.log(file);
       //this.file = this.$refs.file.files[0];
+    },
+    showComponent() {
+      this.isShow = true;
+      this.progresso.valor--;
     }
   },
 
   mounted() {
     axios
-      .get(
-        "/api/departamento/" +
-          "Coordenador do Departamento de Engenharia Informática"
-      )
+      .get("/api/cursosDisponiveis/" + "Coordenador de Engenharia Informática")
       .then(response => {
-        this.departamento_id = response.data[0].id;
-        this.unidadeCurricular.departamento_id = this.departamento_id;
-        axios
-          .get("/api/cursosDisponiveis/" + this.departamento_id)
-          .then(response => {
-            response.data.forEach(x => {
-              this.cursos.push({ value: x.id, text: x.nome_curso });
-            });
-          });
+        this.cursos.push({
+          value: response.data.codigo,
+          text: response.data.nome_curso
+        });
       });
   }
 };

@@ -9,7 +9,7 @@ Vue.use(VueRouter);
 Vue.component('master', require('../components/utils/Master.vue').default);
 const login = Vue.component('login', require('../components/auth/Login.vue').default);
 const dashboard = Vue.component('dashboard', require('../components/Dashboard.vue').default);
-const proponente = Vue.component('proponente', require('../components/Proponente/Proponente.vue').default);
+Vue.component('proponente', require('../components/Proponente/Proponente.vue').default);
 Vue.component('propostaProponenteProfessor', require('../components/Proponente/PropostaProponenteProfessor.vue').default);
 Vue.component('propostaProponenteAssistente', require('../components/Proponente/PropostaProponenteAssistente').default);
 Vue.component('propostaProponenteMonitor', require('../components/Proponente/PropostaProponenteMonitor').default);
@@ -34,23 +34,16 @@ const routes = [
     name: 'dashboard'
   },
 
-  //-----------------------------------Proponente---------------------------
-  {
-    path: '/proponente',
-    component: proponente,
-    name: 'proponente',
-  },
-
   //---------------------------------Diretor UO---------------------------------
   {
     path: '/diretorUOProposta',
     component: diretorUOProposta,
-    name: diretorUOProposta
+    name: 'diretorUOProposta'
   },
   {
     path: '/ctc',
     component: ctc,
-    name: ctc
+    name: 'ctc'
   },
 
 ];

@@ -51,6 +51,7 @@ class InitialMigration extends Migration
             $table->foreign('codigo_curso')->references('codigo')->on('curso');
             $table->integer('departamento_id')->unsigned();
             $table->foreign('departamento_id')->references('id')->on('departamento');
+            $table->enum('tipo', ['Semestral', 'Anual']);
         });
 
         Schema::create('turnos_uc', function (Blueprint $table) {
@@ -58,7 +59,6 @@ class InitialMigration extends Migration
             $table->integer('codigo_uc')->unsigned();
             $table->foreign('codigo_uc')->references('codigo')->on('unidade_curricular');
             $table->enum('regime', ['Diurno', 'Pos-Laboral']);
-            $table->enum('tipo', ['Semestral', 'Anual']);
             $table->string('turno');
         });
 
@@ -89,16 +89,6 @@ class InitialMigration extends Migration
             $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
             $table->softDeletes();
             $table->timestamps();
-        });
-
-        Schema::create('documents', function (Blueprint $table) {
-            $table->increments('id');
-            //$table->enum('type', ['pdf', 'png', 'jpeg']);
-            $table->string('original_name');
-            $table->string('description')->nullable();
-            $table->integer('proposta_id')->unsigned();
-            $table->foreign('proposta_id')->references('proposta')->on('id');
-            $table->timestamp('created_at')->nullable();
         });
 
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
@@ -210,6 +200,16 @@ class InitialMigration extends Migration
             $table->enum('status', ['pendente', 'recusada', 'finalizada']);
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('documents', function (Blueprint $table) {
+            $table->increments('id');
+            //$table->enum('type', ['pdf', 'png', 'jpeg']);
+            $table->string('original_name');
+            $table->string('description')->nullable();
+            $table->integer('proposta_id')->unsigned();
+            $table->foreign('proposta_id')->references('id')->on('proposta');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
