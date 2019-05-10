@@ -155,6 +155,7 @@
     >Finalizar</button>
   </div>
 </template>
+<script src="/socket.io/socket.io.js"></script>
 <script>
 module.exports = {
   props: [
@@ -184,7 +185,6 @@ module.exports = {
               this.idParaUcsPropostaProponente = response.data.id;
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-                
               });
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 axios
@@ -203,10 +203,12 @@ module.exports = {
               axios
                 .post("/api/proposta/" + this.idParaUcsPropostaProponente)
                 .then(response => {
-                  this.ficheiro.fileCurriculo.proposta_id = response.data;
-                this.ficheiro.fileHabilitacoes.proposta_id = response.data;
-                this.ficheiro.fileRelatorio.proposta_id = response.data;
+                  //var socket = io("http://localhost:8080"); // connec to server
 
+                  this.$socket.emit('email-diretor',{msg :'Teste'}); // raise an event on the server
+                  this.ficheiro.fileCurriculo.proposta_id = response.data;
+                  this.ficheiro.fileHabilitacoes.proposta_id = response.data;
+                  this.ficheiro.fileRelatorio.proposta_id = response.data;
                   axios
                     .post("/api/ficheiro", this.ficheiro.fileRelatorio)
                     .then(response => {});
