@@ -13,6 +13,7 @@ class PropostaProponenteProfessorController extends Controller
             'role_professor' => 'required',
             'regime_prestacao_servicos' => 'required',
             'percentagem_prestacao_servicos' => 'nullable|numeric|min:1',
+            'fundamentacao' => 'required',
             'duracao' => 'required',
             'periodo' => 'required',
             'proposta_proponente_id' => 'required',

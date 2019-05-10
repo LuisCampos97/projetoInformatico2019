@@ -143,7 +143,7 @@
                   </thead>
                   <tbody>
                     <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
-                      <td>{{ucAUX.codigo_uc.toString()}}</td>
+                      <td>{{ucAUX.codigo_uc}}</td>
                       <td>{{ucAUX.regime}}</td>
                       <td>{{ucAUX.turno}}</td>
                       <td>{{ucAUX.codigo_curso}}</td>
@@ -154,7 +154,6 @@
                         <button
                           type="button"
                           class="btn btn-danger"
-                          v-if="isClicked"
                           v-on:click="removerUC(ucAUX, index)"
                         >Remover UC</button>
                       </td>
@@ -254,35 +253,30 @@
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
-    <transition
-      name="custom-classes-transition"
-      enter-active-class="animated bounceOutRight"
-      leave-active-class="animated bounceOutRight"
-    >
-      <proposta-proponente-professor
-        :proposta="proposta"
-        :unidadesCurriculares="unidadesCurriculares"
-        v-on:isShow="showComponent"
-        v-on:incrementarBarraProgresso="progresso.valor++"
-        v-if="roleSelecionado == 'professor' && isFinalized && unidadesCurriculares.length > 0"
-      ></proposta-proponente-professor>
-    </transition>
+
+    <proposta-proponente-professor
+      :proposta="proposta"
+      :unidadesCurriculares="unidadesCurriculares"
+      v-on:mostrarProponente="showComponent"
+      v-on:incrementarBarraProgresso="progresso.valor++"
+      v-if="roleSelecionado == 'professor' && isFinalized"
+    ></proposta-proponente-professor>
 
     <proposta-proponente-assistente
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
-      v-on:isShow="showComponent"
+      v-on:mostrarProponente="showComponent"
       v-on:incrementarBarraProgresso="progresso.valor++"
-      v-if="roleSelecionado == 'assistente' && isFinalized && unidadesCurriculares.length > 0"
+      v-if="roleSelecionado == 'assistente' && isFinalized"
     ></proposta-proponente-assistente>
 
     <proposta-proponente-monitor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
-      v-on:isShow="showComponent"
+      v-on:mostrarProponente="showComponent"
       v-on:incrementarBarraProgresso="progresso.valor++"
       :ficheiro="ficheiro"
-      v-if="roleSelecionado == 'monitor' && isFinalized && unidadesCurriculares.length > 0 "
+      v-if="roleSelecionado == 'monitor' && isFinalized"
     ></proposta-proponente-monitor>
 
     <b-progress class="mt-3" :max="progresso.max" height="2rem">
@@ -350,7 +344,6 @@ export default {
       roleSelecionado: "",
       regimesParaUC: [],
       turnosParaUCeRegime: [],
-      isClicked: true,
       isFinalized: false,
       isShow: true,
       progresso: {
@@ -424,7 +417,6 @@ export default {
       if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
         this.$store.commit("setProposta", proposta);
         this.isFinalized = true;
-        this.isClicked = false;
         this.isShow = false;
         this.progresso.valor++;
       }
@@ -516,6 +508,7 @@ export default {
     },
     showComponent() {
       this.isShow = true;
+      this.isFinalized = false;
       this.progresso.valor--;
     }
   },

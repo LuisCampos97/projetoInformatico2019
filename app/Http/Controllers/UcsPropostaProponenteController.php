@@ -11,12 +11,12 @@ class UcsPropostaProponenteController extends Controller
 {
     public function store(Request $request){
         $request->validate([
-            'nome_unidade_curricular' => 'required',
+            'codigo_uc' => 'required',
             'regime' => 'required',
             'tipo' => 'required',
             'horas' => 'required',
             'horas_semestrais' => 'required',
-            'departamento_id' => 'required',
+            'departamento_id' => 'nullable',
             'turno' => 'required'
         ]);
         $ucsPropostaProponente = new UcsPropostaProponente();

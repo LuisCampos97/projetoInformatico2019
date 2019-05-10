@@ -36,7 +36,7 @@
     <div>
       <table class="table">
         <thead>
-          <th>Nome</th>
+          <th>Código</th>
           <th>Regime</th>
           <th>Turno</th>
           <th>Horas</th>
@@ -45,7 +45,7 @@
         </thead>
         <tbody>
           <tr v-for="(ucAUX) in unidadesCurriculares" :key="ucAUX.id">
-            <td>{{ucAUX.nome_unidade_curricular}}</td>
+            <td>{{ucAUX.codigo_uc}}</td>
             <td>{{ucAUX.regime}}</td>
             <td>{{ucAUX.turno}}</td>
             <td>{{ucAUX.horas}}</td>
@@ -179,16 +179,15 @@ module.exports = {
         if (this.unidadesCurriculares.length > 0) {
           console.log(this.ficheiro);
           axios
-            .post("/api/propostaProponente/", this.proposta)
+            .post("/api/propostaProponente", this.proposta)
             .then(response => {
               this.idParaUcsPropostaProponente = response.data.id;
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-                
               });
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 axios
-                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
+                  .post("/api/ucsPropostaProponente", unidadeCurricular)
                   .then(response => {});
                 this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
 
@@ -204,8 +203,8 @@ module.exports = {
                 .post("/api/proposta/" + this.idParaUcsPropostaProponente)
                 .then(response => {
                   this.ficheiro.fileCurriculo.proposta_id = response.data;
-                this.ficheiro.fileHabilitacoes.proposta_id = response.data;
-                this.ficheiro.fileRelatorio.proposta_id = response.data;
+                  this.ficheiro.fileHabilitacoes.proposta_id = response.data;
+                  this.ficheiro.fileRelatorio.proposta_id = response.data;
 
                   axios
                     .post("/api/ficheiro", this.ficheiro.fileRelatorio)

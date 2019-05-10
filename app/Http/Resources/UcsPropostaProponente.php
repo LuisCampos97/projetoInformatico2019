@@ -15,7 +15,7 @@ class UcsPropostaProponente extends JsonResource
     public function toArray($request)
     {
         return [
-            'nome_unidade_curricular' => $this->nome_unidade_curricular,
+            'codigo_uc' => $this->codigo_uc,
             'regime' => $this->regime,
             'tipo' => $this->tipo,
             'horas' => $this->horas,

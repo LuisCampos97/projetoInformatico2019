@@ -145,8 +145,7 @@ export default {
     },
     anterior() {
       //* Mudar para o componente Proponente
-      this.isShowMonitor = false;
-      this.$emit("isShow");
+      this.$emit("mostrarProponente");
     }
   }
 };
