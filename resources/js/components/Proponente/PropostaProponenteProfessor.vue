@@ -142,6 +142,7 @@ export default {
   },
   methods: {
     seguinte() {
+      console.log(this.ficheiro)
       //* Mudar para o componente Resumo Proposta
       this.$v.$touch();
       if (!this.$v.$invalid) {

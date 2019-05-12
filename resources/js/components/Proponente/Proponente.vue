@@ -264,6 +264,7 @@
         :unidadesCurriculares="unidadesCurriculares"
         v-on:isShow="showComponent"
         v-on:incrementarBarraProgresso="progresso.valor++"
+        :ficheiro="ficheiro"
         v-if="roleSelecionado == 'professor' && isFinalized && unidadesCurriculares.length > 0"
       ></proposta-proponente-professor>
     </transition>
@@ -272,6 +273,7 @@
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
       v-on:isShow="showComponent"
+      :ficheiro="ficheiro"
       v-on:incrementarBarraProgresso="progresso.valor++"
       v-if="roleSelecionado == 'assistente' && isFinalized && unidadesCurriculares.length > 0"
     ></proposta-proponente-assistente>
@@ -412,6 +414,9 @@ export default {
   },
   methods: {
     avancar: function(proposta, unidadesCurriculares) {
+      console.log(this.ficheiroCurriculo);
+      console.log(this.ficheiroHabilitacoes);
+      console.log(this.ficheiroRelatorio);
       this.proposta.data_de_assinatura_coordenador_departamento = new Date()
         .toISOString()
         .slice(0, 19)
@@ -419,6 +424,7 @@ export default {
       this.ficheiro.fileCurriculo.nome = this.ficheiroCurriculo.name;
       this.ficheiro.fileRelatorio.nome = this.ficheiroRelatorio.name;
       this.ficheiro.fileHabilitacoes.nome = this.ficheiroHabilitacoes.name;
+      console.log(this.ficheiro);
       this.roleSelecionado = proposta.role;
       this.$v.proposta.$touch();
       if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
