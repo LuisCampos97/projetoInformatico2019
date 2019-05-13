@@ -13,11 +13,20 @@ let transporter = nodemailer.createTransport({
 });
 let mailOptions = {
     from: "estg@gmail.com",
-    to: "projetoinformatico2019@gmail.com",
+    to: "2151571@my.ipleiria.pt",
     subject: "Nova proposta na aplicação de gestão de contratações",
     text: "Tem uma nova proposta",
 }
-
+/*
+transporter.sendMail(mailOptions, function (error) {
+    if (error) {
+        console.log(error);
+    }
+    else {
+        console.log('Email enviado para o diretor da unidade organica!');
+    }
+});
+*/
 //function sendEmail(){
 
 app.listen(8080, function () {

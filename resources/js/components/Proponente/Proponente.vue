@@ -143,7 +143,7 @@
                   </thead>
                   <tbody>
                     <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
-                      <td>{{ucAUX.codigo_uc}}</td>
+                      <td>{{ucAUX.codigo_uc.toString()}}</td>
                       <td>{{ucAUX.regime}}</td>
                       <td>{{ucAUX.turno}}</td>
                       <td>{{ucAUX.codigo_curso}}</td>
@@ -257,6 +257,7 @@
     <proposta-proponente-professor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
+      :ficheiro="ficheiro"
       v-on:mostrarProponente="showComponent"
       v-on:incrementarBarraProgresso="progresso.valor++"
       v-if="roleSelecionado == 'professor' && isFinalized"
@@ -326,6 +327,8 @@ export default {
         role: "",
         data_de_assinatura_coordenador_departamento: "",
         data_de_assinatura_coordenador_de_curso: "",
+        //fundamentacao_coordenador_curso:"",
+        //fundamentacao_coordenador_departamento:"",
         grau: "",
         area_cientifica: "",
         curso: ""

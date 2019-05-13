@@ -72,6 +72,8 @@ class InitialMigration extends Migration
             $table->string('grau');
             $table->string('curso');
             $table->string('area_cientifica');
+            //$table->string('fundamentacao_coordenador_curso');
+            //$table->string('fundamentacao_coordenador_departamento');
             $table->softDeletes();
             $table->timestamps();
         });
