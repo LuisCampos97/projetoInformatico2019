@@ -302,12 +302,13 @@ module.exports = {
       }
     },
     makeToast(variant = null) {
-      this.$bvToast.toast("O Direretor ", {
+      this.$bvToast.toast("", {
         title: `O Diretor da ${
           this.proposta.unidade_organica
         } foi notificado via email!`,
         variant: variant,
-        solid: true
+        solid: true,
+        
       });
     }
   }
