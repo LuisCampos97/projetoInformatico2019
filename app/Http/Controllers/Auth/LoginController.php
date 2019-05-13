@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\User;
+
 
 class LoginController extends Controller
 {
@@ -56,8 +58,18 @@ class LoginController extends Controller
             $response = compact('token');
             $response['user'] = Auth::user();
             $role = \Adldap\Laravel\Facades\Adldap::search()->find($request->email)->title[0];
-            
+            $user = User::where('email', $request->email)->first();
+            if(strpos($role, 'Coordenador')) {
+                $user->roleDB = 'proponente';
+                $user->save();
+            } else {
+                if(strpos($role, 'Diretor')) {
+                    $user->roleDB = 'diretor_uo';
+                    $user->save();
+                }
+            }
             return $response;
+            
         } else {
             $this->incrementLoginAttempts($request);
             return response()->json([

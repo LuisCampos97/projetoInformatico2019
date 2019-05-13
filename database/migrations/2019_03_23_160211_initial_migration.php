@@ -20,7 +20,7 @@ class InitialMigration extends Migration
             $table->enum('tipo_documento', ['cartao_cidadao', 'passaporte'])->nullable();
             $table->string('name');
             $table->string('username')->unique()->nullable();
-            // $table->enum('role', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao', 'recursos_humanos'])->nullable();
+            $table->enum('roleDB', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao', 'recursos_humanos'])->nullable();
             $table->string('role');
             $table->string('password');
             $table->string('email')->unique();

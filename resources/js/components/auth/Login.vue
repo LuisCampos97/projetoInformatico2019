@@ -13,7 +13,7 @@
           </a>
           <div class="app-name pt-5">
             <div class="font-weight-lighter">Plataforma de</div>
-            <div class="font-weight-bold">Gestão de Contrações</div>
+            <div class="font-weight-bold">Gestão de Contratações</div>
             <div class="font-weight-bold">2018.19</div>
           </div>
         </div>
