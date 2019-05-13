@@ -36,7 +36,7 @@
     <div>
       <table class="table">
         <thead>
-          <th>Nome</th>
+          <th>Código</th>
           <th>Regime</th>
           <th>Turno</th>
           <th>Horas</th>
@@ -45,7 +45,7 @@
         </thead>
         <tbody>
           <tr v-for="(ucAUX) in unidadesCurriculares" :key="ucAUX.id">
-            <td>{{ucAUX.nome_unidade_curricular}}</td>
+            <td>{{ucAUX.codigo_uc}}</td>
             <td>{{ucAUX.regime}}</td>
             <td>{{ucAUX.turno}}</td>
             <td>{{ucAUX.horas}}</td>
@@ -199,7 +199,7 @@ module.exports = {
           console.log("Ficheiro");
           console.log(this.ficheiro);
           axios
-            .post("/api/propostaProponente/", this.proposta)
+            .post("/api/propostaProponente", this.proposta)
             .then(response => {
               this.idParaUcsPropostaProponente = response.data.id;
               this.unidadesCurriculares.forEach(unidadeCurricular => {
@@ -207,7 +207,7 @@ module.exports = {
               });
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 axios
-                  .post("/api/ucsPropostaProponente/", unidadeCurricular)
+                  .post("/api/ucsPropostaProponente", unidadeCurricular)
                   .then(response => {});
                 this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
 
@@ -324,12 +324,13 @@ module.exports = {
       }
     },
     makeToast(variant = null) {
-      this.$bvToast.toast("O Direretor ", {
+      this.$bvToast.toast("", {
         title: `O Diretor da ${
           this.proposta.unidade_organica
         } foi notificado via email!`,
         variant: variant,
-        solid: true
+        solid: true,
+        
       });
     },
     computed: {

@@ -19,6 +19,7 @@ class PropostaProponenteProfessor extends JsonResource
             'tipo_contrato' => $this->tipo_contrato,
             'regime_prestacao_servicos' => $this->regime_prestacao_servicos,
             'percentagem_prestacao_servicos' => $this->percentagem_prestacao_servicos,
+            'fundamentacao' => $this->fundamentacao,
             'duracao' => $this->duracao,
             'periodo' => $this->periodo,
             'avaliacao_periodo_anterior' => $this->avaliacao_periodo_anterior,

@@ -55,6 +55,8 @@ class LoginController extends Controller
             $token = Str::random(60);
             $response = compact('token');
             $response['user'] = Auth::user();
+            $role = \Adldap\Laravel\Facades\Adldap::search()->find($request->email)->title[0];
+            
             return $response;
         } else {
             $this->incrementLoginAttempts($request);

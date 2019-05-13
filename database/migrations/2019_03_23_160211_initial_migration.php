@@ -83,6 +83,7 @@ class InitialMigration extends Migration
             $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
             $table->integer('percentagem_prestacao_servicos');
+            $table->string('fundamentacao');
             $table->string('periodo');
             $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa'])->nullable();
@@ -97,6 +98,7 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
             $table->integer('percentagem_prestacao_servicos');
+            $table->string('fundamentacao');
             $table->string('periodo');
             $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa']);
@@ -121,12 +123,12 @@ class InitialMigration extends Migration
 
         Schema::create('ucs_proposta_proponente', function(Blueprint $table){
             $table->increments('id');
-            $table->string('nome_unidade_curricular');
+            $table->string('codigo_uc');
             $table->enum('regime', ['Diurno', 'Pos-Laboral']);
             $table->enum('tipo', ['Semestral', 'Anual']);
             $table->integer('horas')->unsigned();
             $table->integer('horas_semestrais')->unsigned();
-            $table->integer('departamento_id')->unsigned();
+            $table->integer('departamento_id')->unsigned()->nullable(); //! Para já
             $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->integer('proposta_proponente_id')->unsigned();
             $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');

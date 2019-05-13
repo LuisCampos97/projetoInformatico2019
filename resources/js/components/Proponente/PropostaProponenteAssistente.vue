@@ -150,7 +150,7 @@ export default {
   validations: {
     propostaProponenteAssistente: {
       regime_prestacao_servicos: { required },
-      //percentagem_prestacao_servicos: { required },
+      percentagem_prestacao_servicos: { between: between(1, 100) },
       fundamentacao: { required },
       duracao: { required },
       periodo: { required }
@@ -177,8 +177,7 @@ export default {
     },
     anterior() {
       //* Mudar para o componente Proponente
-      this.isShowAssistente = false;
-      this.$emit("isShow");
+      this.$emit("mostrarProponente");
     }
   }
 };

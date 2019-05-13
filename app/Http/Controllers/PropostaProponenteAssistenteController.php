@@ -12,6 +12,7 @@ class PropostaProponenteAssistenteController extends Controller
         $request->validate([
             'regime_prestacao_servicos' => 'required',
             'percentagem_prestacao_servicos' => 'nullable|numeric|min:1',
+            'fundamentacao' => 'required',
             'duracao' => 'required',
             'data_inicio_contrato' => 'required',
             'data_fim_contrato' => 'required',

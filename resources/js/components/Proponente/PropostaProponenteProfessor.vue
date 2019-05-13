@@ -162,12 +162,8 @@ export default {
     },
     anterior() {
       //* Mudar para o componente Proponente
-      this.isShowProfessor = false;
-      this.$emit("isShow");
+      this.$emit("mostrarProponente");
     }
-  },
-  mounted() {
-    this.isShowProfessor = true;
   }
 };
 </script>
