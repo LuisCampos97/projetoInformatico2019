@@ -59,11 +59,17 @@ class LoginController extends Controller
             $response['user'] = Auth::user();
             $role = \Adldap\Laravel\Facades\Adldap::search()->find($request->email)->title[0];
             $user = User::where('email', $request->email)->first();
-            if($role == 'Estudante') {
+            if(strpos($role, 'Coordenador')) {
                 $user->roleDB = 'proponente';
                 $user->save();
+            } else {
+                if(strpos($role, 'Diretor')) {
+                    $user->roleDB = 'diretor_uo';
+                    $user->save();
+                }
             }
             return $response;
+            
         } else {
             $this->incrementLoginAttempts($request);
             return response()->json([
