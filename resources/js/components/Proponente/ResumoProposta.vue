@@ -133,25 +133,7 @@
       </div>
       <br>
     </div>
-<!--
-    <div>
-      <b-form-group v-if="user.role == 'Coordenador de Engenharia Informatica'"
-        label="Fundamentação"
-        class="mt-5"
-      >
-        <b-form-textarea id="textarea" v-model="proposta.fundamentacao_coordenador_curso" rows="3" max-rows="6"></b-form-textarea>
-      </b-form-group>
-    </div>
 
-    <div>
-      <b-form-group v-if="user.role == 'Coordenador do Departamento de Engenharia Informatica'"
-        label="Fundamentação"
-        class="mt-5"
-      >
-        <b-form-textarea id="textarea" v-model="fundamentacao.fundamentacao_coordenador_departamento" rows="3" max-rows="6"></b-form-textarea>
-      </b-form-group>
-    </div>
--->
     <button
       type="button"
       class="btn btn-success"
@@ -345,11 +327,6 @@ module.exports = {
         solid: true,
         
       });
-    },
-    computed: {
-      user(){
-        return this.$store.state.user;
-      }
     },
   }
 };
