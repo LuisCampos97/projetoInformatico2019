@@ -252,9 +252,6 @@ module.exports = {
           this.idParaUcsPropostaProponente = response.data.id;
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-            this.ficheiro.fileCurriculo.proposta_id = this.idParaUcsPropostaProponente;
-            this.ficheiro.fileHabilitacoes.proposta_id = this.idParaUcsPropostaProponente;
-            this.ficheiro.fileRelatorio.proposta_id = this.idParaUcsPropostaProponente;
           });
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             axios
@@ -272,19 +269,28 @@ module.exports = {
 
           axios
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-            .then(response => {});
+            .then(response => {
+              this.ficheiro.fileCurriculo.proposta_id = response.data;
+                  this.ficheiro.fileHabilitacoes.proposta_id = response.data;
+                  this.ficheiro.fileRelatorio.proposta_id = response.data;
+
+                  this.$socket.emit("email-diretor", {
+                    msg: "Pedido de email enviado..."
+                  }); // raise an event on the server
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+                    .then(response => {});
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+                    .then(response => {});
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                    .then(response => {});
+            });
         });
 
-        axios
-          .post("/api/ficheiro", this.ficheiro.fileRelatorio)
-          .then(response => {});
-
-        axios
-          .post("/api/ficheiro", this.ficheiro.fileCurriculo)
-          .then(response => {});
-        axios
-          .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-          .then(response => {});
       }
     },
     submeterPropostaMonitor(propostaProponenteMonitor) {
@@ -293,9 +299,6 @@ module.exports = {
           this.idParaUcsPropostaProponente = response.data.id;
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-            this.ficheiro.fileCurriculo.proposta_id = this.idParaUcsPropostaProponente;
-            this.ficheiro.fileHabilitacoes.proposta_id = this.idParaUcsPropostaProponente;
-            this.ficheiro.fileRelatorio.proposta_id = this.idParaUcsPropostaProponente;
           });
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             axios
@@ -309,17 +312,27 @@ module.exports = {
           });
           axios
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
-            .then(response => {});
-          axios
-            .post("/api/ficheiro", this.ficheiro.fileRelatorio)
-            .then(response => {});
+            .then(response => {
+              this.ficheiro.fileCurriculo.proposta_id = response.data;
+                  this.ficheiro.fileHabilitacoes.proposta_id = response.data;
+                  this.ficheiro.fileRelatorio.proposta_id = response.data;
 
-          axios
-            .post("/api/ficheiro", this.ficheiro.fileCurriculo)
-            .then(response => {});
-          axios
-            .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-            .then(response => {});
+                  this.$socket.emit("email-diretor", {
+                    msg: "Pedido de email enviado..."
+                  }); // raise an event on the server
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+                    .then(response => {});
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+                    .then(response => {});
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                    .then(response => {});
+            });
+
         });
       }
     },

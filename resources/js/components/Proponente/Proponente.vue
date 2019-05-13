@@ -257,6 +257,7 @@
     <proposta-proponente-professor
       :proposta="proposta"
       :unidadesCurriculares="unidadesCurriculares"
+      :ficheiro="ficheiro"
       v-on:mostrarProponente="showComponent"
       v-on:incrementarBarraProgresso="progresso.valor++"
       v-if="roleSelecionado == 'professor' && isFinalized"
@@ -326,8 +327,8 @@ export default {
         role: "",
         data_de_assinatura_coordenador_departamento: "",
         data_de_assinatura_coordenador_de_curso: "",
-        fundamentacao_coordenador_curso:"",
-        fundamentacao_coordenador_departamento:"",
+        //fundamentacao_coordenador_curso:"",
+        //fundamentacao_coordenador_departamento:"",
         grau: "",
         area_cientifica: "",
         curso: ""
