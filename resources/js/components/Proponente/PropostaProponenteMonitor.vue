@@ -106,13 +106,8 @@ export default {
         { text: "20% (3 horas)", value: "20" },
         { text: "15% (2 horas)", value: "15" }
       ],
-      categoriaArray: [
-        { text: "Coordenador", value: "coordenador" },
-        { text: "Adjunto", value: "adjunto" },
-        { text: "Visitante", value: "visitante" }
-      ],
       propostaProponenteMonitor: {
-        regime_prestacao_servicos: "Tempo Parcial",
+        regime_prestacao_servicos: "tempo_parcial",
         percentagem_prestacao_servicos: "",
         duracao: "",
         periodo: "",

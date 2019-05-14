@@ -15,6 +15,8 @@ class PropostaProponenteController extends Controller
             'tipo_contrato' => 'required',
             'data_de_assinatura_coordenador_de_curso' => 'nullable',
             'data_de_assinatura_coordenador_departamento' => 'nullable',
+            'fundamentacao_coordenador_curso' => 'nullable',
+            'fundamentacao_coordenador_departamento' => 'nullable',
             'role' => 'required',
             'grau' => 'required',
             'curso' => 'required',

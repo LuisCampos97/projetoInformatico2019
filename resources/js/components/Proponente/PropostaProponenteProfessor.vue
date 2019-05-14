@@ -26,7 +26,7 @@
         >A seleção do regime de prestaões de serviço é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
 
-      <span v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'Tempo Parcial'">
+      <span v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'tempo_parcial'">
         <b-form-group label="Percentagem de tempo parcial" label-for="inputTempoParcial">
           <b-form-select
             id="inputTempoParcial"
@@ -95,14 +95,14 @@ export default {
   data() {
     return {
       categoriaArray: [
-        { text: "Coordenador", value: "Coordenador" },
-        { text: "Adjunto", value: "Adjunto" },
-        { text: "Visitante", value: "Visitante" }
+        { text: "Coordenador", value: "coordenador" },
+        { text: "Adjunto", value: "adjunto" },
+        { text: "Visitante", value: "visitante" }
       ],
       regimePrestacaoServicosArray: [
-        { text: "Tempo Integral", value: "Tempo Integral" },
-        { text: "Tempo Parcial", value: "Tempo Parcial" },
-        { text: "Dedicação Exclusiva", value: "Dedicacao Exclusiva" }
+        { text: "Tempo Integral", value: "tempo_integral" },
+        { text: "Tempo Parcial", value: "tempo_parcial" },
+        { text: "Dedicação Exclusiva", value: "dedicacao_exclusiva" }
       ],
       percentagensArray: [
         { text: "80% (10 horas)", value: "80" },
@@ -148,9 +148,9 @@ export default {
       if (!this.$v.$invalid) {
         if (
           this.propostaProponenteProfessor.regime_prestacao_servicos ==
-            "Tempo Integral" ||
+            "tempo_integral" ||
           this.propostaProponenteProfessor.regime_prestacao_servicos ==
-            "Dedicacao Exclusiva"
+            "dedicacao_exclusiva"
         ) {
           this.propostaProponenteProfessor.percentagem_prestacao_servicos =
             "100";

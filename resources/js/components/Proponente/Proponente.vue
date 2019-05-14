@@ -8,7 +8,7 @@
 
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
-    <div v-if="proposta.tipo_contrato == 'Contratacao Inicial' && isShow">
+    <div v-if="proposta.tipo_contrato == 'contratacao_inicial' && isShow">
       <b-form-group label="Currículo">
         <b-form-file
           v-model="ficheiroCurriculo"
@@ -17,16 +17,9 @@
           drop-placeholder="Arraste para aqui um ficheiro"
         ></b-form-file>
       </b-form-group>
+
       <b-form-group label="Unidade Orgânica">
-        <b-form-radio-group
-          v-model="proposta.unidade_organica"
-          :options="unidadesOrganicasArray"
-          :state="$v.proposta.unidade_organica.$dirty ? !$v.proposta.unidade_organica.$error : null"
-          stacked
-        ></b-form-radio-group>
-        <b-form-invalid-feedback
-          id="input-1-live-feedback"
-        >A seleção de uma unidade orgânica é obrigatória!</b-form-invalid-feedback>
+        <b-form-input :readonly="true" v-model="proposta.unidade_organica"></b-form-input>
       </b-form-group>
 
       <b-form-group label="Nome completo" label-for="inputNomeCompleto">
@@ -181,6 +174,13 @@
                   :state="$v.proposta.grau.$dirty ? !$v.proposta.grau.$error : null"
                   stacked
                 ></b-form-radio-group>
+                <b-form-radio-group
+                  v-model="opcaoOutro"
+                  :options="[{ text: 'Outro', value: 'outro' }]"
+                  stacked
+                ></b-form-radio-group>
+
+                <b-form-input v-if="opcaoOutro == 'outro'" v-model="proposta.grau"></b-form-input>
                 <b-form-invalid-feedback id="input-1-live-feedback">O Grau é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
 
@@ -206,7 +206,8 @@
 
                 <b-form-group
                   label="Certificado de Habilitações"
-                  v-if="proposta.tipo_contrato == 'Contratacao Inicial'"
+                  v-if="proposta.tipo_contrato == 'contratacao_inicial'"
+                  class="mt-3"
                 >
                   <b-form-file
                     v-model="ficheiroHabilitacoes"
@@ -221,7 +222,7 @@
         </b-collapse>
       </b-card>
 
-      <b-form-group label="Relatório dos proponentes">
+      <b-form-group label="Relatório dos proponentes" class="mt-3">
         <b-form-file
           v-model="ficheiroRelatorio"
           :state="Boolean(ficheiroRelatorio)"
@@ -298,22 +299,14 @@ export default {
     return {
       //? Array de Objetos para Radio Buttons
       tipoContratosArray: [
-        { text: "Contratação Inicial", value: "Contratacao Inicial" },
-        { text: "Renovação", value: "Renovacao" },
-        { text: "Alteração", value: "Alteracao" }
-      ],
-      unidadesOrganicasArray: [
-        { text: "ESECS", value: "ESECS" },
-        { text: "ESTG", value: "ESTG" },
-        { text: "ESSLei", value: "ESSLei" },
-        { text: "ESTM", value: "ESTM" },
-        { text: "ESAD.CR", value: "ESAD.CR" }
+        { text: "Contratação Inicial", value: "contratacao_inicial" },
+        { text: "Renovação", value: "renovacao" },
+        { text: "Alteração", value: "alteracao" }
       ],
       grausArray: [
-        { text: "Licenciatura", value: "Licenciatura" },
-        { text: "Mestrado", value: "Mestrado" },
-        { text: "Doutoramento", value: "Doutoramento" },
-        { text: "Outro", value: "Outro" }
+        { text: "Licenciatura", value: "licenciatura" },
+        { text: "Mestrado", value: "mestrado" },
+        { text: "Doutoramento", value: "doutoramento" }
       ],
       rolesArray: [
         { text: "Professor", value: "professor" },
@@ -322,13 +315,13 @@ export default {
       ],
       proposta: {
         tipo_contrato: "",
-        unidade_organica: "",
+        unidade_organica: this.$store.state.user.unidade_organica,
         nome_completo: "",
         role: "",
         data_de_assinatura_coordenador_departamento: "",
         data_de_assinatura_coordenador_de_curso: "",
-        //fundamentacao_coordenador_curso:"",
-        //fundamentacao_coordenador_departamento:"",
+        fundamentacao_coordenador_curso: "",
+        fundamentacao_coordenador_departamento: "",
         grau: "",
         area_cientifica: "",
         curso: ""
@@ -354,6 +347,7 @@ export default {
         valor: 1,
         max: 3
       },
+      opcaoOutro: "",
       ficheiro: {
         fileCurriculo: {
           nome: "",
@@ -402,24 +396,16 @@ export default {
       fileRelatorio: {
         nome: { required }
       },
-      fileHabilitações: {
+      fileHabilitacoes: {
         nome: { required }
       }
     }
   },
   methods: {
     avancar: function(proposta, unidadesCurriculares) {
-      console.log(this.ficheiroCurriculo);
-      console.log(this.ficheiroHabilitacoes);
-      console.log(this.ficheiroRelatorio);
-      this.proposta.data_de_assinatura_coordenador_departamento = new Date()
-        .toISOString()
-        .slice(0, 19)
-        .replace("T", " "); //Ver tipo de user autenticado
       this.ficheiro.fileCurriculo.nome = this.ficheiroCurriculo.name;
       this.ficheiro.fileRelatorio.nome = this.ficheiroRelatorio.name;
       this.ficheiro.fileHabilitacoes.nome = this.ficheiroHabilitacoes.name;
-      console.log(this.ficheiro);
       this.roleSelecionado = proposta.role;
       this.$v.proposta.$touch();
       if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {

@@ -166,7 +166,8 @@ return [
 
         'name' => 'cn',
         'role' => 'title',
-        'username' => 'mailnickname'
+        'username' => 'mailnickname',
+        'unidade_organica' => 'company'
 
     ],
 

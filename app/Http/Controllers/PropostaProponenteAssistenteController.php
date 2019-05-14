@@ -14,8 +14,7 @@ class PropostaProponenteAssistenteController extends Controller
             'percentagem_prestacao_servicos' => 'nullable|numeric|min:1',
             'fundamentacao' => 'required',
             'duracao' => 'required',
-            'data_inicio_contrato' => 'required',
-            'data_fim_contrato' => 'required',
+            'periodo' => 'required',
             'proposta_proponente_id' => 'required',
         ]);
         $propostaProponenteAssistente = new PropostaProponenteAssistente();

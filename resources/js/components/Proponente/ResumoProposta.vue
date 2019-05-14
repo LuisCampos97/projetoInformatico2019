@@ -133,25 +133,59 @@
       </div>
       <br>
     </div>
-<!--
-    <div>
-      <b-form-group v-if="user.role == 'Coordenador de Engenharia Informatica'"
-        label="Fundamentação"
-        class="mt-5"
-      >
-        <b-form-textarea id="textarea" v-model="proposta.fundamentacao_coordenador_curso" rows="3" max-rows="6"></b-form-textarea>
+
+    <!-- Coordenador de curso -->
+    <div v-if="user.role == 'Estudante'" class="mt-5">
+      <b-form-group>
+        <b-form-checkbox
+          v-model="fundamentacaoCheck"
+        >Reconheço o interesse e a necessidade da contratação inicial/renovação</b-form-checkbox>
       </b-form-group>
+
+      <div v-if="fundamentacaoCheck">
+        <b-form-group label="Fundamentação">
+          <b-form-textarea
+            v-model="proposta.fundamentacao_coordenador_curso"
+            rows="3"
+            max-rows="6"
+          ></b-form-textarea>
+        </b-form-group>
+        <b-form-group label="Data" label-for="inputData">
+          <b-form-input
+            id="inputData"
+            type="date"
+            v-model="proposta.data_de_assinatura_coordenador_de_curso"
+          ></b-form-input>
+        </b-form-group>
+      </div>
     </div>
 
-    <div>
-      <b-form-group v-if="user.role == 'Coordenador do Departamento de Engenharia Informatica'"
-        label="Fundamentação"
-        class="mt-5"
-      >
-        <b-form-textarea id="textarea" v-model="fundamentacao.fundamentacao_coordenador_departamento" rows="3" max-rows="6"></b-form-textarea>
+    <!-- Coordenador de departamento -->
+    <div v-if="user.role == 'Estudante'" class="mt-5">
+      <b-form-group>
+        <b-form-checkbox
+          v-model="fundamentacaoCheck"
+        >Reconheço o interesse e a necessidade da contratação inicial/renovação</b-form-checkbox>
       </b-form-group>
+
+      <div v-if="fundamentacaoCheck">
+        <b-form-group label="Fundamentação">
+          <b-form-textarea
+            v-model="proposta.fundamentacao_coordenador_departamento"
+            rows="3"
+            max-rows="6"
+          ></b-form-textarea>
+        </b-form-group>
+        <b-form-group label="Data" label-for="inputData">
+          <b-form-input
+            id="inputData"
+            type="date"
+            v-model="proposta.data_de_assinatura_coordenador_departamento"
+          ></b-form-input>
+        </b-form-group>
+      </div>
     </div>
--->
+
     <button
       type="button"
       class="btn btn-success"
@@ -187,6 +221,8 @@ module.exports = {
   data() {
     return {
       idParaUcsPropostaProponente: "",
+      fundamentacaoCheck: false,
+      user: this.$store.state.user
     };
   },
   methods: {
@@ -196,8 +232,6 @@ module.exports = {
       );
       if (confirmacao) {
         if (this.unidadesCurriculares.length > 0) {
-          console.log("Ficheiro");
-          console.log(this.ficheiro);
           axios
             .post("/api/propostaProponente", this.proposta)
             .then(response => {
@@ -248,14 +282,14 @@ module.exports = {
     },
     submeterPropostaAssistente(propostaProponenteAssistente) {
       if (this.unidadesCurriculares.length > 0) {
-        axios.post("/api/propostaProponente/", this.proposta).then(response => {
+        axios.post("/api/propostaProponente", this.proposta).then(response => {
           this.idParaUcsPropostaProponente = response.data.id;
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
           });
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             axios
-              .post("/api/ucsPropostaProponente/", unidadeCurricular)
+              .post("/api/ucsPropostaProponente", unidadeCurricular)
               .then(response => {});
             this.propostaProponenteAssistente.proposta_proponente_id = this.idParaUcsPropostaProponente;
 
@@ -271,38 +305,37 @@ module.exports = {
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
             .then(response => {
               this.ficheiro.fileCurriculo.proposta_id = response.data;
-                  this.ficheiro.fileHabilitacoes.proposta_id = response.data;
-                  this.ficheiro.fileRelatorio.proposta_id = response.data;
+              this.ficheiro.fileHabilitacoes.proposta_id = response.data;
+              this.ficheiro.fileRelatorio.proposta_id = response.data;
 
-                  this.$socket.emit("email-diretor", {
-                    msg: "Pedido de email enviado..."
-                  }); // raise an event on the server
+              this.$socket.emit("email-diretor", {
+                msg: "Pedido de email enviado..."
+              }); // raise an event on the server
 
-                  axios
-                    .post("/api/ficheiro", this.ficheiro.fileRelatorio)
-                    .then(response => {});
+              axios
+                .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+                .then(response => {});
 
-                  axios
-                    .post("/api/ficheiro", this.ficheiro.fileCurriculo)
-                    .then(response => {});
-                  axios
-                    .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-                    .then(response => {});
+              axios
+                .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+                .then(response => {});
+              axios
+                .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                .then(response => {});
             });
         });
-
       }
     },
     submeterPropostaMonitor(propostaProponenteMonitor) {
       if (this.unidadesCurriculares.length > 0) {
-        axios.post("/api/propostaProponente/", this.proposta).then(response => {
+        axios.post("/api/propostaProponente", this.proposta).then(response => {
           this.idParaUcsPropostaProponente = response.data.id;
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
           });
           this.unidadesCurriculares.forEach(unidadeCurricular => {
             axios
-              .post("/api/ucsPropostaProponente/", unidadeCurricular)
+              .post("/api/ucsPropostaProponente", unidadeCurricular)
               .then(response => {});
             this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
 
@@ -314,25 +347,24 @@ module.exports = {
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
             .then(response => {
               this.ficheiro.fileCurriculo.proposta_id = response.data;
-                  this.ficheiro.fileHabilitacoes.proposta_id = response.data;
-                  this.ficheiro.fileRelatorio.proposta_id = response.data;
+              this.ficheiro.fileHabilitacoes.proposta_id = response.data;
+              this.ficheiro.fileRelatorio.proposta_id = response.data;
 
-                  this.$socket.emit("email-diretor", {
-                    msg: "Pedido de email enviado..."
-                  }); // raise an event on the server
+              this.$socket.emit("email-diretor", {
+                msg: "Pedido de email enviado..."
+              }); // raise an event on the server
 
-                  axios
-                    .post("/api/ficheiro", this.ficheiro.fileRelatorio)
-                    .then(response => {});
+              axios
+                .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+                .then(response => {});
 
-                  axios
-                    .post("/api/ficheiro", this.ficheiro.fileCurriculo)
-                    .then(response => {});
-                  axios
-                    .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-                    .then(response => {});
+              axios
+                .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+                .then(response => {});
+              axios
+                .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                .then(response => {});
             });
-
         });
       }
     },
@@ -343,14 +375,9 @@ module.exports = {
         } foi notificado via email!`,
         variant: variant,
         solid: true,
-        
+        toaster: "b-toaster-top-right"
       });
-    },
-    computed: {
-      user(){
-        return this.$store.state.user;
-      }
-    },
+    }
   }
 };
 </script>

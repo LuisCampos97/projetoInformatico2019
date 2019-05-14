@@ -28,11 +28,11 @@
       </div>
       <div class="col-lg-9">
         <div class="main">
-          <button class="btn btn-success mb-4 font-weight-bold" v-on:click.prevent="novaProposta" v-if="isDashboardVisible && user.roleDB == 'proponente'">
+          <button class="btn btn-success mb-4 font-weight-bold" v-on:click.prevent="novaProposta" v-if="isDashboardVisible">
             <i class="fas fa-plus"></i> Nova Proposta
           </button>
           <separator-table v-if="isDashboardVisible"></separator-table>
-          <proponente v-if="isNovaPropostaVisible && user.roleDB == 'proponente'"></proponente>
+          <proponente v-if="isNovaPropostaVisible"></proponente>
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@ class InitialMigration extends Migration
             $table->string('username')->unique()->nullable();
             $table->enum('roleDB', ['proponente', 'diretor_uo', 'ctc', 'secretariado_direcao', 'recursos_humanos'])->nullable();
             $table->string('role');
+            $table->string('unidade_organica');
             $table->string('password');
             $table->string('email')->unique();
             $table->boolean('blocked')->default(false);
@@ -68,25 +69,25 @@ class InitialMigration extends Migration
             $table->string('nome_completo');
             $table->dateTime('data_de_assinatura_coordenador_departamento')->nullable();
             $table->dateTime('data_de_assinatura_coordenador_de_curso')->nullable();
-            $table->enum('tipo_contrato', ['Contratação Inicial', 'Renovação', 'Visitante']);
+            $table->enum('tipo_contrato', ['contratacao_inicial', 'renovacao', 'visitante']);
             $table->string('grau');
             $table->string('curso');
             $table->string('area_cientifica');
-            //$table->string('fundamentacao_coordenador_curso');
-            //$table->string('fundamentacao_coordenador_departamento');
+            $table->string('fundamentacao_coordenador_curso')->nullable();
+            $table->string('fundamentacao_coordenador_departamento')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('proposta_proponente_professor', function (Blueprint $table){
             $table->increments('id');
-            $table->enum('role_professor', ['Coordenador', 'Adjunto', 'Visitante']);
-            $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
+            $table->enum('role_professor', ['coordenador', 'adjunto', 'visitante']);
+            $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_integral', 'dedicacao_exclusiva']);
             $table->integer('percentagem_prestacao_servicos');
             $table->string('fundamentacao');
             $table->string('periodo');
             $table->string('duracao');
-            $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa'])->nullable();
+            $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa'])->nullable();
             //Signature???
             $table->integer('proposta_proponente_id')->unsigned();
             $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
@@ -96,12 +97,12 @@ class InitialMigration extends Migration
 
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
             $table->increments('id');
-            $table->enum('regime_prestacao_servicos', ['Tempo Parcial', 'Tempo Integral', 'Dedicação exclusiva']);
+            $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_integral', 'dedicacao_exclusiva']);
             $table->integer('percentagem_prestacao_servicos');
             $table->string('fundamentacao');
             $table->string('periodo');
             $table->string('duracao');
-            $table->enum('avaliacao_periodo_anterior', ['Positiva', 'Negativa']);
+            $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa']);
             $table->integer('proposta_proponente_id')->unsigned();
             $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
             //Signature???
@@ -111,7 +112,7 @@ class InitialMigration extends Migration
 
         Schema::create('proposta_proponente_monitor', function (Blueprint $table){
             $table->increments('id');
-            $table->enum('regime_prestacao_servicos', ['Tempo Parcial']);
+            $table->enum('regime_prestacao_servicos', ['tempo_parcial']);
             $table->integer('percentagem_prestacao_servicos');
             $table->string('periodo');
             $table->string('duracao');
