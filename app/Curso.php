@@ -9,6 +9,6 @@ class Curso extends Model
     protected $table = 'curso';
 
     protected $fillable = [
-        'codigo', 'nome_curso', 'sigla'
+        'codigo', 'nome_curso'
     ];
 }
