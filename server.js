@@ -11,11 +11,18 @@ let transporter = nodemailer.createTransport({
         pass: process.env.MAIL_PASSWORD,
     }
 });
-let mailOptions = {
+let mailOptionsDiretorUO = {
     from: "estg@gmail.com",
     to: "2151571@my.ipleiria.pt",
-    subject: "Nova proposta na aplicação de gestão de contratações",
-    text: "Tem uma nova proposta",
+    subject: "Nova Proposta na plataforma de contratações",
+    text: "Caro diretor da Unidade Orgânica, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
+}
+
+let mailOptionsCTC = {
+    from: "estg@gmail.com",
+    to: "2151571@my.ipleiria.pt",
+    subject: "Nova Proposta na plataforma de contratações",
+    text: "Caro membro do Conselho Tecnico-Científico, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
 }
 /*
 transporter.sendMail(mailOptions, function (error) {
@@ -38,7 +45,19 @@ io.on('connection', function (socket) {
 
     socket.on('email-diretor', function (data) {
         console.log(data);
-        transporter.sendMail(mailOptions, function (error) {
+        transporter.sendMail(mailOptionsDiretorUO, function (error) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log('Email enviado para o diretor da unidade organica!');
+            }
+        });
+    });
+
+    socket.on('email-ctc', function (data) {
+        console.log(data);
+        transporter.sendMail(mailOptionsCTC, function (error) {
             if (error) {
                 console.log(error);
             }

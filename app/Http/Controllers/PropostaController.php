@@ -22,4 +22,11 @@ class PropostaController extends Controller
         $proposta=DB::table('proposta')->where('proposta_proponente_id', $proposta_proponente_id)->get();
         return $proposta[0]->id;
     }
+
+    public function atualizarPropostaDiretor($idPropostaDiretorUO, $propostaID){
+        $proposta = Proposta::findOrFail($propostaID);
+        $proposta->proposta_diretor_uo_id = $idPropostaDiretorUO;
+        $proposta->save();
+        return response()->json($proposta, 201);
+    }
 }

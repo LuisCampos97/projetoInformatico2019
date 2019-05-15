@@ -75,6 +75,7 @@ class InitialMigration extends Migration
             $table->string('area_cientifica');
             $table->string('fundamentacao_coordenador_curso')->nullable();
             $table->string('fundamentacao_coordenador_departamento')->nullable();
+            $table->enum('role', ['professor', 'assistente', 'monitor']);
             $table->softDeletes();
             $table->timestamps();
         });

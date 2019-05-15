@@ -51,13 +51,17 @@ Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@s
 
 //-----------------------Proposta-------------------------------------------------------------
 Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
+Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}', 'PropostaController@atualizarPropostaDiretor');
 
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis/{role}', 'CursoController@getCursosParaUserLogado');
 
 //-----------------------Diretor UO----------------------------------------------------------
 Route::get('/diretorUO/propostasPendentes', 'DiretorUOController@getPropostasPendentes');
+Route::get('/diretorUO/getPropostaProponente/{role}/{proposta_proponente_id}', 'DiretorUOController@getTipoPropostaRole');
+Route::get('/diretorUO/getUCSPropostaSelecionada/{proposta_proponente_id}', 'DiretorUOController@getUCSPropostaSelecionada');
 Route::post('/diretorUO/propostaDiretor', 'DiretorUOController@store');
+Route::get('/diretorUO/historicoPropostas', 'DiretorUOController@getHistoricoPropostas');
 
 //--------------------------CTC-----------------------------------------------------------
 Route::get('/ctc/propostasPendentes', 'CTCController@getPropostasPendentes');

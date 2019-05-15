@@ -5,39 +5,80 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PropostaDiretorUO;
 use Illuminate\Support\Facades\DB;
+use App\PropostaProponenteProfessor;
+use App\PropostaProponenteAssistente;
+use App\PropostaProponenteMonitor;
 
 class DiretorUOController extends Controller
 {
    public function getPropostasPendentes() 
    {
-      $propostas = DB::table('proposta')
-      ->whereNotNull('proposta_proponente_id')
-      ->whereNull('proposta_diretor_uo_id')
-      ->get();
-
-      //dd($propostas);
       $propostasADevolver=[];
 
-      foreach($propostas as $proposta) {
-         //var_dump($proposta->proposta_proponente_id);
-         $propostaProponente=DB::table('proposta_proponente')->where('id', '=', $proposta->proposta_proponente_id)->get();
-         array_push($propostasADevolver, $propostaProponente);
-         //dd($propostaProponente);
-      }
-      return $propostasADevolver;
+      $propostaProponente=DB::table('proposta_proponente')
+      ->join('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
+      ->whereNotNull('proposta.proposta_proponente_id')
+      ->whereNull('proposta.proposta_diretor_uo_id')
+      ->get();
+
+      array_push($propostasADevolver, $propostaProponente);
+      
+      return $propostasADevolver[0];
    }
 
    public function store(Request $request){
+      if($request->reconhecimento == true){
+         $request->reconhecimento = 1;
+      }
+      else{
+         $request->reconhecimento = 0;
+      }
       $request->validate([
          'reconhecimento' => 'required',
          'parecer' => 'required',
          'data_assinatura' => 'required'
       ]);
+      
+      //dd($request->reconhecimento);
       $propostaDiretorUO = new PropostaDiretorUO();
       $propostaDiretorUO->fill($request->all());
       $propostaDiretorUO->save();
       return response()->json($propostaDiretorUO, 200);
+   }
 
+   public function getTipoPropostaRole($role, $proposta_proponente_id){
+      $proposta_proponente_role = null;
+      if($role == "professor"){
+         $proposta_proponente_role = PropostaProponenteProfessor::findOrFail($proposta_proponente_id);
+      }
+      if($role == "assistente"){
+         $proposta_proponente_role = PropostaProponenteAssistente::findOrFail($proposta_proponente_id);
+      }
+      if($role == "monitor"){
+         $proposta_proponente_role = PropostaProponenteMonitor::findOrFail($proposta_proponente_id);
+      }
+
+      return $proposta_proponente_role;
+   }
+
+   public function getUCSPropostaSelecionada($proposta_proponente_id){
+      $ucs = DB::table('ucs_proposta_proponente')->where('proposta_proponente_id', $proposta_proponente_id)->get();
+      return $ucs;
+   }
+
+   public function getHistoricoPropostas(){
+      $propostasADevolver=[];
+
+      $historicoPropostas=DB::table('proposta_proponente')
+      ->leftJoin('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
+      ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id')
+      ->whereNotNull('proposta.proposta_diretor_uo_id')
+      ->whereNull('proposta.proposta_ctc_id')
+      ->get();
+
+      array_push($propostasADevolver, $historicoPropostas);
+      
+      return $propostasADevolver[0];
    }
     
 }
