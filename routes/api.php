@@ -34,6 +34,9 @@ Route::get('/unidadesCurriculares/regime/{codigo_uc}', 'UnidadeCurricularControl
 Route::get('/unidadesCurriculares/turno/{uc_name}/{uc_regime}', 'UnidadeCurricularController@getTurnosParaUCeRegime');
 Route::get('/tiposUnidadesCurriculares/{codigo_uc}', 'UnidadeCurricularController@getTipoUC');
 
+//-----------------------------Cursos----------------------------------
+Route::get('/lerCursosEUcs', 'CursoController@lerCursosEUcs');
+
 //-----------------------Proposta Proponente----------------------------------------
 Route::post('/propostaProponente', 'PropostaProponenteController@store');
 

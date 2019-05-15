@@ -509,7 +509,7 @@ export default {
 
   mounted() {
     axios
-      .get("/api/cursosDisponiveis/" + "Coordenador de Engenharia Informática")
+      .get("/api/cursosDisponiveis/" + "Coordenador da Licenciatura em Engenharia Informática")
       .then(response => {
         this.cursos.push({
           value: response.data.codigo,

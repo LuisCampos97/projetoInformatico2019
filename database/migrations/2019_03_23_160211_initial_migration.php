@@ -42,7 +42,8 @@ class InitialMigration extends Migration
         Schema::create('curso', function(Blueprint $table){
             $table->increments('codigo');
             $table->string('nome_curso');
-            $table->string('sigla');
+            $table->softDeletes();
+            $table->timestamps();
         });
 
         Schema::create('unidade_curricular', function (Blueprint $table){
@@ -50,9 +51,11 @@ class InitialMigration extends Migration
             $table->string('nome');
             $table->integer('codigo_curso')->unsigned();    
             $table->foreign('codigo_curso')->references('codigo')->on('curso');
-            $table->integer('departamento_id')->unsigned();
+            $table->integer('departamento_id')->unsigned()->nullable();
             $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->enum('tipo', ['Semestral', 'Anual']);
+            $table->softDeletes();
+            $table->timestamps();
         });
 
         Schema::create('turnos_uc', function (Blueprint $table) {
