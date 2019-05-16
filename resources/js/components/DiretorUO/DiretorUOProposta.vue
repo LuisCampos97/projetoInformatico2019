@@ -9,20 +9,25 @@
           name="checkboxReconhecimento"
           value="1"
           unchecked-value="0"
+          :state="$v.propostaDiretor.reconhecimento.$dirty ? !$v.propostaDiretor.reconhecimento.$error : null"
         >Reconheço o interesse e a necessidade da contratação/renovação</b-form-checkbox>
         <b-form-invalid-feedback id="input-1-live-feedback">Tem de reconhecer a proposta</b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group label="Parecer">
-        <b-form-radio-group v-model="propostaDiretor.parecer" :options="parecerArray"></b-form-radio-group>
+        <b-form-radio-group v-model="propostaDiretor.parecer"
+            :state="$v.propostaDiretor.parecer.$dirty ? !$v.propostaDiretor.parecer.$error : null"
+            :options="parecerArray"></b-form-radio-group>
         <b-form-invalid-feedback id="input-1-live-feedback">Selecione a opção do parecer</b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group label="Data assinatura">
-        <b-form-input type="date" v-model="propostaDiretor.data_assinatura"></b-form-input>
+        <b-form-input type="date"
+            :state="$v.propostaDiretor.data_assinatura.$dirty ? !$v.propostaDiretor.data_assinatura.$error : null"
+            v-model="propostaDiretor.data_assinatura"></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">Selecione a data de assinatura</b-form-invalid-feedback>
       </b-form-group>
-
+  
       <button
         class="btn btn-success mt-3 font-weight-bold"
         v-on:click.prevent="finalizarParecer(propostaDiretor)"

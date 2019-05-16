@@ -1,7 +1,9 @@
 <template>
   <div>
     <h3>Resumo da proposta de contratação</h3>
-    <button class="btn btn-danger" @click="voltar">Voltar</button>
+    <button v-if="this.$store.state.user.roleDB == 'diretorUO'" class="btn btn-danger" @click="voltar">Voltar</button>
+    <button v-if="this.$store.state.user.roleDB == 'ctc'" class="btn btn-danger" @click="voltarCTC">Voltar</button>
+
     <b-form-group label="Unidade Orgânica">
       <b-form-input :readonly="true" v-model="propostaSelecionada.unidade_organica"></b-form-input>
     </b-form-group>
@@ -71,9 +73,25 @@
       <b-form-input :readonly="true" v-model="propostaSelecionada.parecer"></b-form-input>
     </b-form-group>
     </div>
+    <div v-if="propostaSelecionada.proposta_ctc_id != null">
+    <b-form-group label="Votos a favor do Conselho Tecnico-Científico">
+      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_a_favor"></b-form-input>
+    </b-form-group>
+    <b-form-group label="Votos contra do Conselho Tecnico-Científico">
+      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_contra"></b-form-input>
+    </b-form-group>
+    <b-form-group label="Votos brancos do Conselho Tecnico-Científico">
+      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_brancos"></b-form-input>
+    </b-form-group>
+    <b-form-group label="Votos nulos do Conselho Tecnico-Científico">
+      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_nulos"></b-form-input>
+    </b-form-group>
+    </div>
 
     <diretor v-if="propostaSelecionada.proposta_diretor_uo_id == null"
      :propostaSelecionada="propostaSelecionada"></diretor>
+     <ctc v-if="propostaSelecionada.proposta_ctc_id == null && this.$store.state.user.roleDB == 'ctc'"
+     :propostaSelecionada="propostaSelecionada"></ctc>
   </div>
   
 </template>
@@ -89,6 +107,9 @@ export default {
   methods: {
    voltar(){
      this.$emit('mostrar-diretor');
+   },
+   voltarCTC(){
+     this.$emit('mostrar-ctc');
    }
   },
   mounted() {
@@ -109,7 +130,6 @@ export default {
       )
       .then(response => {
         this.ucsDaPropostaSelecionada = response.data;
-        console.log(this.ucsDaPropostaSelecionada);
       });
   }
 };

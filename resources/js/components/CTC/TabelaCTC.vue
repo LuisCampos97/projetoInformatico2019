@@ -1,9 +1,6 @@
 <template>
-  <div class="main">
-    <!-- <button class=" btn btn-success mb-4 font-weight-bold" v-on:click.prevent="novaProposta">
-      <i class="fas fa-plus"></i> Nova Proposta
-    </button>-->
-    <div v-if="this.$store.state.user.roleDB == 'diretor_uo' && mostrarDiretorComponent">
+  <div>
+    <div v-if="this.$store.state.user.roleDB == 'ctc' && mostrarCTCComponent">
       <div class="separator">
         <b-tabs content-class="mt-3" align="left">
           <b-tab title="Propostas Pendentes" active>
@@ -17,18 +14,18 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(propostaPendenteDiretor, index) in propostasPendentesDiretorUO"
-                  :key="propostaPendenteDiretor.id"
+                  v-for="(propostaPendenteCTC, index) in propostasPendentesCTC"
+                  :key="propostaPendenteCTC.id"
                 >
-                  <td>{{ propostaPendenteDiretor.nome_completo }}</td>
-                  <td>{{ propostaPendenteDiretor.tipo_contrato }}</td>
-                  <td>{{ propostaPendenteDiretor.curso }}</td>
-                  <td>{{ propostaPendenteDiretor.unidade_organica }}</td>
+                  <td>{{ propostaPendenteCTC.nome_completo }}</td>
+                  <td>{{ propostaPendenteCTC.tipo_contrato }}</td>
+                  <td>{{ propostaPendenteCTC.curso }}</td>
+                  <td>{{ propostaPendenteCTC.unidade_organica }}</td>
                   <td>
                     <button
                       type="button"
                       class="btn btn-info"
-                      @click="verDetalhes(propostaPendenteDiretor, index)"
+                      @click="verDetalhes(propostaPendenteCTC, index)"
                     >Ver detalhes</button>
                   </td>
                 </tr>
@@ -47,7 +44,7 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(propostaHistorico, index) in historicoPropostasDiretorUO"
+                  v-for="(propostaHistorico, index) in historicoPropostasCTC"
                   :key="propostaHistorico.id">
                   <td>{{ propostaHistorico.nome_completo }}</td>
                   <td>{{ propostaHistorico.tipo_contrato }}</td>
@@ -68,56 +65,40 @@
         </b-tabs>
       </div>
     </div>
-
     <resumo-diretor v-if="isResumoChecked"
-     v-on:mostrar-diretor="mostrarDiretor" :propostaSelecionada="propostaSelecionada"></resumo-diretor>
+    v-on:mostrar-ctc="mostrarCTC"
+    :propostaSelecionada="propostaSelecionada"></resumo-diretor>
   </div>
 </template>
-
 <script>
 export default {
   data() {
     return {
-      header: "dark",
-      propostasPendentesDiretorUO: [],
-      historicoPropostasDiretorUO: [],
-      isResumoChecked: false,
-      mostrarDiretorComponent: true,
-      propostaSelecionada: {}
+      propostasPendentesCTC: [],
+      historicoPropostasCTC: [],
+      mostrarCTCComponent:true,
+      propostaSelecionada:{}, 
+      isResumoChecked:false,  
     };
   },
   methods: {
-    getPropostasPendeste() {},
-    getHisstoricoPropostas() {
-      //? Propostas Aceites e Recusadas
-    },
-    verDetalhes(propostaPendenteDiretor, index) {
-      this.propostaSelecionada = Object.assign({}, propostaPendenteDiretor);
-      this.mostrarDiretorComponent = false;
-      this.isResumoChecked = true;
-
-    },
-    mostrarDiretor(){
+      verDetalhes(propostaPendenteCTC, index){
+        this.propostaSelecionada = Object.assign({}, propostaPendenteCTC);
+        this.mostrarCTCComponent=false;
+        this.isResumoChecked=true;
+      },
+      mostrarCTC(){
       this.isResumoChecked = false;
-      this.mostrarDiretorComponent = true;
-    }
+      this.mostrarCTCComponent = true;
+      }
   },
   mounted() {
-    if (this.$store.state.user.roleDB == "diretor_uo") {
-      axios.get("/api/diretorUO/propostasPendentes").then(response => {
-        this.propostasPendentesDiretorUO = response.data;
-      });
-      axios.get("/api/diretorUO/historicoPropostas").then(response => {
-        this.historicoPropostasDiretorUO = response.data;
-      });
-    }
+    axios.get("/api/ctc/getPropostasPendentesCTC").then(response => {
+      this.propostasPendentesCTC = response.data;
+    });
+    axios.get('/api/ctc/getHistoricoPropostasCTC').then(response => {
+       this.historicoPropostasCTC = response.data;
+    })
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.main {
-  font-size: 20px;
-  font-family: "Montserrat", sans-serif;
-}
-</style>
