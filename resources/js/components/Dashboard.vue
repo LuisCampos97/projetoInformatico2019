@@ -37,6 +37,7 @@
           </button>
           <separator-table v-if="isDashboardVisible"></separator-table>
           <proponente v-if="isNovaPropostaVisible"></proponente>
+          <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
         </div>
       </div>
     </div>

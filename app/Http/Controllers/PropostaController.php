@@ -29,4 +29,11 @@ class PropostaController extends Controller
         $proposta->save();
         return response()->json($proposta, 201);
     }
+
+    public function atualizarPropostaCTC($idPropostaCTC, $propostaID){
+        $proposta = Proposta::findOrFail($propostaID);
+        $proposta->proposta_ctc_id = $idPropostaCTC;
+        $proposta->save();
+        return response()->json($proposta, 201);
+    }
 }

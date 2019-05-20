@@ -62,11 +62,14 @@ class LoginController extends Controller
             if(strpos($role, 'Coordenador') !== false || strpos($role, 'Estudante') !== false) {
                 $user->roleDB = 'proponente';
                 $user->save();
-            } else {
-                if(strpos($role, 'Diretor') !== false) {
-                    $user->roleDB = 'diretor_uo';
-                    $user->save();
-                }
+            } 
+            elseif(strpos($role, 'Diretor') !== false) {
+                $user->roleDB = 'diretor_uo';
+                $user->save();
+            }
+            elseif(strpos($role, 'Conselho') !== false || strpos($role, 'Estudante') !== false) {
+                $user->roleDB = 'ctc';
+                $user->save();
             }
             return $response;
 

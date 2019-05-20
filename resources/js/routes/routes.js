@@ -17,6 +17,7 @@ Vue.component('resumoProposta', require('../components/Proponente/ResumoProposta
 Vue.component('separator-table', require('../components/utils/Separator_Table.vue').default);
 Vue.component('diretor', require('../components/DiretorUO/DiretorUOProposta.vue').default);
 Vue.component('resumoDiretor', require('../components/DiretorUO/ResumoDiretor.vue').default);
+Vue.component('tabelaCtc', require('../components/CTC/TabelaCTC.vue').default);
 const ctc = Vue.component('ctc', require('../components/CTC/CTC.vue').default);
 const routes = [
   //---------------Auth----------------------
@@ -35,13 +36,6 @@ const routes = [
     name: 'dashboard'
   },
 
-  //---------------------------------Diretor UO---------------------------------
-
-  {
-    path: '/ctc',
-    component: ctc,
-    name: 'ctc'
-  },
 ];
 
 export default new VueRouter({

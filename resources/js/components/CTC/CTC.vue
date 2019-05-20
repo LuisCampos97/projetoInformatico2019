@@ -41,13 +41,17 @@
       <b-form-radio-group v-model="propostaCTC.aprovacao" :options="aprovacaoArray"></b-form-radio-group>
     </b-form-group>
 
-    <b-form-group label="Acta da reunião do Conselho Tecnico-Científico">
+    <b-form-group label="Ata da reunião do Conselho Tecnico-Científico">
       <b-form-file
         v-model="ata"
         :state="Boolean(ata)"
         placeholder="Escolha um ficheiro"
         drop-placeholder="Arraste para aqui um ficheiro"
       ></b-form-file>
+    </b-form-group>
+
+    <b-form-group label="Data de assinatura" label-for="inputData">
+      <b-form-input id="inputData" type="date" v-model="propostaCTC.data_assinatura"></b-form-input>
     </b-form-group>
 
     <button
@@ -63,6 +67,7 @@
 import { required } from "vuelidate/lib/validators";
 
 export default {
+  props: ["propostaSelecionada"],
   data() {
     return {
       propostaCTC: {
@@ -70,9 +75,15 @@ export default {
         votos_contra: "",
         votos_brancos: "",
         votos_nulos: "",
-        aprovacao: ""
+        aprovacao: "",
+        data_assinatura: ""
       },
       ata: null,
+      ficheiro: {
+        nome: "",
+        descricao: "Ata da reuniao do Conselho Tecnico-Cientifico",
+        proposta_id: ""
+      },
 
       aprovacaoArray: [
         { text: "Aprovado", value: "aprovado" },
@@ -86,20 +97,44 @@ export default {
       votos_contra: { required },
       votos_brancos: { required },
       votos_nulos: { required },
-      aprovacao: { required }
-    },
-    ata: { required }
+      aprovacao: { required },
+      data_assinatura: { required }
+    }
+    //ata: { required }
   },
   methods: {
     finalizarAprovacaoCTC(propostaCTC) {
-      this.$v.propostaCTC.$touch();
-      if (!this.$v.propostaCTC.$invalid) {
-        axios
-          .post("/api/ctc/propostaCTC/", this.propostaCTC)
-          .then(response => {})
-          .catch(error => {
-            console.log(error);
-          });
+      console.log(this.propostaSelecionada);
+      this.ficheiro.nome = this.ata.name;
+      let confirmacao = confirm(
+        "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
+      );
+      if (confirmacao) {
+        this.$v.propostaCTC.$touch();
+        if (!this.$v.propostaCTC.$invalid) {
+          axios
+            .post("/api/ctc/propostaCTC", this.propostaCTC)
+            .then(response => {
+              let proposta_ctc_id = response.data.id;
+              console.log(proposta_ctc_id);
+              console.log(this.propostaSelecionada.id);
+
+              axios
+                .patch(
+                  "/api/propostaCTC/" +
+                    proposta_ctc_id +
+                    "/" +
+                    this.propostaSelecionada.id
+                )
+                .then(response => {});
+            })
+            .catch(error => {
+              console.log(error);
+            });
+          this.$socket.emit("email-secretariado", {
+            msg: "Pedido de email enviado..."
+          }); // raise an event on the server
+        }
       }
     }
   }

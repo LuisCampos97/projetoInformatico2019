@@ -55,7 +55,7 @@ Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@s
 //-----------------------Proposta-------------------------------------------------------------
 Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
 Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}', 'PropostaController@atualizarPropostaDiretor');
-
+Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}', 'PropostaController@atualizarPropostaCTC');
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis/{role}', 'CursoController@getCursosParaUserLogado');
 
@@ -67,8 +67,9 @@ Route::post('/diretorUO/propostaDiretor', 'DiretorUOController@store');
 Route::get('/diretorUO/historicoPropostas', 'DiretorUOController@getHistoricoPropostas');
 
 //--------------------------CTC-----------------------------------------------------------
-Route::get('/ctc/propostasPendentes', 'CTCController@getPropostasPendentes');
+Route::get('/ctc/getPropostasPendentesCTC', 'CTCController@getPropostasPendentes');
 Route::post('/ctc/propostaCTC', 'CTCController@store');
+Route::get('/ctc/getHistoricoPropostasCTC', 'CTCController@getHistoricoPropostasCTC');
 
 //-------------------------Ficheiros-----------------------------------------------
 Route::post('/ficheiro', 'FicheiroController@store');
