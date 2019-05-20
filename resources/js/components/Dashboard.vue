@@ -20,16 +20,19 @@
     </b-navbar>
     <div class="row no-gutters">
       <div class="col-lg-3 d-none d-sm-block">
-        <div class="sidebar-item active">PROPONENTE</div>
-        <div class="sidebar-item">DIRETOR DA UO</div>
-        <div class="sidebar-item">CONSELHO TÉCNICO-CIENTÍFICO</div>
-        <div class="sidebar-item">SECRETARIADO DA DIREÇÃO</div>
-        <div class="sidebar-item">RECURSOS HUMANOS</div>
+        <div class="sidebar-item" v-bind:class="{ active: isActiveProponente }">PROPONENTE</div>
+        <div class="sidebar-item" v-bind:class="{ active: isActiveDiretorUO }">DIRETOR DA UO</div>
+        <div class="sidebar-item" v-bind:class="{ active: isActiveCTC }">CONSELHO TÉCNICO-CIENTÍFICO</div>
+        <div class="sidebar-item" v-bind:class="{ active: isActiveSD }">SECRETARIADO DA DIREÇÃO</div>
+        <div class="sidebar-item" v-bind:class="{ active: isActiveRH }">RECURSOS HUMANOS</div>
       </div>
       <div class="col-lg-9">
         <div class="main">
-          <button class="btn btn-success mb-4 font-weight-bold" v-on:click.prevent="novaProposta"
-           v-if="isDashboardVisible && user.roleDB == 'proponente'">
+          <button
+            class="btn btn-success mb-4 font-weight-bold"
+            v-on:click.prevent="novaProposta"
+            v-if="isDashboardVisible && user.roleDB == 'proponente'"
+          >
             <i class="fas fa-plus"></i> Nova Proposta
           </button>
           <separator-table v-if="isDashboardVisible"></separator-table>
@@ -45,7 +48,12 @@ module.exports = {
   data: function() {
     return {
       isDashboardVisible: true,
-      isNovaPropostaVisible: false
+      isNovaPropostaVisible: false,
+      isActiveProponente: false,
+      isActiveDiretorUO: false,
+      isActiveCTC: false,
+      isActiveSD: false,
+      isActiveRH: false
     };
   },
   methods: {
@@ -69,7 +77,12 @@ module.exports = {
     }
   },
   mounted() {
-  },
+    if(this.$store.state.user.roleDB == 'proponente') {
+      this.isActiveProponente = true;
+    } else if(this.$store.state.user.roleDB =='diretor_uo') {
+      this.isActiveDiretorUO = true;
+    }
+  }
 };
 </script>
 

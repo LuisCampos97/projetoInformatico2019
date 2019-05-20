@@ -68,7 +68,7 @@ export default {
         );
         if (confirmacao) {
           axios
-            .post("/api/diretorUO/propostaDiretor/", this.propostaDiretor)
+            .post("/api/diretorUO/propostaDiretor", this.propostaDiretor)
             .then(response => {
               axios
                 .patch(
