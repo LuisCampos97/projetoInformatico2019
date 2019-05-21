@@ -19,7 +19,7 @@
       </b-collapse>
     </b-navbar>
     <div class="row no-gutters">
-      <div class="col-lg-3 d-none d-sm-block">
+      <div class="col-lg-3 d-md-none d-lg-block">
         <div class="sidebar-item" v-bind:class="{ active: isActiveProponente }">PROPONENTE</div>
         <div class="sidebar-item" v-bind:class="{ active: isActiveDiretorUO }">DIRETOR DA UO</div>
         <div class="sidebar-item" v-bind:class="{ active: isActiveCTC }">CONSELHO TÉCNICO-CIENTÍFICO</div>
@@ -31,13 +31,13 @@
           <button
             class="btn btn-success mb-4 font-weight-bold"
             v-on:click.prevent="novaProposta"
-            v-if="isDashboardVisible && user.roleDB == 'proponente'"
+            v-if="isDashboardVisible && this.$store.state.user.roleDB == 'proponente'"
           >
             <i class="fas fa-plus"></i> Nova Proposta
           </button>
           <separator-table v-if="isDashboardVisible"></separator-table>
           <proponente v-if="isNovaPropostaVisible"></proponente>
-          <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
+          <tabela-ctc v-if="this.$store.state.user.roleDB == 'ctc'"></tabela-ctc>
         </div>
       </div>
     </div>
@@ -82,6 +82,8 @@ module.exports = {
       this.isActiveProponente = true;
     } else if(this.$store.state.user.roleDB =='diretor_uo') {
       this.isActiveDiretorUO = true;
+    } else if(this.$store.state.user.roleDB =='ctc') {
+      this.isActiveCTC = true;
     }
   }
 };
@@ -103,9 +105,9 @@ module.exports = {
   color: #1f1f1f;
   background-color: #f5f5f5;
   font-weight: 600;
-  font-size: 20px;
-  vertical-align: middle;
+  font-size: 20px;  
   text-align: center;
+  height: 20%;
   padding: 70px;
   border-bottom: 1px solid white;
   border-top: 1px solid white;

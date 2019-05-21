@@ -30,8 +30,6 @@ Route::get('/departamento/{userDepName}', 'DepartamentoController@departamentoUs
 Route::get('/unidadesCurriculares', 'UnidadeCurricularController@all');
 Route::get('/unidadeCurricularNome/{codigo_uc}', 'UnidadeCurricularController@getNomeUc');
 Route::get('/unidadesCurricularesDoCursoSelecionado/{codigo_curso}', 'UnidadeCurricularController@getUcsParaCurso');
-Route::get('/unidadesCurriculares/regime/{codigo_uc}', 'UnidadeCurricularController@getRegimesParaUC');
-Route::get('/unidadesCurriculares/turno/{uc_name}/{uc_regime}', 'UnidadeCurricularController@getTurnosParaUCeRegime');
 Route::get('/tiposUnidadesCurriculares/{codigo_uc}', 'UnidadeCurricularController@getTipoUC');
 
 //-----------------------------Cursos----------------------------------
@@ -57,7 +55,7 @@ Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inser
 Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}', 'PropostaController@atualizarPropostaDiretor');
 Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}', 'PropostaController@atualizarPropostaCTC');
 //-----------------------Cursos---------------------------------------------------------------
-Route::get('/cursosDisponiveis/{role}', 'CursoController@getCursosParaUserLogado');
+Route::get('/cursosDisponiveis', 'CursoController@getCursos');
 
 //-----------------------Diretor UO----------------------------------------------------------
 Route::get('/diretorUO/propostasPendentes', 'DiretorUOController@getPropostasPendentes');

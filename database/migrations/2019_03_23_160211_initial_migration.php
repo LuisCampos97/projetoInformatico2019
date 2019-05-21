@@ -58,14 +58,6 @@ class InitialMigration extends Migration
             $table->timestamps();
         });
 
-        Schema::create('turnos_uc', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('codigo_uc')->unsigned();
-            $table->foreign('codigo_uc')->references('codigo')->on('unidade_curricular');
-            $table->enum('regime', ['Diurno', 'Pos-Laboral']);
-            $table->string('turno');
-        });
-
         Schema::create('proposta_proponente', function(Blueprint $table){
             $table->increments('id');
             $table->enum('unidade_organica', ['ESECS', 'ESTG', 'ESAD.CR', 'ESTM', 'ESSLei']);
@@ -87,8 +79,8 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('role_professor', ['coordenador', 'adjunto', 'visitante']);
             $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_integral', 'dedicacao_exclusiva']);
-            $table->integer('percentagem_prestacao_servicos');
-            $table->string('fundamentacao');
+            $table->integer('percentagem_prestacao_servicos')->nullable();
+            $table->string('fundamentacao')->nullable();
             $table->string('periodo');
             $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa'])->nullable();
@@ -101,7 +93,7 @@ class InitialMigration extends Migration
 
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
             $table->increments('id');
-            $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_integral', 'dedicacao_exclusiva']);
+            $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_parcial_60', 'tempo_integral', 'dedicacao_exclusiva']);
             $table->integer('percentagem_prestacao_servicos');
             $table->string('fundamentacao');
             $table->string('periodo');

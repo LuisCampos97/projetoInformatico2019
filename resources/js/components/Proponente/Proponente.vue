@@ -57,7 +57,7 @@
                   v-model="unidadeCurricular.codigo_uc"
                   :state="$v.unidadeCurricular.codigo_uc.$dirty ? !$v.unidadeCurricular.codigo_uc.$error : null"
                   :options="ucs"
-                  @change="getRegimes(unidadeCurricular.codigo_uc, unidadeCurricular.codigo_curso)"
+                  @change="getTipo(unidadeCurricular.codigo_uc)"
                 ></b-form-select>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
@@ -70,21 +70,17 @@
                   v-model="unidadeCurricular.regime"
                   :state="$v.unidadeCurricular.regime.$dirty ? !$v.unidadeCurricular.regime.$error : null"
                   :options="regimesParaUC"
-                  @change="getTurnos(unidadeCurricular.codigo_uc, unidadeCurricular.regime, unidadeCurricular.curso_id)"
                 ></b-form-select>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
                 >O Regime da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
 
-              <b-form-group label="Turno" label-for="inputTurno">
-                <b-form-select
-                  id="inputTurno"
-                  v-model="unidadeCurricular.turno"
+              <b-form-group label="Turno">
+                <b-form-input
                   :state="$v.unidadeCurricular.turno.$dirty ? !$v.unidadeCurricular.turno.$error : null"
-                  :options="turnosParaUCeRegime"
-                  @change="getTipo(unidadeCurricular.codigo_uc)"
-                ></b-form-select>
+                  v-model="unidadeCurricular.turno"
+                ></b-form-input>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
                 >O Turno da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
@@ -313,6 +309,10 @@ export default {
         { text: "Assistente", value: "assistente" },
         { text: "Monitor", value: "monitor" }
       ],
+      regimesParaUC: [
+        { text: "Diurno", value: "Diurno" },
+        { text: "Pós-laboral", value: "Pos-Laboral" }
+      ],
       proposta: {
         tipo_contrato: "",
         unidade_organica: this.$store.state.user.unidade_organica,
@@ -339,8 +339,6 @@ export default {
       cursos: [],
       ucs: [],
       roleSelecionado: "",
-      regimesParaUC: [],
-      turnosParaUCeRegime: [],
       isFinalized: false,
       isShow: true,
       progresso: {
@@ -418,36 +416,12 @@ export default {
 
     getUcsDeCurso(codigo_curso) {
       this.ucs = [];
-      this.regimesParaUC = [];
-      this.turnosParaUCeRegime = [];
 
       axios
         .get("/api/unidadesCurricularesDoCursoSelecionado/" + codigo_curso)
         .then(response => {
           response.data.forEach(uc => {
             this.ucs.push({ text: uc.nome, value: uc.codigo });
-          });
-        });
-    },
-    getRegimes(codigo_uc) {
-      this.regimesParaUC = [];
-      this.turnosParaUCeRegime = [];
-
-      axios
-        .get("/api/unidadesCurriculares/regime/" + codigo_uc)
-        .then(response => {
-          response.data.forEach(uc => {
-            this.regimesParaUC.push({ text: uc.regime });
-          });
-        });
-    },
-    getTurnos(codigo_uc, uc_regime) {
-      this.turnosParaUCeRegime = [];
-      axios
-        .get("/api/unidadesCurriculares/turno/" + codigo_uc + "/" + uc_regime)
-        .then(response => {
-          response.data.forEach(x => {
-            this.turnosParaUCeRegime.push({ text: x.turno });
           });
         });
     },
@@ -468,37 +442,11 @@ export default {
         //* Colocar os campos vazios
         this.unidadeCurricular = {};
         this.ucs = [];
-        this.regimesParaUC = [];
-        this.turnosParaUCeRegime = [];
       }
     },
     removerUC(index) {
       delete this.unidadesCurriculares[index];
       this.unidadesCurriculares.splice(index, 1);
-    },
-    /*
-    submitFile(){
-            let formData = new FormData();
-            formData.append('file', this.file);
-
-            axios.post( '/single-file',
-                formData,
-                {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              }
-            ).then(function(){
-          console.log('SUCCESS!!');
-        })
-        .catch(function(){
-          console.log('FAILURE!!');
-        });
-      },
-      */
-    handleFileUpload(file) {
-      console.log(file);
-      //this.file = this.$refs.file.files[0];
     },
     showComponent() {
       this.isShow = true;
@@ -508,14 +456,14 @@ export default {
   },
 
   mounted() {
-    axios
-      .get("/api/cursosDisponiveis/" + "Coordenador da Licenciatura em Engenharia Informática")
-      .then(response => {
+    axios.get("/api/cursosDisponiveis").then(response => {
+      response.data.forEach(curso => {
         this.cursos.push({
-          value: response.data.codigo,
-          text: response.data.nome_curso
+          value: curso.codigo,
+          text: curso.nome_curso
         });
       });
+    });
   }
 };
 </script>

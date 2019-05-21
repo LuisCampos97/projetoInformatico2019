@@ -73,7 +73,6 @@ class DiretorUOController extends Controller
       ->leftJoin('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
       ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id')
       ->whereNotNull('proposta.proposta_diretor_uo_id')
-      ->whereNull('proposta.proposta_ctc_id')
       ->get();
 
       array_push($propostasADevolver, $historicoPropostas);

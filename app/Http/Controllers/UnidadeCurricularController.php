@@ -28,27 +28,6 @@ class UnidadeCurricularController extends Controller
         return $ucs;
     }
 
-    public function getRegimesParaUC($codigo_uc)
-    {
-        $regimes = DB::table('turnos_uc')
-            ->where('codigo_uc', '=', $codigo_uc)
-            ->select('regime')
-            ->distinct('regime')
-            ->get();
-
-        return $regimes;
-    }
-
-    public function getTurnosParaUCeRegime($codigo_uc, $uc_regime)
-    {
-        $turnos = DB::table('turnos_uc')
-            ->where('codigo_uc', '=', $codigo_uc)
-            ->where('regime', '=', $uc_regime)
-            ->get();
-
-        return $turnos;
-    }
-
     public function getTipoUC($codigo_uc)
     {
         $tipo = DB::table('unidade_curricular')
