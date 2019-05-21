@@ -43,6 +43,8 @@
       <b-form-group
         label="Fundamentação"
         description="(cfr. acta do CTC - art. 5º, nº3) N.B Contracto e renovações não podem ter duração superior a 4 anos"
+        v-if="propostaProponenteProfessor.regime_prestacao_servicos == 'tempo_integral' ||
+        propostaProponenteProfessor.regime_prestacao_servicos == 'dedicacao_exclusiva'"
       >
         <b-form-textarea
           v-model="propostaProponenteProfessor.fundamentacao"
@@ -88,7 +90,7 @@
   </div>
 </template>
 <script>
-import { required, between } from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 
 export default {
   props: ["proposta", "unidadesCurriculares", "ficheiro"],
@@ -124,25 +126,41 @@ export default {
         periodo: "",
         proposta_proponente_id: ""
       },
-      dataFimContratoText: "",
       avancar: false,
       isShowProfessor: true
     };
   },
   //? Validations Vuelidate
-  validations: {
-    propostaProponenteProfessor: {
-      role_professor: { required },
-      regime_prestacao_servicos: { required },
-      percentagem_prestacao_servicos: { between: between(1, 100) },
-      fundamentacao: { required },
-      duracao: { required },
-      periodo: { required }
+  validations() {
+    if (
+      this.propostaProponenteProfessor.regime_prestacao_servicos ==
+        "tempo_integral" ||
+      this.propostaProponenteProfessor.regime_prestacao_servicos ==
+        "dedicacao_exclusiva"
+    ) {
+      return {
+        propostaProponenteProfessor: {
+          role_professor: { required },
+          regime_prestacao_servicos: { required },
+          fundamentacao: { required },
+          duracao: { required },
+          periodo: { required }
+        }
+      };
+    } else {
+      return {
+        propostaProponenteProfessor: {
+          role_professor: { required },
+          regime_prestacao_servicos: { required },
+          percentagem_prestacao_servicos: { required },
+          duracao: { required },
+          periodo: { required }
+        }
+      };
     }
   },
   methods: {
     seguinte() {
-      console.log(this.ficheiro)
       //* Mudar para o componente Resumo Proposta
       this.$v.$touch();
       if (!this.$v.$invalid) {

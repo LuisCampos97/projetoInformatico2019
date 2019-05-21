@@ -135,7 +135,7 @@
     </div>
 
     <!-- Coordenador de curso -->
-    <div v-if="user.role == 'Estudante'" class="mt-5">
+    <div v-if="user.role == 'Coordenador'" class="mt-5">
       <b-form-group>
         <b-form-checkbox
           v-model="fundamentacaoCheck"

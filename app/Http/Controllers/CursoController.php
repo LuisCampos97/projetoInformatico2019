@@ -9,13 +9,12 @@ use App\UnidadeCurricular;
 
 class CursoController extends Controller
 {
-    public function getCursosParaUserLogado($role)
+    public function getCursos()
     {
-        $nome_curso = str_replace(substr($role, 0, 15), '', $role);
+        //$nome_curso = str_replace(substr($role, 0, 15), '', $role);
+        //$curso = Curso::where('nome_curso', $nome_curso)->first();
 
-        $curso = Curso::where('nome_curso', $nome_curso)->first();
-
-        return $curso;
+        return Curso::all();
     }
 
     public function lerCursosEUcs()
