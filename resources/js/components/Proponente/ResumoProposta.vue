@@ -197,12 +197,14 @@
       type="button"
       class="btn btn-success"
       v-on:click="submeterPropostaAssistente(propostaProponenteAssistente)"
+      @click="makeToast('success')"
       v-if="proposta.role=='assistente'"
     >Finalizar</button>
     <button
       type="button"
       class="btn btn-success"
       v-on:click="submeterPropostaMonitor(propostaProponenteMonitor)"
+      @click="makeToast('success')"
       v-if="proposta.role=='monitor'"
     >Finalizar</button>
   </div>
@@ -256,7 +258,6 @@ module.exports = {
               axios
                 .post("/api/proposta/" + this.idParaUcsPropostaProponente)
                 .then(response => {
-                  //var socket = io("http://localhost:8080"); // connec to server
                   this.ficheiro.fileCurriculo.proposta_id = response.data;
                   this.ficheiro.fileHabilitacoes.proposta_id = response.data;
                   this.ficheiro.fileRelatorio.proposta_id = response.data;

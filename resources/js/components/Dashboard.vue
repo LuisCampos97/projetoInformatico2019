@@ -35,9 +35,10 @@
           >
             <i class="fas fa-plus"></i> Nova Proposta
           </button>
-          <separator-table v-if="isDashboardVisible"></separator-table>
+          <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
           <proponente v-if="isNovaPropostaVisible"></proponente>
-          <tabela-ctc v-if="this.$store.state.user.roleDB == 'ctc'"></tabela-ctc>
+          <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
+          <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
         </div>
       </div>
     </div>

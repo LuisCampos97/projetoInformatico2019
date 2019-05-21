@@ -23,15 +23,21 @@ class PropostaController extends Controller
         return $proposta[0]->id;
     }
 
-    public function atualizarPropostaDiretor($idPropostaDiretorUO, $propostaID){
+    public function atualizarPropostaDiretor($idPropostaDiretorUO, $propostaID, $reconhecimento){
         $proposta = Proposta::findOrFail($propostaID);
+        if($reconhecimento == 'Desfavoravel'){
+            $proposta->status = 'recusada';
+        }
         $proposta->proposta_diretor_uo_id = $idPropostaDiretorUO;
         $proposta->save();
         return response()->json($proposta, 201);
     }
 
-    public function atualizarPropostaCTC($idPropostaCTC, $propostaID){
+    public function atualizarPropostaCTC($idPropostaCTC, $propostaID, $aprovacao){
         $proposta = Proposta::findOrFail($propostaID);
+        if($aprovacao == 'naoaprovado'){
+            $proposta->status = 'recusada';
+        }
         $proposta->proposta_ctc_id = $idPropostaCTC;
         $proposta->save();
         return response()->json($proposta, 201);

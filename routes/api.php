@@ -52,8 +52,8 @@ Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@s
 
 //-----------------------Proposta-------------------------------------------------------------
 Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
-Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}', 'PropostaController@atualizarPropostaDiretor');
-Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}', 'PropostaController@atualizarPropostaCTC');
+Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}/{parecer}', 'PropostaController@atualizarPropostaDiretor');
+Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}/{aprovacao}', 'PropostaController@atualizarPropostaCTC');
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis', 'CursoController@getCursos');
 
@@ -71,3 +71,7 @@ Route::get('/ctc/getHistoricoPropostasCTC', 'CTCController@getHistoricoPropostas
 
 //-------------------------Ficheiros-----------------------------------------------
 Route::post('/ficheiro', 'FicheiroController@store');
+
+//-------------------------Secretariado Direcao---------------------------------------------------
+Route::get('/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao', 'SecretariadoDirecaoController@getPropostasPendentes');
+Route::get('/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao', 'SecretariadoDirecaoController@getHistoricoPropostas');

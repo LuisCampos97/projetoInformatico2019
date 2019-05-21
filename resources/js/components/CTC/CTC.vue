@@ -87,7 +87,7 @@ export default {
 
       aprovacaoArray: [
         { text: "Aprovado", value: "aprovado" },
-        { text: "Reprovado", value: "reprovado" }
+        { text: "Nao aprovado", value: "nao aprovado" }
       ]
     };
   },
@@ -116,15 +116,13 @@ export default {
             .post("/api/ctc/propostaCTC", this.propostaCTC)
             .then(response => {
               let proposta_ctc_id = response.data.id;
-              console.log(proposta_ctc_id);
-              console.log(this.propostaSelecionada.id);
-
+              let aprovacao = response.data.aprovacao.replace(' ', '');
               axios
                 .patch(
                   "/api/propostaCTC/" +
                     proposta_ctc_id +
                     "/" +
-                    this.propostaSelecionada.id
+                    this.propostaSelecionada.id+"/"+aprovacao
                 )
                 .then(response => {});
             })

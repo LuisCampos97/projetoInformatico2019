@@ -14,11 +14,13 @@ Vue.component('propostaProponenteProfessor', require('../components/Proponente/P
 Vue.component('propostaProponenteAssistente', require('../components/Proponente/PropostaProponenteAssistente').default);
 Vue.component('propostaProponenteMonitor', require('../components/Proponente/PropostaProponenteMonitor').default);
 Vue.component('resumoProposta', require('../components/Proponente/ResumoProposta.vue').default);
-Vue.component('separator-table', require('../components/utils/Separator_Table.vue').default);
+Vue.component('tabelaDiretor', require('../components/utils/TabelaDiretor.vue').default);
 Vue.component('diretor', require('../components/DiretorUO/DiretorUOProposta.vue').default);
-Vue.component('resumoDiretor', require('../components/DiretorUO/ResumoDiretor.vue').default);
+Vue.component('resumoGeral', require('../components/DiretorUO/ResumoGeral.vue').default);
 Vue.component('tabelaCtc', require('../components/CTC/TabelaCTC.vue').default);
-const ctc = Vue.component('ctc', require('../components/CTC/CTC.vue').default);
+Vue.component('ctc', require('../components/CTC/CTC.vue').default);
+Vue.component('tabelaSecretariado', require('../components/SecretariadoDirecao/TabelaSecretariadoDirecao.vue').default);
+Vue.component('propostaSecretariado', require('../components/SecretariadoDirecao/PropostaSecretariadoDirecao.vue').default);
 const routes = [
   //---------------Auth----------------------
   {
