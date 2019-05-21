@@ -52,7 +52,6 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $token = Str::random(60);
             $response = compact('token');
@@ -67,8 +66,12 @@ class LoginController extends Controller
                 $user->roleDB = 'diretor_uo';
                 $user->save();
             }
-            elseif(strpos($role, 'Conselho') !== false || strpos($role, 'Estudante') !== false) {
+            elseif(strpos($role, 'Conselho') !== false  ) {
                 $user->roleDB = 'ctc';
+                $user->save();
+            }
+            elseif(strpos($role, 'Secretariado') !== false || strpos($role, 'Estudante') !== false) {
+                $user->roleDB = 'secretariado_direcao';
                 $user->save();
             }
             return $response;

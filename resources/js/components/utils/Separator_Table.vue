@@ -69,8 +69,8 @@
       </div>
     </div>
 
-    <resumo-diretor v-if="isResumoChecked"
-     v-on:mostrar-diretor="mostrarDiretor" :propostaSelecionada="propostaSelecionada"></resumo-diretor>
+    <resumo-geral v-if="isResumoChecked"
+     v-on:mostrar-diretor="mostrarDiretor" :propostaSelecionada="propostaSelecionada"></resumo-geral>
   </div>
 </template>
 

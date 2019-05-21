@@ -75,12 +75,15 @@ export default {
           axios
             .post("/api/diretorUO/propostaDiretor/", this.propostaDiretor)
             .then(response => {
+              console.log(response);
+              let parecer = response.data.parecer;
               axios
                 .patch(
                   "/api/proposta/" +
                     parseInt(response.data.id) +
                     "/" +
-                    this.propostaSelecionada.id
+                    this.propostaSelecionada.id+ "/"
+                    + parecer
                 )
                 .then(response => {
                   this.$socket.emit("email-ctc", {

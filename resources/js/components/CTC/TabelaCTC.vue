@@ -65,9 +65,9 @@
         </b-tabs>
       </div>
     </div>
-    <resumo-diretor v-if="isResumoChecked"
+    <resumo-geral v-if="isResumoChecked"
     v-on:mostrar-ctc="mostrarCTC"
-    :propostaSelecionada="propostaSelecionada"></resumo-diretor>
+    :propostaSelecionada="propostaSelecionada"></resumo-geral>
   </div>
 </template>
 <script>

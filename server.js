@@ -31,17 +31,6 @@ let mailOptionsSecretariadoDirecao = {
     subject: "Nova Proposta na plataforma de contratações",
     text: "Caro membro do Secretariado da Direção, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
 }
-/*
-transporter.sendMail(mailOptions, function (error) {
-    if (error) {
-        console.log(error);
-    }
-    else {
-        console.log('Email enviado para o diretor da unidade organica!');
-    }
-});
-*/
-//function sendEmail(){
 
 app.listen(8080, function () {
     console.log('Listening on port 8080')

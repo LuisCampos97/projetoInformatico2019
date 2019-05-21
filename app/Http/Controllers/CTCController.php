@@ -17,7 +17,7 @@ class CTCController extends Controller
       ->join('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', '=', 'proposta_diretor_uo.id')
       ->whereNotNull('proposta.proposta_diretor_uo_id')
       ->whereNull('proposta.proposta_ctc_id')
-      ->where('status', '!=', 'rejeitado')
+      ->where('status', '=', 'pendente')
       ->get();
 
       array_push($propostasADevolver, $propostas);
