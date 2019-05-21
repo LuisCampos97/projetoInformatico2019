@@ -31,6 +31,24 @@
         <b-form-invalid-feedback id="input-1-live-feedback">O Nome completo é obrigatório!</b-form-invalid-feedback>
       </b-form-group>
 
+      <b-form-group label="Email" label-for="inputEmail">
+        <b-form-input
+          id="inputEmail"
+          :state="$v.proposta.email.$dirty ? !$v.proposta.email.$error : null"
+          v-model="proposta.email"
+        ></b-form-input>
+        <b-form-invalid-feedback id="input-1-live-feedback">O Email é obrigatório!</b-form-invalid-feedback>
+      </b-form-group>
+
+      <b-form-group label="Numero Telefone" label-for="inputNumeroTelefone">
+        <b-form-input
+          id="inputNumeroTelefone"
+          :state="$v.proposta.numero_telefone.$dirty ? !$v.proposta.numero_telefone.$error : null"
+          v-model="proposta.numero_telefone"
+        ></b-form-input>
+        <b-form-invalid-feedback id="input-1-live-feedback">O Numero de telefone é obrigatório!</b-form-invalid-feedback>
+      </b-form-group>
+
       <b-card no-body class="mb-1">
         <b-card-header header-tag="header" class="p-1" role="tab">
           <b-button block href="#" v-b-toggle.accordion-1 variant="dark">Unidades Curriculares</b-button>
@@ -317,6 +335,8 @@ export default {
         tipo_contrato: "",
         unidade_organica: this.$store.state.user.unidade_organica,
         nome_completo: "",
+        email:"",
+        numero_telefone:"",
         role: "",
         data_de_assinatura_coordenador_departamento: "",
         data_de_assinatura_coordenador_de_curso: "",
@@ -375,6 +395,8 @@ export default {
     proposta: {
       unidade_organica: { required },
       nome_completo: { required },
+      email: { required },
+      numero_telefone: { required },
       grau: { required },
       curso: { required },
       area_cientifica: { required },

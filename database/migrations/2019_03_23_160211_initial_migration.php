@@ -70,6 +70,8 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('unidade_organica', ['ESECS', 'ESTG', 'ESAD.CR', 'ESTM', 'ESSLei']);
             $table->string('nome_completo');
+            $table->string('email');
+            $table->string('numero_telefone');
             $table->dateTime('data_de_assinatura_coordenador_departamento')->nullable();
             $table->dateTime('data_de_assinatura_coordenador_de_curso')->nullable();
             $table->enum('tipo_contrato', ['contratacao_inicial', 'renovacao', 'visitante']);
