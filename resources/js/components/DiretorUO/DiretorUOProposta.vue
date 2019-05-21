@@ -73,7 +73,7 @@ export default {
         );
         if (confirmacao) {
           axios
-            .post("/api/diretorUO/propostaDiretor/", this.propostaDiretor)
+            .post("/api/diretorUO/propostaDiretor", this.propostaDiretor)
             .then(response => {
               console.log(response);
               let parecer = response.data.parecer;

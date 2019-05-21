@@ -7,7 +7,9 @@ use App\Ficheiro;
 
 class FicheiroController extends Controller
 {
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        $file =
 
         $request->validate([
             'nome' => 'required',
@@ -15,9 +17,12 @@ class FicheiroController extends Controller
             'proposta_id' => 'required'
         ]);
         $ficheiro = new Ficheiro();
-        $ficheiro->fill($request->all());
+        $ficheiro->nome = $request->proposta_id . '_' . $request->nome;
+        $ficheiro->descricao = $request->descricao;
+        $ficheiro->proposta_id = $request->proposta_id;
         $ficheiro->save();
-        return response()->json($ficheiro, 200);
 
+        Storage::disk('local')->putFileAs('ficheiros/' . $request->proposta_id, $file, $ficheiro->nome);
+        return response()->json($ficheiro, 200);
     }
 }
