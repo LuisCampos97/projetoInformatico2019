@@ -8,10 +8,16 @@ use App\Http\Resources\PropostaProponente as PropostaProponenteResource;
 
 class PropostaProponenteController extends Controller
 {
+    public function getPropostasProponente() {
+        return PropostaProponente::all();
+    }
+
     public function store(Request $request){
         $request->validate([
             'unidade_organica' => 'required',
             'nome_completo' => 'required',
+            'email' => 'required',
+            'numero_telefone' => 'required',
             'tipo_contrato' => 'required',
             'data_de_assinatura_coordenador_de_curso' => 'nullable',
             'data_de_assinatura_coordenador_departamento' => 'nullable',

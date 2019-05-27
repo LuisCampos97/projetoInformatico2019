@@ -37,18 +37,23 @@ Route::get('/lerCursosEUcs', 'CursoController@lerCursosEUcs');
 
 //-----------------------Proposta Proponente----------------------------------------
 Route::post('/propostaProponente', 'PropostaProponenteController@store');
+Route::get('/allPropostasProponente', 'PropostaProponenteController@getPropostasProponente');
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
+Route::get('/getUcsPropostaProponente/{idProposta}', 'UcsPropostaProponenteController@getUcsPropostaProponente');
 
 //----------------------Proposta Proponente Professor-------------------------------------------
 Route::post('/propostaProponenteProfessor', 'PropostaProponenteProfessorController@store');
+Route::get('/propostaProponenteProfessor/{idPropostaProponente}', 'PropostaProponenteProfessorController@getProposta');
 
 //----------------------Proposta Proponente Assistente---------------------------------------------
 Route::post('/propostaProponenteAssistente', 'PropostaProponenteAssistenteController@store');
+Route::get('/propostaProponenteAssistente/{idPropostaProponente}', 'PropostaProponenteAssistenteController@getProposta');
 
 //----------------------PropostaProponenteMonitor------------------------------------------------
 Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@store');
+Route::get('/propostaProponenteMonitor/{idPropostaProponente}', 'PropostaProponenteMonitorController@getProposta');
 
 //-----------------------Proposta-------------------------------------------------------------
 Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
@@ -71,6 +76,7 @@ Route::get('/ctc/getHistoricoPropostasCTC', 'CTCController@getHistoricoPropostas
 
 //-------------------------Ficheiros-----------------------------------------------
 Route::post('/ficheiro', 'FicheiroController@store');
+Route::get('/ficheiros/{proposta_id}', 'FicheiroController@getFicheiros');
 
 //-------------------------Secretariado Direcao---------------------------------------------------
 Route::get('/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao', 'SecretariadoDirecaoController@getPropostasPendentes');

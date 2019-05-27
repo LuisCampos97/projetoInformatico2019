@@ -9,7 +9,7 @@ class FicheiroController extends Controller
 {
     public function store(Request $request)
     {
-        $file =
+        //$file =
 
         $request->validate([
             'nome' => 'required',
@@ -22,7 +22,12 @@ class FicheiroController extends Controller
         $ficheiro->proposta_id = $request->proposta_id;
         $ficheiro->save();
 
-        Storage::disk('local')->putFileAs('ficheiros/' . $request->proposta_id, $file, $ficheiro->nome);
+        //Storage::disk('local')->putFileAs('ficheiros/' . $request->proposta_id, $file, $ficheiro->nome);
         return response()->json($ficheiro, 200);
+    }
+
+    public function getFicheiros($proposta_id)
+    {
+        return Ficheiro::where('proposta_id', $proposta_id)->get();
     }
 }

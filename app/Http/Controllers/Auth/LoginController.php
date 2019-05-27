@@ -44,12 +44,11 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
 
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-
-            return $this->sendLockoutResponse($request);
+        if (empty($request->email) || empty($request->password)) {
+            return response()->json([
+                'errorMessage' => 'Os dados inseridos estão inválidos!'
+            ], 401);
         }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -58,43 +57,31 @@ class LoginController extends Controller
             $response['user'] = Auth::user();
             $role = \Adldap\Laravel\Facades\Adldap::search()->find($request->email)->title[0];
             $user = User::where('email', $request->email)->first();
-            if(strpos($role, 'Coordenador') !== false || $role == 'Coordenador' || strpos($role, 'Estudante') !== false) {
+            if (strpos($role, 'Coordenador') !== false || $role == 'Coordenador' || strpos($role, 'Estudante') !== false) {
                 $user->roleDB = 'proponente';
                 $user->save();
-            } 
-            elseif(strpos($role, 'Diretor') !== false) {
+            } elseif (strpos($role, 'Diretor') !== false) {
                 $user->roleDB = 'diretor_uo';
                 $user->save();
-            }
-            elseif(strpos($role, 'Conselho') !== false  ) {
+            } elseif (strpos($role, 'Conselho') !== false) {
                 $user->roleDB = 'ctc';
                 $user->save();
-            }
-            elseif(strpos($role, 'Secretariado') !== false ) {
+            } elseif (strpos($role, 'Secretariado') !== false) {
                 $user->roleDB = 'secretariado_direcao';
                 $user->save();
             }
             return $response;
-
-        } else {
-            $this->incrementLoginAttempts($request);
-            return response()->json([
-                'errorMessage' => 'As credenciais estão inválidas. Por
-                favor tente novamente'
-            ], 401);
         }
 
-        $this->incrementLoginAttempts($request);
-        return $this->sendFailedLoginResponse($request);
+        return response()->json([
+            'errorMessage' => 'As credenciais estão inválidas. Por
+            favor tente novamente'
+        ], 401);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         $this->guard()->logout();
-
-        // $request->session()->flush();
-
-        // $request->session()->regenerate();
 
         return response()->json([
             'errorMessage' => 'Logout with success.'

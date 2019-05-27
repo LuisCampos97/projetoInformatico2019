@@ -53,7 +53,6 @@ class InitialMigration extends Migration
             $table->foreign('codigo_curso')->references('codigo')->on('curso');
             $table->integer('departamento_id')->unsigned()->nullable();
             $table->foreign('departamento_id')->references('id')->on('departamento');
-            $table->enum('tipo', ['Semestral', 'Anual']);
             $table->softDeletes();
             $table->timestamps();
         });

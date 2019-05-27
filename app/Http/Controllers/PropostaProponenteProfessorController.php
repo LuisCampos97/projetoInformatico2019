@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\PropostaProponenteProfessor;
-use App\Http\Resources\PropostaProponenteProfessor as PropostaProponenteProfessorResource;
 
 class PropostaProponenteProfessorController extends Controller
 {
@@ -23,5 +22,10 @@ class PropostaProponenteProfessorController extends Controller
         $propostaProponenteProfessor->save();
         return response()->json($propostaProponenteProfessor, 200);
 
+    }
+
+    public function getProposta($idPropostaProponente)
+    {
+        return PropostaProponenteProfessor::where('proposta_proponente_id', $idPropostaProponente)->first();
     }
 }

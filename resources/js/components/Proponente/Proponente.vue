@@ -1,6 +1,5 @@
 <template>
   <div>
-    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <h2 class="pb-4">Nova Proposta</h2>
     <b-form-group label="Tipo de Proposta" v-show="isShow">
       <b-form-radio-group v-model="proposta.tipo_contrato" :options="tipoContratosArray" stacked></b-form-radio-group>
@@ -9,6 +8,14 @@
     <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
 
     <div v-if="proposta.tipo_contrato == 'contratacao_inicial' && isShow">
+      <b-form-group label="Propostas existentes">
+        <b-form-select
+          :options="propostasExistentes"
+          v-model="propostaExistente"
+          @change="associarProposta()"
+        ></b-form-select>
+      </b-form-group>
+      <br>
       <b-form-group label="Currículo">
         <b-form-file
           v-model="ficheiroCurriculo"
@@ -22,9 +29,8 @@
         <b-form-input :readonly="true" v-model="proposta.unidade_organica"></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Nome completo" label-for="inputNomeCompleto">
+      <b-form-group label="Nome completo">
         <b-form-input
-          id="inputNomeCompleto"
           :state="$v.proposta.nome_completo.$dirty ? !$v.proposta.nome_completo.$error : null"
           v-model="proposta.nome_completo"
         ></b-form-input>
@@ -69,22 +75,20 @@
                 <b-form-invalid-feedback id="input-1-live-feedback">O Curso é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
 
-              <b-form-group label="Nome unidade curricular" label-for="inputNomeUC">
+              <b-form-group label="Unidade Curricular" label-for="inputNomeUC">
                 <b-form-select
                   id="inputNomeUC"
                   v-model="unidadeCurricular.codigo_uc"
                   :state="$v.unidadeCurricular.codigo_uc.$dirty ? !$v.unidadeCurricular.codigo_uc.$error : null"
                   :options="ucs"
-                  @change="getTipo(unidadeCurricular.codigo_uc)"
                 ></b-form-select>
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
                 >O Nome da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
 
-              <b-form-group label="Regime unidade curricular" label-for="inputRegimeUC">
+              <b-form-group label="Regime">
                 <b-form-select
-                  id="inputRegimeUC"
                   v-model="unidadeCurricular.regime"
                   :state="$v.unidadeCurricular.regime.$dirty ? !$v.unidadeCurricular.regime.$error : null"
                   :options="regimesParaUC"
@@ -92,6 +96,17 @@
                 <b-form-invalid-feedback
                   id="input-1-live-feedback"
                 >O Regime da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
+              </b-form-group>
+
+              <b-form-group label="Tipo">
+                <b-form-select
+                  v-model="unidadeCurricular.tipo"
+                  :state="$v.unidadeCurricular.tipo.$dirty ? !$v.unidadeCurricular.tipo.$error : null"
+                  :options="tiposParaUC"
+                ></b-form-select>
+                <b-form-invalid-feedback
+                  id="input-1-live-feedback"
+                >O Tipo da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
 
               <b-form-group label="Turno">
@@ -104,7 +119,7 @@
                 >O Turno da Unidade Curricular é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
 
-              <b-form-group label="Numero de horas" label-for="inputNumeroHoras">
+              <b-form-group label="Número de horas" label-for="inputNumeroHoras">
                 <b-form-input
                   id="inputNumeroHoras"
                   :state="$v.unidadeCurricular.horas.$dirty ? !$v.unidadeCurricular.horas.$error : null"
@@ -116,7 +131,7 @@
               </b-form-group>
 
               <b-form-group
-                label="Numero de horas (semestrais)"
+                label="Número de horas (semestrais)"
                 label-for="inputNumeroHorasSemestrais"
               >
                 <b-form-input
@@ -331,12 +346,16 @@ export default {
         { text: "Diurno", value: "Diurno" },
         { text: "Pós-laboral", value: "Pos-Laboral" }
       ],
+      tiposParaUC: [
+        { text: "Semestral", value: "Semestral" },
+        { text: "Anual", value: "Anual" }
+      ],
       proposta: {
         tipo_contrato: "",
         unidade_organica: this.$store.state.user.unidade_organica,
         nome_completo: "",
-        email:"",
-        numero_telefone:"",
+        email: "",
+        numero_telefone: "",
         role: "",
         data_de_assinatura_coordenador_departamento: "",
         data_de_assinatura_coordenador_de_curso: "",
@@ -346,6 +365,7 @@ export default {
         area_cientifica: "",
         curso: ""
       },
+      propostaExistente: {},
       unidadeCurricular: {
         codigo_uc: "",
         regime: "",
@@ -361,6 +381,7 @@ export default {
       roleSelecionado: "",
       isFinalized: false,
       isShow: true,
+      propostasExistentes: [],
       progresso: {
         valor: 1,
         max: 3
@@ -404,6 +425,7 @@ export default {
       codigo_curso: { required },
       codigo_uc: { required },
       regime: { required },
+      tipo: { required },
       turno: { required },
       horas: { required },
       horas_semestrais: { required }
@@ -447,13 +469,6 @@ export default {
           });
         });
     },
-    getTipo(codigo_uc) {
-      axios
-        .get("/api/tiposUnidadesCurriculares/" + codigo_uc)
-        .then(response => {
-          this.unidadeCurricular.tipo = response.data[0].tipo;
-        });
-    },
     adicionarUC() {
       this.$v.unidadeCurricular.$touch();
       if (!this.$v.unidadeCurricular.$invalid) {
@@ -474,6 +489,28 @@ export default {
       this.isShow = true;
       this.isFinalized = false;
       this.progresso.valor--;
+    },
+    associarProposta() {
+      //* Limpar Objectos
+      this.unidadesCurriculares = [];
+      Object.assign(this.propostaExistente, {});
+
+      //* Associar proposta atual à proposta existente selecionada à
+      Object.assign(this.proposta, this.propostaExistente);
+
+      axios.get("/api/getUcsPropostaProponente/"+this.propostaExistente.id).then(response => {
+        response.data.forEach(uc => {
+          this.unidadesCurriculares.push(uc);
+        })
+      });
+
+      axios.get("/api/ficheiros/"+this.propostaExistente.id).then(response => {
+        this.ficheiro.fileCurriculo.nome = response.data[0].nome;
+        this.ficheiro.fileRelatorio.nome = response.data[1].nome;
+        this.ficheiro.fileHabilitacoes.nome = response.data[2].nome;
+      })
+
+      
     }
   },
 
@@ -483,6 +520,20 @@ export default {
         this.cursos.push({
           value: curso.codigo,
           text: curso.nome_curso
+        });
+      });
+    });
+
+    axios.get("/api/allPropostasProponente").then(response => {
+      response.data.forEach(proposta => {
+        this.propostasExistentes.push({
+          value: proposta,
+          text:
+            proposta.unidade_organica +
+            " - " +
+            proposta.nome_completo +
+            " - " +
+            proposta.tipo_contrato
         });
       });
     });

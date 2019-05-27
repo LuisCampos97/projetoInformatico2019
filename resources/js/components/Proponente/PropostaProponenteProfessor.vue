@@ -182,6 +182,15 @@ export default {
       //* Mudar para o componente Proponente
       this.$emit("mostrarProponente");
     }
+  },
+  mounted() {
+    if (this.proposta.role == "professor") {
+      axios
+        .get("/api/propostaProponenteProfessor/" + this.proposta.id)
+        .then(response => {
+          Object.assign(this.propostaProponenteProfessor, response.data);
+        });
+    }
   }
 };
 </script>

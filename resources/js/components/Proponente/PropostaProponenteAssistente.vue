@@ -199,6 +199,15 @@ export default {
       //* Mudar para o componente Proponente
       this.$emit("mostrarProponente");
     }
+  },
+  mounted() {
+    if (this.proposta.role == "assistente") {
+      axios
+        .get("/api/propostaProponenteAssistente/" + this.proposta.id)
+        .then(response => {
+          Object.assign(this.propostaProponenteAssistente, response.data);
+        });
+    }
   }
 };
 </script>

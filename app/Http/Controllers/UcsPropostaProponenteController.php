@@ -9,6 +9,10 @@ use App\Http\Resources\UcsPropostaProponente as UcsPropostaProponenteResource;
 
 class UcsPropostaProponenteController extends Controller
 {
+    public function getUcsPropostaProponente($idProposta) {
+        return UcsPropostaProponente::where('proposta_proponente_id', $idProposta)->get();
+    }
+
     public function store(Request $request){
         $request->validate([
             'codigo_uc' => 'required',

@@ -144,11 +144,7 @@
 
       <div v-if="fundamentacaoCheck">
         <b-form-group label="Fundamentação">
-          <b-form-textarea
-            v-model="proposta.fundamentacao_coordenador_curso"
-            rows="3"
-            max-rows="6"
-          ></b-form-textarea>
+          <b-form-textarea v-model="proposta.fundamentacao_coordenador_curso" rows="3" max-rows="6"></b-form-textarea>
         </b-form-group>
         <b-form-group label="Data" label-for="inputData">
           <b-form-input
@@ -264,7 +260,7 @@ module.exports = {
 
                   this.$socket.emit("email-diretor", {
                     msg: "Pedido de email enviado..."
-                  }); // raise an event on the server
+                  });
 
                   axios
                     .post("/api/ficheiro", this.ficheiro.fileRelatorio)
