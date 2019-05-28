@@ -25,11 +25,11 @@
           <b-alert show variant="dark" v-show="error">{{ errorMessage }}</b-alert>
           <div class="form-group">
             <label for="inputEmail" class="font-weight-bold">Nome de utilizador</label>
-            <b-form-input id="inputEmail" v-model="user.email" trim></b-form-input>
+            <b-form-input id="inputEmail" v-model="user.email" v-on:keyup.enter="login" trim></b-form-input>
           </div>
           <div class="form-group">
             <label for="inputPassword" class="font-weight-bold">Senha</label>
-            <b-form-input type="password" id="inputPassword" v-model="user.password" trim></b-form-input>
+            <b-form-input type="password" id="inputPassword" v-model="user.password" v-on:keyup.enter="login" trim></b-form-input>
           </div>
           <b-button class="col-md-12" variant="dark" v-on:click.prevent="login">Entrar</b-button>
         </div>
@@ -43,7 +43,7 @@ module.exports = {
   data: function() {
     return {
       error: false,
-      errorMessage: '',
+      errorMessage: "",
       user: {
         email: "",
         password: ""
@@ -99,7 +99,7 @@ module.exports = {
 /* Login Form */
 .login_form {
   margin: 0 14vw;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .form-control:focus {

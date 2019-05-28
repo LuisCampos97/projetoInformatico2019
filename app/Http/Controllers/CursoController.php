@@ -45,7 +45,6 @@ class CursoController extends Controller
                 $uc->codigo = $value_parsing[2];
                 $uc->nome = utf8_encode($value_parsing[3]);
                 $uc->codigo_curso = $value_parsing[0];
-                $uc->tipo = 'Semestral';
                 $uc->save();
 
                 //* Para não colocar o mesmo UC na Base de Dados

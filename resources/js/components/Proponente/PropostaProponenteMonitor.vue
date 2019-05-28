@@ -142,6 +142,15 @@ export default {
       //* Mudar para o componente Proponente
       this.$emit("mostrarProponente");
     }
+  },
+  mounted() {
+    if (this.proposta.role == "monitor") {
+      axios
+        .get("/api/propostaProponenteMonitor/" + this.proposta.id)
+        .then(response => {
+          Object.assign(this.propostaProponenteMonitor, response.data);
+        });
+    }
   }
 };
 </script>
