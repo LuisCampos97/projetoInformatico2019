@@ -32,6 +32,7 @@ let mailOptionsSecretariadoDirecao = {
     text: "Caro membro do Secretariado da Direção, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
 }
 
+
 app.listen(8080, function () {
     console.log('Listening on port 8080')
 })
@@ -40,7 +41,6 @@ io.on('connection', function (socket) {
     console.log("Client connected");
 
     socket.on('email-diretor', function (data) {
-        console.log(data);
         transporter.sendMail(mailOptionsDiretorUO, function (error) {
             if (error) {
                 console.log(error);
@@ -52,7 +52,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('email-ctc', function (data) {
-        console.log(data);
         transporter.sendMail(mailOptionsCTC, function (error) {
             if (error) {
                 console.log(error);
@@ -64,7 +63,6 @@ io.on('connection', function (socket) {
     });
 
     socket.on('email-secretariado', function (data) {
-        console.log(data);
         transporter.sendMail(mailOptionsSecretariadoDirecao, function (error) {
             if (error) {
                 console.log(error);
@@ -74,4 +72,24 @@ io.on('connection', function (socket) {
             }
         });
     });
+
+    socket.on('email-docente', function (data) {
+        let mailOptionsDocente = {
+            from: "estg@gmail.com",
+            to: data.email,
+            subject: "Nova Proposta na plataforma de contratações",
+            //text: "Caro docente a ESTG pretende contrata-lo!!",
+            html: '<p>Caro '+ data.nome_completo +' a ESTG pretende contrata-lo!!</p><br><a href="http://projetoinformatico.project:8080/#/login"> Clique aqui para ser redirecionado para a pagina de login da aplicação </a>'
+            //check nodemailer.markdown
+        }
+        transporter.sendMail(mailOptionsDocente, function (error) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log('Email enviado o docente a ser contratado!');
+            }
+        });
+    });
+
 });

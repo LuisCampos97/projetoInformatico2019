@@ -22,7 +22,7 @@ class FicheiroController extends Controller
         $ficheiro->proposta_id = $request->proposta_id;
         $ficheiro->save();
 
-        Storage::disk('local')->putFileAs('ficheiros/' . $request->proposta_id, $file, $ficheiro->nome);
+        //Storage::disk('local')->putFileAs('ficheiros/' . $request->proposta_id, $file, $ficheiro->nome);
         return response()->json($ficheiro, 200);
     }
 }

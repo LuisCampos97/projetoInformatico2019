@@ -54,6 +54,7 @@ Route::post('/propostaProponenteMonitor', 'PropostaProponenteMonitorController@s
 Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inserirPropostaProponenteID');
 Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}/{parecer}', 'PropostaController@atualizarPropostaDiretor');
 Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}/{aprovacao}', 'PropostaController@atualizarPropostaCTC');
+Route::patch('/propostaSecretariadoDirecao/{propostaSecretariadoDirecaoID}/{propostaID}', 'PropostaController@atualizarPropostaSecretariadoDirecao');
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis', 'CursoController@getCursos');
 
@@ -75,3 +76,7 @@ Route::post('/ficheiro', 'FicheiroController@store');
 //-------------------------Secretariado Direcao---------------------------------------------------
 Route::get('/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao', 'SecretariadoDirecaoController@getPropostasPendentes');
 Route::get('/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao', 'SecretariadoDirecaoController@getHistoricoPropostas');
+Route::post('/secretariadoDirecao/propostaSecretariadoDirecao', 'SecretariadoDirecaoController@store');
+
+//_--------------------------Users--------------------------------------------------------------
+Route::post('/users/criarUserTemporario', 'UserController@store');

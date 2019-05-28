@@ -1,9 +1,21 @@
 <template>
   <div>
     <h3>Resumo da proposta de contratação</h3>
-    <button v-if="this.$store.state.user.roleDB == 'diretor_uo'" class="btn btn-danger" @click="voltar">Voltar</button>
-    <button v-if="this.$store.state.user.roleDB == 'ctc'" class="btn btn-danger" @click="voltarCTC">Voltar</button>
-    <button v-if="this.$store.state.user.roleDB == 'secretariado_direcao'" class="btn btn-danger" @click="voltarSecretariado">Voltar</button>
+    <button
+      v-if="this.$store.state.user.roleDB == 'diretor_uo'"
+      class="btn btn-danger"
+      @click="voltar"
+    >Voltar</button>
+    <button
+      v-if="this.$store.state.user.roleDB == 'ctc'"
+      class="btn btn-danger"
+      @click="voltarCTC"
+    >Voltar</button>
+    <button
+      v-if="this.$store.state.user.roleDB == 'secretariado_direcao'"
+      class="btn btn-danger"
+      @click="voltarSecretariado"
+    >Voltar</button>
 
     <b-form-group label="Unidade Orgânica">
       <b-form-input :readonly="true" v-model="propostaSelecionada.unidade_organica"></b-form-input>
@@ -67,35 +79,49 @@
       <b-form-input :readonly="true" v-model="propostaSelecionada.fundamentacao_coordenador_curso"></b-form-input>
     </b-form-group>
     <b-form-group label="Fundamentação Coordenador de Departamento">
-      <b-form-input :readonly="true" v-model="propostaSelecionada.fundamentacao_coordenador_departamento"></b-form-input>
+      <b-form-input
+        :readonly="true"
+        v-model="propostaSelecionada.fundamentacao_coordenador_departamento"
+      ></b-form-input>
     </b-form-group>
-    <div v-if="this.$store.state.user != 'proponente' ">
-    <b-form-group label="Parecer sobre a proposta do Diretor da Unidade Orgânica">
-      <b-form-input :readonly="true" v-model="propostaSelecionada.parecer"></b-form-input>
-    </b-form-group>
+    <div v-if="propostaSelecionada.proposta_diretor_uo_id != null &&(this.$store.state.user.roleDB == 'diretor_uo' 
+    || this.$store.state.user.roleDB == 'ctc' || this.$store.state.user.roleDB == 'secretariado_direcao' || 
+    this.$store.state.user.roleDB == 'recursos_humanos' )"
+    >
+      <b-form-group label="Parecer sobre a proposta do Diretor da Unidade Orgânica">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.parecer"></b-form-input>
+      </b-form-group>
     </div>
-    <div v-if="this.$store.state.user != 'proponente' || this.$store.state.user != 'diretor_uo'">
-    <b-form-group label="Votos a favor do Conselho Tecnico-Científico">
-      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_a_favor"></b-form-input>
-    </b-form-group>
-    <b-form-group label="Votos contra do Conselho Tecnico-Científico">
-      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_contra"></b-form-input>
-    </b-form-group>
-    <b-form-group label="Votos brancos do Conselho Tecnico-Científico">
-      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_brancos"></b-form-input>
-    </b-form-group>
-    <b-form-group label="Votos nulos do Conselho Tecnico-Científico">
-      <b-form-input :readonly="true" v-model="propostaSelecionada.votos_nulos"></b-form-input>
-    </b-form-group>
+    <div v-if="propostaSelecionada.proposta_ctc_id != null &&( this.$store.state.user != 'proponente' || this.$store.state.user != 'ctc'
+    || this.$store.state.user.roleDB == 'secretariado_direcao' || 
+    this.$store.state.user.roleDB == 'recursos_humanos' )"
+    >
+      <b-form-group label="Votos a favor do Conselho Tecnico-Científico">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.votos_a_favor"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Votos contra do Conselho Tecnico-Científico">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.votos_contra"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Votos brancos do Conselho Tecnico-Científico">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.votos_brancos"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Votos nulos do Conselho Tecnico-Científico">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.votos_nulos"></b-form-input>
+      </b-form-group>
     </div>
 
-    <diretor v-if="propostaSelecionada.proposta_diretor_uo_id == null && this.$store.state.user.roleDB == 'diretor_uo'"
-     :propostaSelecionada="propostaSelecionada"></diretor>
-    <ctc v-if="propostaSelecionada.proposta_ctc_id == null && this.$store.state.user.roleDB == 'ctc'"
-     :propostaSelecionada="propostaSelecionada"></ctc>
-    <proposta-secretariado v-if="this.$store.state.user.roleDB == 'secretariado_direcao'"></proposta-secretariado>
+    <diretor
+      v-if="propostaSelecionada.proposta_diretor_uo_id == null && this.$store.state.user.roleDB == 'diretor_uo'"
+      :propostaSelecionada="propostaSelecionada"
+    ></diretor>
+    <ctc
+      v-if="propostaSelecionada.proposta_ctc_id == null && this.$store.state.user.roleDB == 'ctc'"
+      :propostaSelecionada="propostaSelecionada"
+    ></ctc>
+    <proposta-secretariado
+     v-if="propostaSelecionada.proposta_secretariado_direcao_id == null &&this.$store.state.user.roleDB == 'secretariado_direcao'"
+     :propostaSelecionada="propostaSelecionada"></proposta-secretariado>
   </div>
-  
 </template>
 <script>
 export default {
@@ -103,19 +129,19 @@ export default {
   data() {
     return {
       tipoPropostaRole: [],
-      ucsDaPropostaSelecionada: [],
+      ucsDaPropostaSelecionada: []
     };
   },
   methods: {
-   voltar(){
-     this.$emit('mostrar-diretor');
-   },
-   voltarCTC(){
-     this.$emit('mostrar-ctc');
-   },
-   voltarSecretariado(){
-     this.$emit('mostrar-secretariado');
-   }
+    voltar() {
+      this.$emit("mostrar-diretor");
+    },
+    voltarCTC() {
+      this.$emit("mostrar-ctc");
+    },
+    voltarSecretariado() {
+      this.$emit("mostrar-secretariado");
+    }
   },
   mounted() {
     axios

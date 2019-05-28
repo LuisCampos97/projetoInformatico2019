@@ -34,7 +34,36 @@
               </tbody>
             </table>
           </b-tab>
-          <b-tab title="Histórico de Propostas"></b-tab>
+          <b-tab title="Histórico de Propostas">
+            <table class="table ">
+              <thead>
+                <th>Nome docente a ser contratado</th>
+                <th>Tipo contrato</th>
+                <th>Curso</th>
+                <th>Unidade Organica</th>
+                <th>Parecer</th>
+                <th>Ações</th>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(propostaHistorico, index) in historicoPropostasSecretariadoDirecao"
+                  :key="propostaHistorico.id">
+                  <td>{{ propostaHistorico.nome_completo }}</td>
+                  <td>{{ propostaHistorico.tipo_contrato }}</td>
+                  <td>{{ propostaHistorico.curso }}</td>
+                  <td>{{ propostaHistorico.unidade_organica }}</td>
+                  <td>{{ propostaHistorico.parecer}}</td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-info"
+                      @click="verDetalhes(propostaHistorico, index)"
+                    >Ver detalhes</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </b-tab>
         </b-tabs>
       </div>
     </div>
@@ -57,6 +86,7 @@ export default {
   methods: {
       verDetalhes(propostaPendenteSecretariadoDirecao, index){
           this.propostaSelecionada = Object.assign({}, propostaPendenteSecretariadoDirecao);
+          console.log(this.propostaSelecionada);
           this.isResumoChecked = true;
           this.mostrarSecretariadoComponent = false;
       },
@@ -72,7 +102,7 @@ export default {
         this.propostasPendentesSecretariadoDirecao = response.data;
       });
     axios.get('/api/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao').then(response => {
-        console.log(response);
+        this.historicoPropostasSecretariadoDirecao = response.data;
     })
   }
 };

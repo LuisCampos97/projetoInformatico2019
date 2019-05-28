@@ -42,4 +42,10 @@ class PropostaController extends Controller
         $proposta->save();
         return response()->json($proposta, 201);
     }
+
+    public function atualizarPropostaSecretariadoDirecao($idPropostaSecretariadoDirecao, $propostaID){
+        $proposta = Proposta::findOrFail($propostaID);
+        $proposta->proposta_secretariado_direcao_id = $idPropostaSecretariadoDirecao;
+        $proposta->save();
+    }
 }

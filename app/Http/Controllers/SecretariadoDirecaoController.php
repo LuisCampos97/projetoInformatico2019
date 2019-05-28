@@ -40,4 +40,14 @@ class SecretariadoDirecaoController extends Controller
       return $propostasADevolver[0];
     }
 
+    public function store(Request $request){
+      $request->validate([
+        'convite' => 'required'
+      ]);
+      $propostaSecretariadoDirecao = new PropostaSecretariadoDirecao();
+      $propostaSecretariadoDirecao->fill($request->all());
+      $propostaSecretariadoDirecao->save();
+      return response()->json($propostaSecretariadoDirecao, 200);
+    }
+
 }

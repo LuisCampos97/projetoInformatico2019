@@ -39,6 +39,9 @@
           <proponente v-if="isNovaPropostaVisible"></proponente>
           <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
           <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
+          <div v-if="user.roleDB == 'docente_temp'">
+            TESTE DOCENTE
+          </div>
         </div>
       </div>
     </div>
