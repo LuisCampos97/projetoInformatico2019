@@ -84,5 +84,9 @@ Route::get('/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao', 'Sec
 Route::get('/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao', 'SecretariadoDirecaoController@getHistoricoPropostas');
 Route::post('/secretariadoDirecao/propostaSecretariadoDirecao', 'SecretariadoDirecaoController@store');
 
+//-------------------------Recursos Humanos ----------------------------------------------------------
+Route::get('/recursosHumanos/getPropostasPendentesRecursosHumanos', 'RecursosHumanosController@getPropostasPendentes');
+Route::get('/recursosHumanos/getHistoricoPropostasRecursosHumanos', 'RecursosHumanosController@getHistoricoPropostas');
+
 //_--------------------------Users--------------------------------------------------------------
 Route::post('/users/criarUserTemporario', 'UserController@store');

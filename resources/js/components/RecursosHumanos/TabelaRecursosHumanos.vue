@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div
-      v-if="this.$store.state.user.roleDB == 'secretariado_direcao' && mostrarSecretariadoComponent"
-    >
+    <div v-if="this.$store.state.user.roleDB == 'recursos_humanos' && mostrarRHComponent">
       <div class="separator">
         <b-tabs content-class="mt-3" align="left">
           <b-tab title="Propostas Pendentes" active>
@@ -16,18 +14,18 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(propostaPendenteSecretariadoDirecao, index) in propostasPendentesSecretariadoDirecao"
-                  :key="propostaPendenteSecretariadoDirecao.id"
+                  v-for="(propostaPendenteRecursosHumanos, index) in propostasPendentesRecursosHumanos"
+                  :key="propostaPendenteRecursosHumanos.id"
                 >
-                  <td>{{ propostaPendenteSecretariadoDirecao.nome_completo }}</td>
-                  <td>{{ propostaPendenteSecretariadoDirecao.tipo_contrato }}</td>
-                  <td>{{ propostaPendenteSecretariadoDirecao.curso }}</td>
-                  <td>{{ propostaPendenteSecretariadoDirecao.unidade_organica }}</td>
+                  <td>{{ propostaPendenteRecursosHumanos.nome_completo }}</td>
+                  <td>{{ propostaPendenteRecursosHumanos.tipo_contrato }}</td>
+                  <td>{{ propostaPendenteRecursosHumanos.curso }}</td>
+                  <td>{{ propostaPendenteRecursosHumanos.unidade_organica }}</td>
                   <td>
                     <button
                       type="button"
                       class="btn btn-info"
-                      @click="verDetalhes(propostaPendenteSecretariadoDirecao, index)"
+                      @click="verDetalhes(propostaPendenteRecursosHumanos, index)"
                     >Ver detalhes</button>
                   </td>
                 </tr>
@@ -35,7 +33,7 @@
             </table>
           </b-tab>
           <b-tab title="Histórico de Propostas">
-            <table class="table ">
+            <table class="table">
               <thead>
                 <th>Nome docente a ser contratado</th>
                 <th>Tipo contrato</th>
@@ -46,8 +44,9 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(propostaHistorico, index) in historicoPropostasSecretariadoDirecao"
-                  :key="propostaHistorico.id">
+                  v-for="(propostaHistorico, index) in historicoPropostasRecursosHumanos"
+                  :key="propostaHistorico.id"
+                >
                   <td>{{ propostaHistorico.nome_completo }}</td>
                   <td>{{ propostaHistorico.tipo_contrato }}</td>
                   <td>{{ propostaHistorico.curso }}</td>
@@ -67,42 +66,49 @@
         </b-tabs>
       </div>
     </div>
-    <resumo-geral v-if="isResumoChecked"
-    v-on:mostrar-secretariado="mostrarSecretariado"
-    :propostaSelecionada="propostaSelecionada"></resumo-geral>
+    <resumo-geral
+      v-if="isResumoChecked"
+      v-on:mostrar-recursos="mostrarRecursos"
+      :propostaSelecionada="propostaSelecionada"
+    ></resumo-geral>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      propostasPendentesSecretariadoDirecao: [],
-      historicoPropostasSecretariadoDirecao: [],
-      mostrarSecretariadoComponent: true,
-      isResumoChecked:false,
-      propostaSelecionada:{},
+      propostasPendentesRecursosHumanos: "",
+      historicoPropostasRecursosHumanos: "",
+      mostrarRHComponent: true,
+      propostaSelecionada: {},
+      isResumoChecked: false
     };
   },
   methods: {
-      verDetalhes(propostaPendenteSecretariadoDirecao, index){
-          this.propostaSelecionada = Object.assign({}, propostaPendenteSecretariadoDirecao);
-          this.isResumoChecked = true;
-          this.mostrarSecretariadoComponent = false;
-      },
-      mostrarSecretariado(){
-          this.isResumoChecked=false;
-          this.mostrarSecretariadoComponent = true;
-      }
+    mostrarRecursos() {
+      this.isResumoChecked = false;
+      this.mostrarRHComponent = true;
+    },
+    verDetalhes(propostaPendenteRecursosHumanos, index) {
+      this.propostaSelecionada = Object.assign(
+        {},
+        propostaPendenteRecursosHumanos
+      );
+      this.isResumoChecked = true;
+      this.mostrarRHComponent = false;
+    }
   },
   mounted() {
     axios
-      .get("/api/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao")
+      .get("/api/recursosHumanos/getPropostasPendentesRecursosHumanos")
       .then(response => {
-        this.propostasPendentesSecretariadoDirecao = response.data;
+        this.propostasPendentesRecursosHumanos = response.data;
       });
-    axios.get('/api/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao').then(response => {
-        this.historicoPropostasSecretariadoDirecao = response.data;
-    })
+    axios
+      .get("/api/recursosHumanos/getHistoricoPropostasRecursosHumanos")
+      .then(response => {
+        this.historicoPropostasRecursosHumanos = response.data;
+      });
   }
 };
 </script>

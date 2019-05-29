@@ -16,6 +16,11 @@
       class="btn btn-danger"
       @click="voltarSecretariado"
     >Voltar</button>
+    <button
+      v-if="this.$store.state.user.roleDB == 'recursos_humanos'"
+      class="btn btn-danger"
+      @click="voltarRecursosHumanos"
+    >Voltar</button>
 
     <b-form-group label="Unidade Orgânica">
       <b-form-input :readonly="true" v-model="propostaSelecionada.unidade_organica"></b-form-input>
@@ -25,6 +30,12 @@
     </b-form-group>
     <b-form-group label="Tipo de Contratação">
       <b-form-input :readonly="true" v-model="propostaSelecionada.tipo_contrato"></b-form-input>
+    </b-form-group>
+    <b-form-group label="Email">
+      <b-form-input :readonly="true" v-model="propostaSelecionada.email"></b-form-input>
+    </b-form-group>
+    <b-form-group label="Número telefone">
+      <b-form-input :readonly="true" v-model="propostaSelecionada.numero_telefone"></b-form-input>
     </b-form-group>
     <b-form-group label="Unidades Curriculares">
       <table class="table mt-3">
@@ -121,6 +132,9 @@
     <proposta-secretariado
      v-if="propostaSelecionada.proposta_secretariado_direcao_id == null &&this.$store.state.user.roleDB == 'secretariado_direcao'"
      :propostaSelecionada="propostaSelecionada"></proposta-secretariado>
+     <proposta-recursos
+      v-if="propostaSelecionada.proposta_recursos_humanos_id == null && this.$store.state.user.roleDB == 'recursos_humanos'"
+      :propostaSelecionada="propostaSelecionada"></proposta-recursos>
   </div>
 </template>
 <script>
@@ -141,6 +155,9 @@ export default {
     },
     voltarSecretariado() {
       this.$emit("mostrar-secretariado");
+    },
+    voltarRecursosHumanos(){
+      this.$emit("mostrar-recursos");
     }
   },
   mounted() {

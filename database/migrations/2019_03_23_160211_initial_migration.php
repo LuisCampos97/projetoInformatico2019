@@ -170,8 +170,7 @@ class InitialMigration extends Migration
             $table->string('escalao');
             $table->string('indice');
             $table->integer('numero_funcionario')->unsigned();
-            $table->boolean('contratacao_comunicada')->default(false);
-            $table->boolean('inscricao_seguranca_social')->default(false);
+            $table->enum('inscricao', ['seguranca_social', 'CGA']);
             $table->boolean('inscricao_caiga_geral_aposentacoes')->default(false);
             $table->datetime('despacho_presidente_ipl');
             $table->boolean('contrato_redigido')->default(false);

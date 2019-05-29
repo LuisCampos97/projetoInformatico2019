@@ -21,6 +21,8 @@ Vue.component('tabelaCtc', require('../components/CTC/TabelaCTC.vue').default);
 Vue.component('ctc', require('../components/CTC/CTC.vue').default);
 Vue.component('tabelaSecretariado', require('../components/SecretariadoDirecao/TabelaSecretariadoDirecao.vue').default);
 Vue.component('propostaSecretariado', require('../components/SecretariadoDirecao/PropostaSecretariadoDirecao.vue').default);
+Vue.component('tabelaRecursos', require('../components/RecursosHumanos/TabelaRecursosHumanos.vue').default);
+Vue.component('propostaRecursos', require('../components/RecursosHumanos/PropostaRecursosHumanos.vue').default);
 const routes = [
   //---------------Auth----------------------
   {
