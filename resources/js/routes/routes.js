@@ -22,6 +22,7 @@ Vue.component('ctc', require('../components/CTC/CTC.vue').default);
 Vue.component('tabelaSecretariado', require('../components/SecretariadoDirecao/TabelaSecretariadoDirecao.vue').default);
 Vue.component('propostaSecretariado', require('../components/SecretariadoDirecao/PropostaSecretariadoDirecao.vue').default);
 Vue.component('tabelaRecursos', require('../components/RecursosHumanos/TabelaRecursosHumanos.vue').default);
+const ficheirosDocente = Vue.component('ficheirosDocente', require('../components/NovosDocentes/FicheirosDocente.vue').default);
 Vue.component('propostaRecursos', require('../components/RecursosHumanos/PropostaRecursosHumanos.vue').default);
 const routes = [
   //---------------Auth----------------------
@@ -38,6 +39,11 @@ const routes = [
     path: '/dashboard',
     component: dashboard,
     name: 'dashboard'
+  },
+  {
+    path: '/ficheirosDocente',
+    component: ficheirosDocente,
+    name: 'ficheirosDocente'
   },
 
 ];

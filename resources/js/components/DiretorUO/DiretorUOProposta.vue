@@ -86,9 +86,11 @@ export default {
                     + parecer
                 )
                 .then(response => {
-                  this.$socket.emit("email-ctc", {
-                    msg: "Pedido de email enviado..."
-                  }); // raise an event on the server
+                  if(parecer == 'Favoravel'){
+                    this.$socket.emit("email-ctc", {
+                      msg: "Pedido de email enviado..."
+                    }); 
+                  }
                 });
             })
             .catch(error => {
