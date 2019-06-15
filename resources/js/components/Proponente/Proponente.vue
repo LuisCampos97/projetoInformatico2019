@@ -2,12 +2,16 @@
   <div>
     <h2 class="pb-4">Nova Proposta</h2>
     <b-form-group label="Tipo de Proposta" v-show="isShow">
-      <b-form-radio-group v-model="proposta.tipo_contrato" :options="tipoContratosArray" stacked></b-form-radio-group>
+      <b-form-radio-group
+        v-model="proposta.tipo_contrato"
+        :options="tipoContratosArray"
+        :state="!$v.proposta.tipo_contrato.$error && null"
+        stacked
+      ></b-form-radio-group>
+      <b-form-invalid-feedback id="input-1-live-feedback">O Tipo da Proposta é obrigatória!</b-form-invalid-feedback>
     </b-form-group>
 
-    <!-----------------CONTRATAÇÃO INICIAL-------------------------------------------->
-
-    <div v-if="proposta.tipo_contrato == 'contratacao_inicial' && isShow">
+    <div v-if="isShow">
       <b-form-group label="Propostas existentes">
         <b-form-select
           :options="propostasExistentes"
@@ -19,10 +23,16 @@
       <b-form-group label="Currículo">
         <b-form-file
           v-model="ficheiroCurriculo"
-          :state="Boolean(ficheiroCurriculo)"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
+          browse-text="Procurar"
+          name="ficheiroCurriculo"
+          v-validate="{ required: true }"
+          :state="validateState('ficheiroCurriculo')"
+          @change="onFileSelected"
         ></b-form-file>
+        
+        <b-form-invalid-feedback id="input-1-live-feedback">O Ficheiro de Currículo é obrigatório!</b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group label="Unidade Orgânica">
@@ -31,7 +41,7 @@
 
       <b-form-group label="Nome completo">
         <b-form-input
-          :state="$v.proposta.nome_completo.$dirty ? !$v.proposta.nome_completo.$error : null"
+          :state="!$v.proposta.nome_completo.$error && null"
           v-model="proposta.nome_completo"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">O Nome completo é obrigatório!</b-form-invalid-feedback>
@@ -40,16 +50,18 @@
       <b-form-group label="Email" label-for="inputEmail">
         <b-form-input
           id="inputEmail"
-          :state="$v.proposta.email.$dirty ? !$v.proposta.email.$error : null"
+          :state="!$v.proposta.email.$error && null"
           v-model="proposta.email"
         ></b-form-input>
-        <b-form-invalid-feedback id="input-1-live-feedback">O Email é obrigatório!</b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          id="input-1-live-feedback"
+        >O Email é obrigatório e deve ser um email válido!</b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group label="Numero Telefone" label-for="inputNumeroTelefone">
         <b-form-input
           id="inputNumeroTelefone"
-          :state="$v.proposta.numero_telefone.$dirty ? !$v.proposta.numero_telefone.$error : null"
+          :state="!$v.proposta.numero_telefone.$error && null"
           v-model="proposta.numero_telefone"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">O Numero de telefone é obrigatório!</b-form-invalid-feedback>
@@ -68,7 +80,7 @@
                 <b-form-select
                   id="inputCurso"
                   v-model="unidadeCurricular.codigo_curso"
-                  :state="$v.unidadeCurricular.codigo_curso.$dirty ? !$v.unidadeCurricular.codigo_curso.$error : null"
+                  :state="!$v.unidadeCurricular.codigo_curso.$error && null"
                   :options="cursos"
                   @change="getUcsDeCurso(unidadeCurricular.codigo_curso)"
                 ></b-form-select>
@@ -79,7 +91,7 @@
                 <b-form-select
                   id="inputNomeUC"
                   v-model="unidadeCurricular.codigo_uc"
-                  :state="$v.unidadeCurricular.codigo_uc.$dirty ? !$v.unidadeCurricular.codigo_uc.$error : null"
+                  :state="!$v.unidadeCurricular.codigo_uc.$error && null"
                   :options="ucs"
                 ></b-form-select>
                 <b-form-invalid-feedback
@@ -90,7 +102,7 @@
               <b-form-group label="Regime">
                 <b-form-select
                   v-model="unidadeCurricular.regime"
-                  :state="$v.unidadeCurricular.regime.$dirty ? !$v.unidadeCurricular.regime.$error : null"
+                  :state="!$v.unidadeCurricular.regime.$error && null"
                   :options="regimesParaUC"
                 ></b-form-select>
                 <b-form-invalid-feedback
@@ -101,7 +113,7 @@
               <b-form-group label="Tipo">
                 <b-form-select
                   v-model="unidadeCurricular.tipo"
-                  :state="$v.unidadeCurricular.tipo.$dirty ? !$v.unidadeCurricular.tipo.$error : null"
+                  :state="!$v.unidadeCurricular.tipo.$error && null"
                   :options="tiposParaUC"
                 ></b-form-select>
                 <b-form-invalid-feedback
@@ -111,7 +123,7 @@
 
               <b-form-group label="Turno">
                 <b-form-input
-                  :state="$v.unidadeCurricular.turno.$dirty ? !$v.unidadeCurricular.turno.$error : null"
+                  :state="!$v.unidadeCurricular.turno.$error && null"
                   v-model="unidadeCurricular.turno"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -122,7 +134,7 @@
               <b-form-group label="Número de horas" label-for="inputNumeroHoras">
                 <b-form-input
                   id="inputNumeroHoras"
-                  :state="$v.unidadeCurricular.horas.$dirty ? !$v.unidadeCurricular.horas.$error : null"
+                  :state="!$v.unidadeCurricular.horas.$error && null"
                   v-model="unidadeCurricular.horas"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -136,7 +148,7 @@
               >
                 <b-form-input
                   id="inputNumeroHorasSemestrais"
-                  :state="$v.unidadeCurricular.horas_semestrais.$dirty ? !$v.unidadeCurricular.horas_semestrais.$error : null"
+                  :state="!$v.unidadeCurricular.horas_semestrais.$error && null"
                   v-model="unidadeCurricular.horas_semestrais"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -200,7 +212,7 @@
                 <b-form-radio-group
                   v-model="proposta.grau"
                   :options="grausArray"
-                  :state="$v.proposta.grau.$dirty ? !$v.proposta.grau.$error : null"
+                  :state="!$v.proposta.grau.$error && null"
                   stacked
                 ></b-form-radio-group>
                 <b-form-radio-group
@@ -216,7 +228,7 @@
               <b-form-group label="Curso" label-for="inputCursoHabilitacoesLiterarias">
                 <b-form-input
                   id="inputCursoHabilitacoesLiterarias"
-                  :state="$v.proposta.curso.$dirty ? !$v.proposta.curso.$error : null"
+                  :state="!$v.proposta.curso.$error && null"
                   v-model="proposta.curso"
                 ></b-form-input>
                 <b-form-invalid-feedback id="input-1-live-feedback">O Curso é obrigatório!</b-form-invalid-feedback>
@@ -228,7 +240,7 @@
               >
                 <b-form-input
                   id="inputAreaCientificaHabilitacoesLiterarias"
-                  :state="$v.proposta.area_cientifica.$dirty ? !$v.proposta.area_cientifica.$error : null"
+                  :state="!$v.proposta.area_cientifica.$error && null"
                   v-model="proposta.area_cientifica"
                 ></b-form-input>
                 <b-form-invalid-feedback id="input-1-live-feedback">A Área Científica é obrigatória!</b-form-invalid-feedback>
@@ -240,9 +252,13 @@
                 >
                   <b-form-file
                     v-model="ficheiroHabilitacoes"
-                    :state="Boolean(ficheiroHabilitacoes)"
                     placeholder="Escolha um ficheiro"
                     drop-placeholder="Arraste para aqui um ficheiro"
+                    browse-text="Procurar"
+                    name="ficheiroHabilitacoes"
+                    v-validate="{ required: true }"
+                    :state="validateState('ficheiroHabilitacoes')"
+                    @change="onFileSelected"
                   ></b-form-file>
                 </b-form-group>
               </b-form-group>
@@ -254,9 +270,13 @@
       <b-form-group label="Relatório dos proponentes" class="mt-3">
         <b-form-file
           v-model="ficheiroRelatorio"
-          :state="Boolean(ficheiroRelatorio)"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
+          browse-text="Procurar"
+          name="ficheiroRelatorio"
+          v-validate="{ required: true }"
+          :state="validateState('ficheiroRelatorio')"
+          @change="onFileSelected"
         ></b-form-file>
       </b-form-group>
 
@@ -267,7 +287,7 @@
         <b-form-radio-group
           v-model="proposta.role"
           :options="rolesArray"
-          :state="$v.proposta.role.$dirty ? !$v.proposta.role.$error : null"
+          :state="!$v.proposta.role.$error && null"
           stacked
         ></b-form-radio-group>
         <b-form-invalid-feedback
@@ -290,6 +310,7 @@
       :ficheiro="ficheiro"
       v-on:mostrarProponente="showComponent"
       v-on:incrementarBarraProgresso="progresso.valor++"
+      v-on:decrementarBarraProgresso="progresso.valor--"
       v-if="roleSelecionado == 'professor' && isFinalized"
     ></proposta-proponente-professor>
 
@@ -299,6 +320,7 @@
       v-on:mostrarProponente="showComponent"
       :ficheiro="ficheiro"
       v-on:incrementarBarraProgresso="progresso.valor++"
+      v-on:decrementarBarraProgresso="progresso.valor--"
       v-if="roleSelecionado == 'assistente' && isFinalized"
     ></proposta-proponente-assistente>
 
@@ -307,6 +329,7 @@
       :unidadesCurriculares="unidadesCurriculares"
       v-on:mostrarProponente="showComponent"
       v-on:incrementarBarraProgresso="progresso.valor++"
+      v-on:decrementarBarraProgresso="progresso.valor--"
       :ficheiro="ficheiro"
       v-if="roleSelecionado == 'monitor' && isFinalized"
     ></proposta-proponente-monitor>
@@ -321,7 +344,7 @@
   </div>
 </template>
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required, email, minLength } from "vuelidate/lib/validators";
 
 export default {
   data() {
@@ -388,22 +411,11 @@ export default {
       },
       opcaoOutro: "",
       ficheiro: {
-        fileCurriculo: {
-          nome: "",
-          descricao: "Curriculo do docente a ser contratado",
-          proposta_id: ""
-        },
-        fileRelatorio: {
-          nome: "",
-          descricao: "Relatorio dos 2 proponentes",
-          proposta_id: ""
-        },
-        fileHabilitacoes: {
-          nome: "",
-          descricao: "Habilitacoes do docente a ser contratado",
-          proposta_id: ""
-        }
+        fileCurriculo: {},
+        fileRelatorio: {},
+        fileHabilitacoes: {}
       },
+      ficheiros: [],
       ficheiroCurriculo: "",
       ficheiroHabilitacoes: "",
       ficheiroRelatorio: ""
@@ -412,10 +424,11 @@ export default {
   //? Validations Vuelidate
   validations: {
     proposta: {
+      tipo_contrato: { required },
       unidade_organica: { required },
       nome_completo: { required },
-      email: { required },
-      numero_telefone: { required },
+      email: { required, email },
+      numero_telefone: { required, minLength: minLength(9) },
       grau: { required },
       curso: { required },
       area_cientifica: { required },
@@ -429,33 +442,61 @@ export default {
       turno: { required },
       horas: { required },
       horas_semestrais: { required }
-    },
-
-    ficheiro: {
-      fileCurriculo: {
-        nome: { required }
-      },
-      fileRelatorio: {
-        nome: { required }
-      },
-      fileHabilitacoes: {
-        nome: { required }
-      }
     }
   },
   methods: {
+    validateState(ref) {
+      return this.veeErrors.has(ref) ? false : null;
+    },
+    onFileSelected(event) {
+      this.ficheiros[event.target.name] = event.target.files[0];
+    },
     avancar: function(proposta, unidadesCurriculares) {
-      this.ficheiro.fileCurriculo.nome = this.ficheiroCurriculo.name;
-      this.ficheiro.fileRelatorio.nome = this.ficheiroRelatorio.name;
-      this.ficheiro.fileHabilitacoes.nome = this.ficheiroHabilitacoes.name;
+      //? Necessário o FormData para passar a informção do ficheiro para o backend "Laravel"
+      this.ficheiro.fileCurriculo = new FormData();
+      this.ficheiro.fileCurriculo.append(
+        "file",
+        this.ficheiros["ficheiroCurriculo"]
+      );
+      this.ficheiro.fileCurriculo.append(
+        "descricao",
+        "Curriculo do docente a ser contratado"
+      );
+
+      if (this.proposta.tipo_contrato == "contratacao_inicial") {
+        this.ficheiro.fileHabilitacoes = new FormData();
+        this.ficheiro.fileHabilitacoes.append(
+          "file",
+          this.ficheiros["ficheiroHabilitacoes"]
+        );
+        this.ficheiro.fileHabilitacoes.append(
+          "descricao",
+          "Habilitacoes do docente a ser contratado"
+        );
+      }
+
+      this.ficheiro.fileRelatorio = new FormData();
+      this.ficheiro.fileRelatorio.append(
+        "file",
+        this.ficheiros["ficheiroRelatorio"]
+      );
+      this.ficheiro.fileRelatorio.append(
+        "descricao",
+        "Relatorio dos 2 proponentes"
+      );
+
       this.roleSelecionado = proposta.role;
       this.$v.proposta.$touch();
-      if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
-        this.$store.commit("setProposta", proposta);
-        this.isFinalized = true;
-        this.isShow = false;
-        this.progresso.valor++;
-      }
+      this.$validator.validateAll().then(result => {
+        if (result) {
+          if (!this.$v.proposta.$invalid && unidadesCurriculares.length > 0) {
+            this.$store.commit("setProposta", proposta);
+            this.isFinalized = true;
+            this.isShow = false;
+            this.progresso.valor++;
+          }
+        }
+      });
     },
 
     getUcsDeCurso(codigo_curso) {
@@ -498,19 +539,34 @@ export default {
       //* Associar proposta atual à proposta existente selecionada à
       Object.assign(this.proposta, this.propostaExistente);
 
-      axios.get("/api/getUcsPropostaProponente/"+this.propostaExistente.id).then(response => {
-        response.data.forEach(uc => {
-          this.unidadesCurriculares.push(uc);
-        })
-      });
+      axios
+        .get("/api/getUcsPropostaProponente/" + this.propostaExistente.id)
+        .then(response => {
+          response.data.forEach(uc => {
+            this.unidadesCurriculares.push(uc);
+          });
+        });
 
-      axios.get("/api/ficheiros/"+this.propostaExistente.id).then(response => {
-        this.ficheiro.fileCurriculo.nome = response.data[0].nome;
-        this.ficheiro.fileRelatorio.nome = response.data[1].nome;
-        this.ficheiro.fileHabilitacoes.nome = response.data[2].nome;
-      })
+      axios
+        .get("/api/ficheiros/" + this.propostaExistente.id)
+        .then(response => {
+          response.data.forEach(ficheiro => {
+            if (ficheiro.descricao == "Curriculo do docente a ser contratado")
+              this.ficheiroCurriculo = ficheiro;
 
-      
+            if (ficheiro.descricao == "Relatorio dos 2 proponentes")
+              this.ficheiroRelatorio = ficheiro;
+
+            if (
+              this.proposta.tipo_contrato == "contratacao_inicial" &&
+              ficheiro.descricao == "Habilitacoes do docente a ser contratado"
+            ) {
+              this.ficheiroHabilitacoes = ficheiro;
+            }
+          });
+        });
+
+      this.$store.commit("setPropostaExistente");
     }
   },
 
@@ -532,6 +588,8 @@ export default {
             proposta.unidade_organica +
             " - " +
             proposta.nome_completo +
+            " - " +
+            proposta.role +
             " - " +
             proposta.tipo_contrato
         });

@@ -6,7 +6,7 @@
         <b-form-radio-group
           v-model="propostaProponenteProfessor.role_professor"
           :options="categoriaArray"
-          :state="$v.propostaProponenteProfessor.role_professor.$dirty ? !$v.propostaProponenteProfessor.role_professor.$error : null"
+          :state="!$v.propostaProponenteProfessor.role_professor.$error && null"
           stacked
         ></b-form-radio-group>
         <b-form-invalid-feedback
@@ -18,7 +18,7 @@
         <b-form-radio-group
           v-model="propostaProponenteProfessor.regime_prestacao_servicos"
           :options="regimePrestacaoServicosArray"
-          :state="$v.propostaProponenteProfessor.regime_prestacao_servicos.$dirty ? !$v.propostaProponenteProfessor.regime_prestacao_servicos.$error : null"
+          :state="!$v.propostaProponenteProfessor.regime_prestacao_servicos.$error && null"
           stacked
         ></b-form-radio-group>
         <b-form-invalid-feedback
@@ -31,7 +31,7 @@
           <b-form-select
             id="inputTempoParcial"
             v-model="propostaProponenteProfessor.percentagem_prestacao_servicos"
-            :state="$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$error : null"
+            :state="!$v.propostaProponenteProfessor.percentagem_prestacao_servicos.$error && null"
             :options="percentagensArray"
           ></b-form-select>
           <b-form-invalid-feedback
@@ -48,7 +48,7 @@
       >
         <b-form-textarea
           v-model="propostaProponenteProfessor.fundamentacao"
-          :state="$v.propostaProponenteProfessor.fundamentacao.$dirty ? !$v.propostaProponenteProfessor.fundamentacao.$error : null"
+          :state="!$v.propostaProponenteProfessor.fundamentacao.$error && null"
         ></b-form-textarea>
         <b-form-invalid-feedback id="input-1-live-feedback">A fundamentação é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
@@ -56,7 +56,7 @@
       <b-form-group label="Duração do contrato" label-for="inputDuracaoContrato">
         <b-form-input
           id="inputDuracaoContrato"
-          :state="$v.propostaProponenteProfessor.duracao.$dirty ? !$v.propostaProponenteProfessor.duracao.$error : null"
+          :state="!$v.propostaProponenteProfessor.duracao.$error && null"
           v-model="propostaProponenteProfessor.duracao"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">A duração do contrato é obrigatória!</b-form-invalid-feedback>
@@ -65,7 +65,7 @@
       <b-form-group label="Periodo" label-for="inputPeriodo">
         <b-form-input
           id="inputPeriodo"
-          :state="$v.propostaProponenteProfessor.periodo.$dirty ? !$v.propostaProponenteProfessor.periodo.$error : null"
+          :state="!$v.propostaProponenteProfessor.periodo.$error && null"
           v-model="propostaProponenteProfessor.periodo"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
@@ -86,6 +86,7 @@
       :unidadesCurriculares="unidadesCurriculares"
       :propostaProponenteProfessor="propostaProponenteProfessor"
       :ficheiro="ficheiro"
+      v-on:mostrarPropostaProponente_professor="mostrarComponente"
     ></resumo-proposta>
   </div>
 </template>
@@ -176,15 +177,23 @@ export default {
         this.avancar = true;
         this.isShowProfessor = false;
         this.$emit("incrementarBarraProgresso");
+        this.$store.commit("setPropostaProponenteProfessor", this.propostaProponenteProfessor);
       }
     },
     anterior() {
       //* Mudar para o componente Proponente
       this.$emit("mostrarProponente");
+    },
+    mostrarComponente() {
+      this.isShowProfessor = true;
+      this.avancar = false;
+      this.$emit("decrementarBarraProgresso");
     }
   },
   mounted() {
-    if (this.proposta.role == "professor") {
+    Object.assign(this.propostaProponenteProfessor, this.$store.state.propostaProponenteProfessor);
+
+    if (this.proposta.role == "professor" && this.$store.state.propostaExistente) {
       axios
         .get("/api/propostaProponenteProfessor/" + this.proposta.id)
         .then(response => {

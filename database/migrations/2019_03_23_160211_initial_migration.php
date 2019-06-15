@@ -96,7 +96,7 @@ class InitialMigration extends Migration
             $table->increments('id');
             $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_parcial_60', 'tempo_integral', 'dedicacao_exclusiva']);
             $table->integer('percentagem_prestacao_servicos');
-            $table->string('fundamentacao');
+            $table->string('fundamentacao')->nullable();
             $table->string('periodo');
             $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa']);

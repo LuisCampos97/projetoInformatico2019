@@ -87,6 +87,10 @@ module.exports = {
       this.isActiveDiretorUO = true;
     } else if(this.$store.state.user.roleDB =='ctc') {
       this.isActiveCTC = true;
+    } else if(this.$store.state.user.roleDB =='secretariado_direcao') {
+      this.isActiveSD = true;
+    } else if(this.$store.state.user.roleDB =='recursos_humanos') {
+      this.isActiveRH = true;
     }
   }
 };

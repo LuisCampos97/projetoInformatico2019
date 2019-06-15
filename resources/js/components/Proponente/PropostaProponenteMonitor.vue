@@ -7,7 +7,7 @@
       <b-form-radio-group
         v-model="propostaProponenteMonitor.ciclo"
         :options="ciclosArray"
-        :state="$v.propostaProponenteMonitor.ciclo.$dirty ? !$v.propostaProponenteMonitor.ciclo.$error : null"
+        :state="!$v.propostaProponenteMonitor.ciclo.$error && null"
       ></b-form-radio-group>
       <b-form-invalid-feedback id="input-1-live-feedback">A seleção de um ciclo é obrigatória!</b-form-invalid-feedback>
     </b-form-group>
@@ -20,7 +20,7 @@
       <b-form-select
         id="inputTempoParcial"
         v-model="propostaProponenteMonitor.percentagem_prestacao_servicos"
-        :state="$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$error : null"
+        :state="!$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$error && null"
         :options="percentagensArray1Ciclo"
       ></b-form-select>
       <b-form-invalid-feedback
@@ -36,7 +36,7 @@
       <b-form-select
         id="inputTempoParcial"
         v-model="propostaProponenteMonitor.percentagem_prestacao_servicos"
-        :state="$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$error : null"
+        :state="!$v.propostaProponenteMonitor.percentagem_prestacao_servicos.$error && null"
         :options="percentagensArray2Ciclo"
       ></b-form-select>
       <b-form-invalid-feedback
@@ -47,7 +47,7 @@
     <b-form-group label="Duração do contrato" label-for="inputDuracaoContrato">
       <b-form-input
         id="inputDuracaoContrato"
-        :state="$v.propostaProponenteMonitor.duracao.$dirty ? !$v.propostaProponenteMonitor.duracao.$error : null"
+        :state="!$v.propostaProponenteMonitor.duracao.$error && null"
         v-model="propostaProponenteMonitor.duracao"
       ></b-form-input>
       <b-form-invalid-feedback id="input-1-live-feedback">A duração do contrato é obrigatória!</b-form-invalid-feedback>
@@ -56,7 +56,7 @@
     <b-form-group label="Periodo" label-for="inputPeriodo">
       <b-form-input
         id="inputPeriodo"
-        :state="$v.propostaProponenteMonitor.periodo.$dirty ? !$v.propostaProponenteMonitor.periodo.$error : null"
+        :state="!$v.propostaProponenteMonitor.periodo.$error && null"
         v-model="propostaProponenteMonitor.periodo"
       ></b-form-input>
       <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
@@ -77,6 +77,7 @@
       :unidadesCurriculares="unidadesCurriculares"
       :propostaProponenteMonitor="propostaProponenteMonitor"
       :ficheiro="ficheiro"
+      v-on:mostrarPropostaProponente_monitor="mostrarComponente"
     ></resumo-proposta>
   </div>
 </template>
@@ -136,15 +137,23 @@ export default {
         this.avancar = true;
         this.isShowMonitor = false;
         this.$emit("incrementarBarraProgresso");
+        this.$store.commit("setPropostaProponenteMonitor", this.propostaProponenteMonitor);
       }
     },
     anterior() {
       //* Mudar para o componente Proponente
       this.$emit("mostrarProponente");
+    },
+    mostrarComponente() {
+      this.isShowMonitor = true;
+      this.avancar = false;
+      this.$emit("decrementarBarraProgresso");
     }
   },
   mounted() {
-    if (this.proposta.role == "monitor") {
+    Object.assign(this.propostaProponenteMonitor, this.$store.state.propostaProponenteMonitor);
+
+    if (this.proposta.role == "monitor" && this.$store.state.propostaExistente) {
       axios
         .get("/api/propostaProponenteMonitor/" + this.proposta.id)
         .then(response => {
