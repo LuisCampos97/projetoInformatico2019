@@ -31,10 +31,20 @@
           :state="validateState('ficheiroCurriculo')"
           @change="onFileSelected"
         ></b-form-file>
-        
         <b-form-invalid-feedback id="input-1-live-feedback">O Ficheiro de Currículo é obrigatório!</b-form-invalid-feedback>
       </b-form-group>
 
+      <b-form-group>
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroCurriculo"
+          @click="downloadFicheiro(ficheiroCurriculo.proposta_id, 'Curriculo do docente a ser contratado')"
+        >
+          <i class="far fa-file-pdf"></i> Atual Curriculo do Docente
+        </b-button>
+      </b-form-group>
+      <br>
       <b-form-group label="Unidade Orgânica">
         <b-form-input :readonly="true" v-model="proposta.unidade_organica"></b-form-input>
       </b-form-group>
@@ -260,6 +270,16 @@
                     :state="validateState('ficheiroHabilitacoes')"
                     @change="onFileSelected"
                   ></b-form-file>
+                  <b-form-group>
+                    <b-button
+                      size="md"
+                      variant="dark"
+                      v-if="ficheiroHabilitacoes"
+                      @click="downloadFicheiro(ficheiroHabilitacoes.proposta_id, 'Habilitacoes do docente a ser contratado')"
+                    >
+                      <i class="far fa-file-pdf"></i> Atual Ficheiro de Habilitacoes do Docente
+                    </b-button>
+                  </b-form-group>
                 </b-form-group>
               </b-form-group>
             </b-card-text>
@@ -279,6 +299,17 @@
           @change="onFileSelected"
         ></b-form-file>
       </b-form-group>
+      <b-form-group>
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroRelatorio"
+          @click="downloadFicheiro(ficheiroRelatorio.proposta_id, 'Relatorio dos 2 proponentes')"
+        >
+          <i class="far fa-file-pdf"></i> Atual Relatório dos 2 proponentes
+        </b-button>
+      </b-form-group>
+      <br>
 
       <b-form-group
         label="Qual será o papel a desempenhar pelo docente a ser contratado?"
@@ -447,6 +478,19 @@ export default {
   methods: {
     validateState(ref) {
       return this.veeErrors.has(ref) ? false : null;
+    },
+    downloadFicheiro(proposta_id, descricao) {
+      axios
+        .get("/api/downloadFicheiro/" + proposta_id + "/" + descricao, {
+          responseType: "arraybuffer"
+        })
+        .then(response => {
+          let blob = new Blob([response.data]);
+          let link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = descricao + ".pdf";
+          link.click();
+        });
     },
     onFileSelected(event) {
       this.ficheiros[event.target.name] = event.target.files[0];
