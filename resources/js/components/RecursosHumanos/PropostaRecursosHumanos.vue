@@ -38,7 +38,7 @@
         <b-form-invalid-feedback id="input-1-live-feedback">Insira um número para o funcionario</b-form-invalid-feedback>
       </b-form-group>
 
-      <b-form-group label="Inscrição" v-show="isShow">
+      <b-form-group label="Inscrição">
         <b-form-radio-group
           v-model="propostaRecursosHumanos.inscricao"
           :options="inscricao_array"
@@ -130,15 +130,6 @@
         <b-form-invalid-feedback id="input-1-live-feedback">Tem de preencher este campo</b-form-invalid-feedback>
       </b-form-group>
 
-      <b-form-group label="Número cartão de cidadão" label-for="inputCC">
-        <b-form-input
-          id="inputCC"
-          :state="$v.propostaRecursosHumanos.numero_CC.$dirty ? !$v.propostaRecursosHumanos.numero_CC.$error : null"
-          v-model="propostaRecursosHumanos.numero_CC"
-        ></b-form-input>
-        <b-form-invalid-feedback id="input-1-live-feedback">Tem de preencher este campo</b-form-invalid-feedback>
-      </b-form-group>
-
       <b-form-group label="E-mail pessoal" label-for="inputEmailPessoal">
         <b-form-input
           id="inputEmailPessoal"
@@ -167,7 +158,7 @@
       </b-form-group>
 
       <button class="btn btn-success mt-3 font-weight-bold"
-        v-on:click.prevent="finalizarAprovacaoCTC(propostaCTC)">Finalizar
+        v-on:click.prevent="finalizarPropostaRecursosHumanos(propostaRecursosHumanos)">Finalizar
         <i class="fas fa-arrow-right"></i>
       </button>
       
@@ -177,6 +168,7 @@
 <script>
 import { required } from "vuelidate/lib/validators";
 export default {
+  props:["propostaSelecionada"],
   data() {
     return {
       inscricao_array: [
@@ -223,6 +215,28 @@ export default {
       dados_GIAF_carregados_por: { required },
       data_carregamento_dados_GIAF: { required }
     }
-  }
+  },
+  methods: {
+    finalizarPropostaRecursosHumanos(propostaRecursosHumanos){
+      this.$v.propostaSecretariadoDirecao.convite.$touch();
+      if (!this.$v.propostaSecretariadoDirecao.convite.$invalid) {
+        let confirmacao = confirm(
+          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
+        );
+        if (confirmacao) {
+          axios.post('/api/recursosHumanos/propostaRecursosHumanos', propostaRecursosHumanos)
+          .then(response => {
+            let idPropostaRecursosHumanos = response.data.id;
+            axios.patch('/api/propostaRecursosHumanos/' + idPropostaRecursosHumanos + "/" 
+            + propostaSelecionada.id).then(response => {
+              this.$socket.emit("email-recursos-humanos", {
+                msg: "Pedido de email enviado..."
+              });
+            });
+          });
+        }
+      }
+    }
+  },
 };
 </script>
