@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PropostaProponente;
 use App\Http\Resources\PropostaProponente as PropostaProponenteResource;
+use Illuminate\Support\Facades\DB;
 
 class PropostaProponenteController extends Controller
 {
@@ -33,6 +34,30 @@ class PropostaProponenteController extends Controller
         $propostaProponente->fill($request->all());
         $propostaProponente->save();
         return $propostaProponente;
+    }
+
+    public function getPropostasPendentesCoordenadorDepartamento(){
+        $propostasPendentesCoordenadorDepartamento = 
+        DB::table('proposta_proponente')
+        ->whereNull('fundamentacao_coordenador_curso')
+        ->get();
+
+        $propostasADevolver=[];
+        array_push($propostasADevolver, $propostasPendentesCoordenadorDepartamento);
+        return $propostasADevolver[0];
 
     }
+
+    public function getHistoricoPropostasCoordenadorDepartamento(){
+        $propostasPendentesCoordenadorDepartamento = 
+        DB::table('proposta_proponente')
+        ->whereNotNull('fundamentacao_coordenador_curso')
+        ->whereNotNull('fundamentacao_coordenador_departamento')
+        ->get();
+
+        $propostasADevolver=[];
+        array_push($propostasADevolver, $propostasPendentesCoordenadorDepartamento);
+        return $propostasADevolver[0];
+    }
+    
 }

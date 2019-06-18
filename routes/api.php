@@ -38,6 +38,8 @@ Route::get('/lerCursosEUcs', 'CursoController@lerCursosEUcs');
 //-----------------------Proposta Proponente----------------------------------------
 Route::post('/propostaProponente', 'PropostaProponenteController@store');
 Route::get('/allPropostasProponente', 'PropostaProponenteController@getPropostasProponente');
+Route::get('/coordenadorDepartamento/propostasPendentes', 'PropostaProponenteController@getPropostasPendentesCoordenadorDepartamento');
+Route::get('/coordenadorDepartamento/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorDepartamento');
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
@@ -60,6 +62,7 @@ Route::post('/proposta/{idParaUcsPropostaProponente}', 'PropostaController@inser
 Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}/{parecer}', 'PropostaController@atualizarPropostaDiretor');
 Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}/{aprovacao}', 'PropostaController@atualizarPropostaCTC');
 Route::patch('/propostaSecretariadoDirecao/{propostaSecretariadoDirecaoID}/{propostaID}', 'PropostaController@atualizarPropostaSecretariadoDirecao');
+Route::patch('/propostaRecursosHumanos/{propostaRecursoHumanosID}/{propostaID}', 'PropostaController@atualizarPropostaRecursosHumanos');
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis', 'CursoController@getCursos');
 
@@ -87,6 +90,7 @@ Route::post('/secretariadoDirecao/propostaSecretariadoDirecao', 'SecretariadoDir
 //-------------------------Recursos Humanos ----------------------------------------------------------
 Route::get('/recursosHumanos/getPropostasPendentesRecursosHumanos', 'RecursosHumanosController@getPropostasPendentes');
 Route::get('/recursosHumanos/getHistoricoPropostasRecursosHumanos', 'RecursosHumanosController@getHistoricoPropostas');
+Route::post('/recursosHumanos/propostaRecursosHumanos', 'RecursosHumanosController@store');
 
 //_--------------------------Users--------------------------------------------------------------
 Route::post('/users/criarUserTemporario', 'UserController@store');

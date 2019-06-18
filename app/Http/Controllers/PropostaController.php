@@ -48,4 +48,11 @@ class PropostaController extends Controller
         $proposta->proposta_secretariado_direcao_id = $idPropostaSecretariadoDirecao;
         $proposta->save();
     }
+
+    public function atualizarPropostaRecursosHumanos($propostaRecursoHumanosID, $propostaID){
+        $proposta = Proposta::findOrFail($propostaID);
+        $proposta->proposta_recursos_humanos_id = $propostaRecursoHumanosID;
+        $proposta->status = 'finalizada';
+        $proposta->save();
+    }
 }

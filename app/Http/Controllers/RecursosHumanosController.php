@@ -39,5 +39,31 @@ class RecursosHumanosController extends Controller
   
         array_push($propostasADevolver, $historicoPropostas);
         return $propostasADevolver[0];
-      }
+    }
+
+    public function store(Request $request){
+      $request->validate([
+        'remuneracao' => 'required',
+        'escalao' => 'required',
+        'indice' => 'required',
+        'numero_funcionario' => 'required',
+        'contratacao_comunicada' => 'required',
+        'inscricao_seguranca_social' => 'required',
+        'inscricao_caixa_geral_aposentacoes' => 'required',
+        'despacho_presidente_ipl' => 'required',
+        'contrato_redigido' => 'required',
+        'contrato_anexo' => 'required',
+        'cessacao_social' => 'required',
+        'NISS_ou_numero_CGA' => 'required',
+        'data_nascimento' => 'required',
+        'numero_cc' => 'required',
+        'email' => 'required',
+        'dados_GIAF_carregados_por' => 'required',
+        'data_carregamento_dados_GIAF' => 'required'
+      ]);
+      $propostaRecursosHumanos = new PropostaRecursosHumanos();
+      $propostaRecursosHumanos->fill($request->all());
+      $propostaRecursosHumanos->save();
+      return response()->json($propostaRecursosHumanos, 200);
+    }
 }

@@ -104,6 +104,11 @@
         ></b-form-file>
     </b-form-group>
 
+    <button
+        class="btn btn-success mt-3 font-weight-bold">
+        Submeter Ficheiros
+      </button>
+
   </div>
 </template>
 <script>
