@@ -17,12 +17,19 @@
           :options="propostasExistentes"
           v-model="propostaExistente"
           @change="associarProposta()"
-        ></b-form-select>
+        >
+          <template slot="first">
+            <option
+              :value="null"
+              disabled
+            >-- Por favor selecione uma proposta existente, caso exista --</option>
+          </template>
+        </b-form-select>
       </b-form-group>
       <br>
       <b-form-group label="Currículo">
         <b-form-file
-          v-model="ficheiroCurriculo"
+          v-model="ficheiroCurriculoModel"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
           browse-text="Procurar"
@@ -261,7 +268,7 @@
                   class="mt-3"
                 >
                   <b-form-file
-                    v-model="ficheiroHabilitacoes"
+                    v-model="ficheiroHabilitacoesModel"
                     placeholder="Escolha um ficheiro"
                     drop-placeholder="Arraste para aqui um ficheiro"
                     browse-text="Procurar"
@@ -289,7 +296,7 @@
 
       <b-form-group label="Relatório dos proponentes" class="mt-3">
         <b-form-file
-          v-model="ficheiroRelatorio"
+          v-model="ficheiroRelatorioModel"
           placeholder="Escolha um ficheiro"
           drop-placeholder="Arraste para aqui um ficheiro"
           browse-text="Procurar"
@@ -449,7 +456,10 @@ export default {
       ficheiros: [],
       ficheiroCurriculo: "",
       ficheiroHabilitacoes: "",
-      ficheiroRelatorio: ""
+      ficheiroRelatorio: "",
+      ficheiroCurriculoModel: "",
+      ficheiroHabilitacoesModel: "",
+      ficheiroRelatorioModel: ""
     };
   },
   //? Validations Vuelidate
@@ -495,6 +505,14 @@ export default {
     onFileSelected(event) {
       this.ficheiros[event.target.name] = event.target.files[0];
     },
+    makeToast(variant = null) {
+      this.$bvToast.toast("", {
+        title: 'O formulário possui erros',
+        variant: variant,
+        solid: true,
+        toaster: "b-toaster-top-right"
+      });
+    },
     avancar: function(proposta, unidadesCurriculares) {
       //? Necessário o FormData para passar a informção do ficheiro para o backend "Laravel"
       this.ficheiro.fileCurriculo = new FormData();
@@ -539,6 +557,12 @@ export default {
             this.isShow = false;
             this.progresso.valor++;
           }
+        } else {
+          this.$bvToast.toast('Toast body content', {
+          title: 'ERROS',
+          variant: 'danger',
+          solid: true
+        })
         }
       });
     },
