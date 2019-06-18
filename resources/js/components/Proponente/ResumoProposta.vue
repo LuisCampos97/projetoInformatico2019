@@ -182,27 +182,37 @@
       </div>
     </div>
 
+    <button class="btn btn-info" v-on:click.prevent="anterior">
+      <i class="fas fa-arrow-left"></i> Anterior
+    </button>
+
     <button
       type="button"
       class="btn btn-success"
       v-on:click="submeterPropostaProfessor(propostaProponenteProfessor)"
       @click="makeToast('success')"
       v-if="proposta.role=='professor'"
-    >Finalizar</button>
+    >
+      <i class="fas fa-save"></i> Finalizar
+    </button>
     <button
       type="button"
       class="btn btn-success"
       v-on:click="submeterPropostaAssistente(propostaProponenteAssistente)"
       @click="makeToast('success')"
       v-if="proposta.role=='assistente'"
-    >Finalizar</button>
+    >
+      <i class="fas fa-save"></i> Finalizar
+    </button>
     <button
       type="button"
       class="btn btn-success"
       v-on:click="submeterPropostaMonitor(propostaProponenteMonitor)"
       @click="makeToast('success')"
       v-if="proposta.role=='monitor'"
-    >Finalizar</button>
+    >
+      <i class="fas fa-save"></i> Finalizar
+    </button>
   </div>
 </template>
 <script src="/socket.io/socket.io.js"></script>
@@ -254,9 +264,21 @@ module.exports = {
               axios
                 .post("/api/proposta/" + this.idParaUcsPropostaProponente)
                 .then(response => {
-                  this.ficheiro.fileCurriculo.proposta_id = response.data;
-                  this.ficheiro.fileHabilitacoes.proposta_id = response.data;
-                  this.ficheiro.fileRelatorio.proposta_id = response.data;
+                  this.ficheiro.fileCurriculo.append(
+                    "proposta_id",
+                    response.data
+                  );
+                  if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                    this.ficheiro.fileHabilitacoes.append(
+                      "proposta_id",
+                      response.data
+                    );
+                  }
+
+                  this.ficheiro.fileRelatorio.append(
+                    "proposta_id",
+                    response.data
+                  );
 
                   this.$socket.emit("email-diretor", {
                     msg: "Pedido de email enviado..."
@@ -269,9 +291,11 @@ module.exports = {
                   axios
                     .post("/api/ficheiro", this.ficheiro.fileCurriculo)
                     .then(response => {});
-                  axios
-                    .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-                    .then(response => {});
+                  if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                    axios
+                      .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                      .then(response => {});
+                  }
                 });
             });
         }
@@ -301,24 +325,30 @@ module.exports = {
           axios
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
             .then(response => {
-              this.ficheiro.fileCurriculo.proposta_id = response.data;
-              this.ficheiro.fileHabilitacoes.proposta_id = response.data;
-              this.ficheiro.fileRelatorio.proposta_id = response.data;
+              this.ficheiro.fileCurriculo.append("proposta_id", response.data);
+              if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                this.ficheiro.fileHabilitacoes.append(
+                  "proposta_id",
+                  response.data
+                );
+              }
+              this.ficheiro.fileRelatorio.append("proposta_id", response.data);
 
               this.$socket.emit("email-diretor", {
                 msg: "Pedido de email enviado..."
               }); // raise an event on the server
 
               axios
-                .post("/api/ficheiro", this.ficheiro.fileRelatorio)
-                .then(response => {});
-
-              axios
                 .post("/api/ficheiro", this.ficheiro.fileCurriculo)
                 .then(response => {});
               axios
-                .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                .post("/api/ficheiro", this.ficheiro.fileRelatorio)
                 .then(response => {});
+              if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                axios
+                  .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                  .then(response => {});
+              }
             });
         });
       }
@@ -343,9 +373,14 @@ module.exports = {
           axios
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
             .then(response => {
-              this.ficheiro.fileCurriculo.proposta_id = response.data;
-              this.ficheiro.fileHabilitacoes.proposta_id = response.data;
-              this.ficheiro.fileRelatorio.proposta_id = response.data;
+              this.ficheiro.fileCurriculo.append("proposta_id", response.data);
+              if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                this.ficheiro.fileHabilitacoes.append(
+                  "proposta_id",
+                  response.data
+                );
+              }
+              this.ficheiro.fileRelatorio.append("proposta_id", response.data);
 
               this.$socket.emit("email-diretor", {
                 msg: "Pedido de email enviado..."
@@ -358,9 +393,11 @@ module.exports = {
               axios
                 .post("/api/ficheiro", this.ficheiro.fileCurriculo)
                 .then(response => {});
-              axios
-                .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-                .then(response => {});
+              if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                axios
+                  .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                  .then(response => {});
+              }
             });
         });
       }
@@ -374,6 +411,10 @@ module.exports = {
         solid: true,
         toaster: "b-toaster-top-right"
       });
+    },
+    anterior() {
+      //* Mudar para o componente PropostaProponente*
+      this.$emit("mostrarPropostaProponente_" + this.proposta.role);
     }
   }
 };

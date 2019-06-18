@@ -12,7 +12,11 @@ export default new Vuex.Store({
     state: {
         token: '',
         user: null,
-        proposta: null
+        proposta: null,
+        propostaProponenteProfessor: null,
+        propostaProponenteAssistente: null,
+        propostaProponenteMonitor: null,
+        propostaExistente: false
     },
     getters: {
         loggedIn(state) {
@@ -60,11 +64,23 @@ export default new Vuex.Store({
             }
         },
         //* Informação sobre a PROPOSTA
+        setPropostaExistente(state) {
+            state.propostaExistente = true;
+        },
+        resetPropostaExistente(state) {
+            state.propostaExistente = false;
+        },
         setProposta: (state, proposta) => {
             state.proposta = proposta;
         },
-        loadProposta: state => {
-            
+        setPropostaProponenteProfessor(state, propostaProponenteProfessor) {
+            state.propostaProponenteProfessor = propostaProponenteProfessor;
+        },
+        setPropostaProponenteAssistente(state, propostaProponenteAssistente) {
+            state.propostaProponenteAssistente = propostaProponenteAssistente;
+        },
+        setPropostaProponenteMonitor(state, propostaProponenteMonitor) {
+            state.propostaProponenteMonitor = propostaProponenteMonitor;
         }
     }
 });

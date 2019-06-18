@@ -81,6 +81,7 @@ Route::get('/ctc/getHistoricoPropostasCTC', 'CTCController@getHistoricoPropostas
 //-------------------------Ficheiros-----------------------------------------------
 Route::post('/ficheiro', 'FicheiroController@store');
 Route::get('/ficheiros/{proposta_id}', 'FicheiroController@getFicheiros');
+Route::get('/downloadFicheiro/{proposta_id}/{descricao}', 'FicheiroController@downloadFicheiro');
 
 //-------------------------Secretariado Direcao---------------------------------------------------
 Route::get('/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao', 'SecretariadoDirecaoController@getPropostasPendentes');

@@ -1,5 +1,7 @@
 <template>
   <div class="wrapper row no-gutters">
+    <loading :active.sync="isLoading"
+        :width="150" :height="150"></loading>
     <div class="col-md-6 welcome">
       <div class="wrapper row no-gutters align-items-center">
         <div class="col">
@@ -20,7 +22,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="wrapper row no-gutters align-items-center">
+      <div class="wrapper row no-gutters align-items-center teste">
         <div class="col-md-6 login_form">
           <b-alert show variant="dark" v-show="error">{{ errorMessage }}</b-alert>
           <div class="form-group">
@@ -39,9 +41,13 @@
 </template>
 
 <script>
-module.exports = {
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+
+export default {
   data: function() {
     return {
+      isLoading: false,
       error: false,
       errorMessage: "",
       user: {
@@ -50,17 +56,24 @@ module.exports = {
       }
     };
   },
+  components: {
+            Loading
+        },
   methods: {
     login() {
+      this.isLoading = true;
+      this.error = false;
       axios
         .post("api/login", this.user)
         .then(response => {
           this.$store.commit("setToken", response.data.token);
           this.$store.commit("setUser", response.data.user);
+          this.isLoading = false;
           this.$router.push({ name: "dashboard" });
         })
         .catch(error => {
           this.error = true;
+          this.isLoading = false;
           this.errorMessage = Object.values(error.response.data)[0];
         });
     },
@@ -100,6 +113,7 @@ module.exports = {
 .login_form {
   margin: 0 14vw;
   font-family: "Montserrat", sans-serif;
+  align-items: center;
 }
 
 .form-control:focus {
@@ -109,6 +123,8 @@ module.exports = {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
 }
+
+.clas
 
 .btn-dark {
   color: #fff;
@@ -122,6 +138,6 @@ label {
 
 .alert-dark {
   text-align: center;
-  padding: 25px;
+  padding: 20px;
 }
 </style>

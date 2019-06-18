@@ -6,7 +6,7 @@
         <b-form-radio-group
           v-model="propostaProponenteAssistente.regime_prestacao_servicos"
           :options="regimePrestacaoServicosArray"
-          :state="$v.propostaProponenteAssistente.regime_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.regime_prestacao_servicos.$error : null"
+          :state="!$v.propostaProponenteAssistente.regime_prestacao_servicos.$error && null"
           stacked
         ></b-form-radio-group>
         <b-form-invalid-feedback
@@ -21,7 +21,7 @@
         <b-form-select
           id="inputTempoParcial"
           v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
-          :state="$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error : null"
+          :state="!$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error && null"
           :options="percentagensArraySuperiorA60"
         ></b-form-select>
         <b-form-invalid-feedback
@@ -36,7 +36,7 @@
         <b-form-select
           id="inputTempoParcial"
           v-model="propostaProponenteAssistente.percentagem_prestacao_servicos"
-          :state="$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$dirty ? !$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error : null"
+          :state="!$v.propostaProponenteAssistente.percentagem_prestacao_servicos.$error && null"
           :options="percentagensArray"
         ></b-form-select>
         <b-form-invalid-feedback
@@ -52,7 +52,7 @@
       >
         <b-form-textarea
           v-model="propostaProponenteAssistente.fundamentacao"
-          :state="$v.propostaProponenteAssistente.fundamentacao.$dirty ? !$v.propostaProponenteAssistente.fundamentacao.$error : null"
+          :state="!$v.propostaProponenteAssistente.fundamentacao.$error && null"
         ></b-form-textarea>
         <b-form-invalid-feedback id="input-1-live-feedback">A fundamentação é obrigatória!</b-form-invalid-feedback>
       </b-form-group>
@@ -60,7 +60,7 @@
       <b-form-group label="Duração do contrato" label-for="inputDuracaoContrato">
         <b-form-input
           id="inputDuracaoContrato"
-          :state="$v.propostaProponenteAssistente.duracao.$dirty ? !$v.propostaProponenteAssistente.duracao.$error : null"
+          :state="!$v.propostaProponenteAssistente.duracao.$error && null"
           v-model="propostaProponenteAssistente.duracao"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">A duração do contrato é obrigatória!</b-form-invalid-feedback>
@@ -69,7 +69,7 @@
       <b-form-group label="Periodo" label-for="inputPeriodo">
         <b-form-input
           id="inputPeriodo"
-          :state="$v.propostaProponenteAssistente.periodo.$dirty ? !$v.propostaProponenteAssistente.periodo.$error : null"
+          :state="!$v.propostaProponenteAssistente.periodo.$error && null"
           v-model="propostaProponenteAssistente.periodo"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
@@ -90,6 +90,7 @@
       :unidadesCurriculares="unidadesCurriculares"
       :propostaProponenteAssistente="propostaProponenteAssistente"
       :ficheiro="ficheiro"
+      v-on:mostrarPropostaProponente_assistente="mostrarComponente"
     ></resumo-proposta>
   </div>
 </template>
@@ -193,15 +194,24 @@ export default {
         this.avancar = true;
         this.isShowAssistente = false;
         this.$emit("incrementarBarraProgresso");
+        this.$store.commit("setPropostaProponenteAssistente", this.propostaProponenteAssistente);
       }
     },
     anterior() {
       //* Mudar para o componente Proponente
       this.$emit("mostrarProponente");
+    },
+    mostrarComponente() {
+      this.isShowAssistente = true;
+      this.avancar = false;
+      this.$emit("decrementarBarraProgresso");
     }
   },
   mounted() {
-    if (this.proposta.role == "assistente") {
+    Object.assign(this.propostaProponenteAssistente, this.$store.state.propostaProponenteAssistente);
+
+    //? Se selecionou uma proposta existente
+    if (this.proposta.role == "assistente" && this.$store.state.propostaExistente) {
       axios
         .get("/api/propostaProponenteAssistente/" + this.proposta.id)
         .then(response => {
