@@ -73,11 +73,7 @@ class LoginController extends Controller
                 $user->roleDB = 'secretariado_direcao';
                 $user->save();
             }
-<<<<<<< HEAD
             elseif(strpos($role, 'Recursos') !== false ) {
-=======
-            elseif(strpos($role, 'Recursos') !== false) {
->>>>>>> 3dc992a6d7b56802c2752dfd440a106383ba223f
                 $user->roleDB = 'recursos_humanos';
                 $user->save();
             }
