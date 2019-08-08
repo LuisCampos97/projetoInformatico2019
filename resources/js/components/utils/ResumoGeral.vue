@@ -3,9 +3,8 @@
     <div v-if="this.$store.state.user.roleDB == 'proponente_departamento'">
       <h3>Resumo da proposta de contratação</h3>
     <button
-      
       class="btn btn-danger"
-      
+      @click="voltarProponentes"
     >Voltar</button>
     </div>
     
@@ -13,6 +12,7 @@
       <h3>Resumo da proposta de contratação</h3>
       <button
         class="btn btn-danger"
+        @click="voltarProponentes"
       >Voltar</button>
     </div>
 
@@ -160,7 +160,7 @@
     ></fundamentacao-curso>
 
     <diretor
-      v-if="this.$store.state.user.roleDB == 'diretor_uo'"
+      v-if="this.$store.state.user.roleDB == 'diretor_uo' && this.propostaSelecionada.proposta_diretor_uo_id == null"
       :propostaSelecionada="propostaSelecionada"
     ></diretor>
     <ctc
@@ -185,6 +185,9 @@ export default {
     };
   },
   methods: {
+    voltarProponentes(){
+      this.$emit("mostrar-proponentes");
+    },
     voltarDiretor() {
       this.$emit("mostrar-diretor");
     },

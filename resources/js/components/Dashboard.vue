@@ -2,7 +2,7 @@
   <div>
     <b-navbar toggleable="lg" type="light" variant="light">
       <b-navbar-brand>
-        <img src="../../assets/logo.svg" class="pr-5">Plataforma de Gestão de Contratações
+        <img src="../../assets/logo.svg" class="pr-5" />Plataforma de Gestão de Contratações
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -43,145 +43,149 @@
           <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
           <div v-if="user.roleDB == 'docente_temp'">TESTE DOCENTE</div>
           <tabela-recursos v-if="user.roleDB == 'recursos_humanos'"></tabela-recursos>
-
-          <div v-if="user.roleDB == 'proponente_departamento' && !isNovaPropostaVisible">
-            COORDENADOR DEPARTAMENTO
-            <div class="separator">
-              <b-tabs content-class="mt-3" align="left">
-                <b-tab title="Propostas Pendentes" active>
-                  <table class="table">
-                    <thead>
-                      <th>Nome docente a ser contratado</th>
-                      <th>Tipo contrato</th>
-                      <th>Unidade Organica</th>
-                      <th>Role</th>
-                      <th>Ações</th>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(propostaPendenteDiretorDepartamento, index) in propostasPendentesCoordenadorDepartamento"
-                        :key="propostaPendenteDiretorDepartamento.id"
-                      >
-                        <td>{{ propostaPendenteDiretorDepartamento.nome_completo }}</td>
-                        <td>{{ propostaPendenteDiretorDepartamento.tipo_contrato }}</td>
-                        <td>{{ propostaPendenteDiretorDepartamento.role }}</td>
-                        <td>{{ propostaPendenteDiretorDepartamento.unidade_organica }}</td>
-                        <td>
-                          <button
-                            type="button"
-                            class="btn btn-info"
-                            @click="verDetalhesCoordenadorDepartamento(propostaPendenteDiretorDepartamento, index)"
-                          >Ver detalhes</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </b-tab>
-                <b-tab title="Histórico de Propostas">
-                  <table class="table">
-                    <thead>
-                      <th>Nome docente a ser contratado</th>
-                      <th>Tipo contrato</th>
-                      <th>Unidade Organica</th>
-                      <th>Role</th>
-                      <th>Ações</th>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(propostaHistorico, index) in historicoPropostasCoordenadorDepartamento"
-                        :key="propostaHistorico.id"
-                      >
-                        <td>{{ propostaHistorico.nome_completo }}</td>
-                        <td>{{ propostaHistorico.tipo_contrato }}</td>
-                        <td>{{ propostaHistorico.role }}</td>
-                        <td>{{ propostaHistorico.unidade_organica }}</td>
-                        <td>
-                          <button
-                            type="button"
-                            class="btn btn-info"
-                            @click="verDetalhesCoordenadorDepartamento(propostaHistorico, index)"
-                          >Ver detalhes</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </b-tab>
-              </b-tabs>
+          <resumo-geral
+            v-if="isResumoPropostaVisible"
+            :propostaSelecionada="propostaSelecionada"
+            v-on:mostrar-proponentes="mostrarProponentes"
+          ></resumo-geral>
+          <div v-if="mostrarTabela">
+            <div v-if="user.roleDB == 'proponente_departamento' && !isNovaPropostaVisible">
+              COORDENADOR DEPARTAMENTO
+              <div class="separator">
+                <b-tabs content-class="mt-3" align="left">
+                  <b-tab title="Propostas Pendentes" active>
+                    <table class="table">
+                      <thead>
+                        <th>Nome docente a ser contratado</th>
+                        <th>Tipo contrato</th>
+                        <th>Unidade Organica</th>
+                        <th>Role</th>
+                        <th>Ações</th>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(propostaPendenteDiretorDepartamento, index) in propostasPendentesCoordenadorDepartamento"
+                          :key="propostaPendenteDiretorDepartamento.id"
+                        >
+                          <td>{{ propostaPendenteDiretorDepartamento.nome_completo }}</td>
+                          <td>{{ propostaPendenteDiretorDepartamento.tipo_contrato }}</td>
+                          <td>{{ propostaPendenteDiretorDepartamento.role }}</td>
+                          <td>{{ propostaPendenteDiretorDepartamento.unidade_organica }}</td>
+                          <td>
+                            <button
+                              type="button"
+                              class="btn btn-info"
+                              @click="verDetalhesCoordenadorDepartamento(propostaPendenteDiretorDepartamento, index)"
+                            >Ver detalhes</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </b-tab>
+                  <b-tab title="Histórico de Propostas">
+                    <table class="table">
+                      <thead>
+                        <th>Nome docente a ser contratado</th>
+                        <th>Tipo contrato</th>
+                        <th>Unidade Organica</th>
+                        <th>Role</th>
+                        <th>Ações</th>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(propostaHistorico, index) in historicoPropostasCoordenadorDepartamento"
+                          :key="propostaHistorico.id"
+                        >
+                          <td>{{ propostaHistorico.nome_completo }}</td>
+                          <td>{{ propostaHistorico.tipo_contrato }}</td>
+                          <td>{{ propostaHistorico.role }}</td>
+                          <td>{{ propostaHistorico.unidade_organica }}</td>
+                          <td>
+                            <button
+                              type="button"
+                              class="btn btn-info"
+                              @click="verDetalhesCoordenadorDepartamento(propostaHistorico, index)"
+                            >Ver detalhes</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </b-tab>
+                </b-tabs>
+              </div>
             </div>
-          </div>
 
-          <br>
-          <div v-if="user.roleDB == 'proponente_curso' && !isNovaPropostaVisible">
-            COORDENADOR CURSO
-            <div class="separator">
-              <b-tabs content-class="mt-3" align="left">
-                <b-tab title="Propostas Pendentes" active>
-                  <table class="table">
-                    <thead>
-                      <th>Nome docente a ser contratado</th>
-                      <th>Tipo contrato</th>
-                      <th>Unidade Organica</th>
-                      <th>Role</th>
-                      <th>Ações</th>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(propostaPendenteCoordenadorCurso, index) in propostasPendentesCoordenadorCurso"
-                        :key="propostaPendenteCoordenadorCurso.id"
-                      >
-                        <td>{{ propostaPendenteCoordenadorCurso.nome_completo }}</td>
-                        <td>{{ propostaPendenteCoordenadorCurso.tipo_contrato }}</td>
-                        <td>{{ propostaPendenteCoordenadorCurso.unidade_organica }}</td>
-                        <td>{{ propostaPendenteCoordenadorCurso.role }}</td>
+            <br />
+            <div v-if="user.roleDB == 'proponente_curso' && !isNovaPropostaVisible">
+              COORDENADOR CURSO
+              <div class="separator">
+                <b-tabs content-class="mt-3" align="left">
+                  <b-tab title="Propostas Pendentes" active>
+                    <table class="table">
+                      <thead>
+                        <th>Nome docente a ser contratado</th>
+                        <th>Tipo contrato</th>
+                        <th>Unidade Organica</th>
+                        <th>Role</th>
+                        <th>Ações</th>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(propostaPendenteCoordenadorCurso, index) in propostasPendentesCoordenadorCurso"
+                          :key="propostaPendenteCoordenadorCurso.id"
+                        >
+                          <td>{{ propostaPendenteCoordenadorCurso.nome_completo }}</td>
+                          <td>{{ propostaPendenteCoordenadorCurso.tipo_contrato }}</td>
+                          <td>{{ propostaPendenteCoordenadorCurso.unidade_organica }}</td>
+                          <td>{{ propostaPendenteCoordenadorCurso.role }}</td>
 
-                        <td>
-                          <button
-                            type="button"
-                            class="btn btn-info"
-                            @click="verDetalhesCoordenadorCurso(propostaPendenteCoordenadorCurso, index)"
-                          >Ver detalhes</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </b-tab>
-                <b-tab title="Histórico de Propostas">
-                  <table class="table">
-                    <thead>
-                      <th>Nome docente a ser contratado</th>
-                      <th>Tipo contrato</th>
-                      <th>Role</th>
-                      <th>Unidade Organica</th>
-                      <th>Ações</th>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="(propostaHistorico, index) in historicoPropostasCoordenadorCurso"
-                        :key="propostaHistorico.id"
-                      >
-                        <td>{{ propostaHistorico.nome_completo }}</td>
-                        <td>{{ propostaHistorico.tipo_contrato }}</td>
-                        <td>{{ propostaHistorico.role }}</td>
-                        <td>{{ propostaHistorico.unidade_organica }}</td>
-                        <td>
-                          <button
-                            type="button"
-                            class="btn btn-info"
-                            @click="verDetalhesCoordenadorCurso(propostaHistorico, index)"
-                          >Ver detalhes</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </b-tab>
-              </b-tabs>
+                          <td>
+                            <button
+                              type="button"
+                              class="btn btn-info"
+                              @click="verDetalhesCoordenadorCurso(propostaPendenteCoordenadorCurso, index)"
+                            >Ver detalhes</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </b-tab>
+                  <b-tab title="Histórico de Propostas">
+                    <table class="table">
+                      <thead>
+                        <th>Nome docente a ser contratado</th>
+                        <th>Tipo contrato</th>
+                        <th>Role</th>
+                        <th>Unidade Organica</th>
+                        <th>Ações</th>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(propostaHistorico, index) in historicoPropostasCoordenadorCurso"
+                          :key="propostaHistorico.id"
+                        >
+                          <td>{{ propostaHistorico.nome_completo }}</td>
+                          <td>{{ propostaHistorico.tipo_contrato }}</td>
+                          <td>{{ propostaHistorico.role }}</td>
+                          <td>{{ propostaHistorico.unidade_organica }}</td>
+                          <td>
+                            <button
+                              type="button"
+                              class="btn btn-info"
+                              @click="verDetalhesCoordenadorCurso(propostaHistorico, index)"
+                            >Ver detalhes</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </b-tab>
+                </b-tabs>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <resumo-geral v-if="isResumoPropostaVisible"
-    :propostaSelecionada="propostaSelecionada"></resumo-geral>
   </div>
 </template>
 
@@ -200,8 +204,9 @@ module.exports = {
       historicoPropostasCoordenadorDepartamento: "",
       propostasPendentesCoordenadorCurso: "",
       historicoPropostasCoordenadorCurso: "",
-      isResumoPropostaVisible:false,
-      propostaSelecionada:"",
+      isResumoPropostaVisible: false,
+      propostaSelecionada: "",
+      mostrarTabela: true
     };
   },
   methods: {
@@ -218,16 +223,34 @@ module.exports = {
       this.isNovaPropostaVisible = true;
       this.isDashboardVisible = false;
     },
-    verDetalhesCoordenadorCurso(propostaPendenteCoordenadorCurso, index){
+    verDetalhesCoordenadorCurso(propostaPendenteCoordenadorCurso, index) {
       this.isResumoPropostaVisible = true;
       this.isDashboardVisible = false;
-      this.propostaSelecionada = Object.assign({}, propostaPendenteCoordenadorCurso);
+      this.propostaSelecionada = Object.assign(
+        {},
+        propostaPendenteCoordenadorCurso
+      );
+      this.mostrarTabela = false;
+      this.isDashboardVisible = false;
     },
-    verDetalhesCoordenadorDepartamento(propostaPendenteCoordenadorDepartamento, index){
+    verDetalhesCoordenadorDepartamento(
+      propostaPendenteCoordenadorDepartamento,
+      index
+    ) {
       this.isResumoPropostaVisible = true;
       this.isDashboardVisible = true;
-      this.propostaSelecionada = Object.assign({}, propostaPendenteCoordenadorDepartamento);
-
+      this.propostaSelecionada = Object.assign(
+        {},
+        propostaPendenteCoordenadorDepartamento
+      );
+      this.mostrarTabela = false;
+      this.isDashboardVisible = false;
+    },
+    mostrarProponentes() {
+      this.isNovaPropostaVisible = false;
+      this.mostrarTabela = true;
+      this.isResumoPropostaVisible = false;
+      this.isDashboardVisible = true;
     }
   },
   computed: {
@@ -256,7 +279,6 @@ module.exports = {
       axios.get("/api/coordenadorCurso/historicoPropostas").then(response => {
         this.historicoPropostasCoordenadorCurso = response.data;
       });
-
     } else if (this.$store.state.user.roleDB == "diretor_uo") {
       this.isActiveDiretorUO = true;
     } else if (this.$store.state.user.roleDB == "ctc") {
