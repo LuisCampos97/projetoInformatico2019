@@ -57,10 +57,14 @@ class LoginController extends Controller
             $response['user'] = Auth::user();
             $role = \Adldap\Laravel\Facades\Adldap::search()->find($request->email)->title[0];
             $user = User::where('email', $request->email)->first();
-            if(strpos($role, 'Coordenador') !== false  || $role == 'Coordenador' || strpos($role, 'Estudante') !== false) {
-                $user->roleDB = 'proponente';
+            if(strpos($role, 'Departamento') !== false ) {
+                $user->roleDB = 'proponente_departamento';
                 $user->save();
-            } 
+            }
+            elseif(strpos($role, 'Curso') !== false || strpos($role, 'Estudante') !== false) {
+                $user->roleDB = 'proponente_curso';
+                $user->save();
+            }
             elseif(strpos($role, 'Diretor') !== false ) {
                 $user->roleDB = 'diretor_uo';
                 $user->save();
@@ -73,7 +77,7 @@ class LoginController extends Controller
                 $user->roleDB = 'secretariado_direcao';
                 $user->save();
             }
-            elseif(strpos($role, 'Recursos') !== false ) {
+            elseif(strpos($role, 'Recursos') !== false) {
                 $user->roleDB = 'recursos_humanos';
                 $user->save();
             }

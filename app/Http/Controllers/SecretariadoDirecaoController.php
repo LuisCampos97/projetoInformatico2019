@@ -12,7 +12,7 @@ class SecretariadoDirecaoController extends Controller
       $propostasADevolver=[];
       $propostas = DB::table('proposta')
         ->join('proposta_proponente', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
-        ->join('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', '=', 'proposta_diretor_uo.id')
+        ->join('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id')
         ->join('proposta_ctc', 'proposta.proposta_ctc_id', 'proposta_ctc.id')
         ->whereNotNull('proposta.proposta_ctc_id')
         ->whereNull('proposta.proposta_secretariado_direcao_id')

@@ -40,6 +40,11 @@ Route::post('/propostaProponente', 'PropostaProponenteController@store');
 Route::get('/allPropostasProponente', 'PropostaProponenteController@getPropostasProponente');
 Route::get('/coordenadorDepartamento/propostasPendentes', 'PropostaProponenteController@getPropostasPendentesCoordenadorDepartamento');
 Route::get('/coordenadorDepartamento/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorDepartamento');
+Route::get('/coordenadorCurso/propostasPendentes', 'PropostaProponenteController@getPropostasPendentesCoordenadorCurso');
+Route::get('/coordenadorCurso/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorCurso');
+Route::put('/propostaProponente/fundamentacaoCoordenadorDepartamento/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorDepartamento');
+Route::put('/propostaProponente/fundamentacaoCoordenadorCurso/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorCurso');
+
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');

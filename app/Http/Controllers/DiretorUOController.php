@@ -19,6 +19,8 @@ class DiretorUOController extends Controller
       ->join('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
       ->whereNotNull('proposta.proposta_proponente_id')
       ->whereNull('proposta.proposta_diretor_uo_id')
+      ->whereNotNull('proposta_proponente.fundamentacao_coordenador_departamento')
+      ->whereNotNull('proposta_proponente.fundamentacao_coordenador_curso')
       ->get();
 
       array_push($propostasADevolver, $propostaProponente);

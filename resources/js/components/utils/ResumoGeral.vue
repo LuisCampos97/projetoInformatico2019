@@ -1,26 +1,52 @@
 <template>
   <div>
-    <h3>Resumo da proposta de contratação</h3>
+    <div v-if="this.$store.state.user.roleDB == 'proponente_departamento'">
+      <h3>Resumo da proposta de contratação</h3>
     <button
-      v-if="this.$store.state.user.roleDB == 'diretor_uo'"
+      
       class="btn btn-danger"
-      @click="voltar"
+      
     >Voltar</button>
-    <button
-      v-if="this.$store.state.user.roleDB == 'ctc'"
-      class="btn btn-danger"
-      @click="voltarCTC"
-    >Voltar</button>
-    <button
-      v-if="this.$store.state.user.roleDB == 'secretariado_direcao'"
-      class="btn btn-danger"
-      @click="voltarSecretariado"
-    >Voltar</button>
-    <button
-      v-if="this.$store.state.user.roleDB == 'recursos_humanos'"
-      class="btn btn-danger"
-      @click="voltarRecursosHumanos"
-    >Voltar</button>
+    </div>
+    
+    <div v-if="this.$store.state.user.roleDB == 'proponente_curso'">
+      <h3>Resumo da proposta de contratação</h3>
+      <button
+        class="btn btn-danger"
+      >Voltar</button>
+    </div>
+
+    <div v-if="this.$store.state.user.roleDB == 'diretor_uo'">
+      <h3>Resumo da proposta de contratação</h3>
+      <button
+        class="btn btn-danger"
+        @click="voltarDiretor"
+      >Voltar</button>
+    </div>
+
+    <div v-if="this.$store.state.user.roleDB == 'ctc'">
+      <h3>Resumo da proposta de contratação</h3>
+      <button
+        class="btn btn-danger"
+        @click="voltarCTC"
+      >Voltar</button>
+    </div>
+    
+    <div v-if="this.$store.state.user.roleDB == 'secretariado_direcao'">
+      <h3>Resumo da proposta de contratação</h3>
+      <button
+        class="btn btn-danger"
+        @click="voltarSecretariado"
+      >Voltar</button>
+    </div>
+
+    <div v-if="this.$store.state.user.roleDB == 'recursos_humanos'">
+      <h3>Resumo da proposta de contratação</h3>
+      <button
+        class="btn btn-danger"
+        @click="voltarRecursosHumanos"
+      >Voltar</button>
+    </div>
 
     <b-form-group label="Unidade Orgânica">
       <b-form-input :readonly="true" v-model="propostaSelecionada.unidade_organica"></b-form-input>
@@ -121,8 +147,20 @@
       </b-form-group>
     </div>
 
+    <fundamentacao-departamento
+      v-if="this.$store.state.user.roleDB == 'proponente_departamento' &&
+      this.propostaSelecionada.fundamentacao_coordenador_departamento == null"
+      :propostaSelecionada = "propostaSelecionada"
+    ></fundamentacao-departamento>
+
+    <fundamentacao-curso
+      v-if="this.$store.state.user.roleDB == 'proponente_curso' &&
+            this.propostaSelecionada.fundamentacao_coordenador_curso == null"
+      :propostaSelecionada = "propostaSelecionada"
+    ></fundamentacao-curso>
+
     <diretor
-      v-if="propostaSelecionada.proposta_diretor_uo_id == null && this.$store.state.user.roleDB == 'diretor_uo'"
+      v-if="this.$store.state.user.roleDB == 'diretor_uo'"
       :propostaSelecionada="propostaSelecionada"
     ></diretor>
     <ctc
@@ -147,7 +185,7 @@ export default {
     };
   },
   methods: {
-    voltar() {
+    voltarDiretor() {
       this.$emit("mostrar-diretor");
     },
     voltarCTC() {
@@ -161,12 +199,13 @@ export default {
     }
   },
   mounted() {
+
     axios
       .get(
         "/api/diretorUO/getPropostaProponente/" +
           this.propostaSelecionada.role +
           "/" +
-          this.propostaSelecionada.proposta_proponente_id
+          this.propostaSelecionada.id
       )
       .then(response => {
         this.tipoPropostaRole = response.data;
@@ -174,10 +213,12 @@ export default {
     axios
       .get(
         "api/diretorUO/getUCSPropostaSelecionada/" +
-          this.propostaSelecionada.proposta_proponente_id
+          this.propostaSelecionada.id
       )
       .then(response => {
         this.ucsDaPropostaSelecionada = response.data;
+                console.log(response);
+
       });
   }
 };
