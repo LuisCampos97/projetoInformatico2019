@@ -58,7 +58,7 @@ class InitialMigration extends Migration
         });
 
         Schema::create('proposta_proponente', function(Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_proponente');
             $table->enum('unidade_organica', ['ESECS', 'ESTG', 'ESAD.CR', 'ESTM', 'ESSLei']);
             $table->string('nome_completo');
             $table->string('email');
@@ -77,7 +77,7 @@ class InitialMigration extends Migration
         });
 
         Schema::create('proposta_proponente_professor', function (Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_proponente_professor');
             $table->enum('role_professor', ['coordenador', 'adjunto', 'visitante']);
             $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_integral', 'dedicacao_exclusiva']);
             $table->integer('percentagem_prestacao_servicos')->nullable();
@@ -87,13 +87,13 @@ class InitialMigration extends Migration
             $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa'])->nullable();
             //Signature???
             $table->integer('proposta_proponente_id')->unsigned();
-            $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
+            $table->foreign('proposta_proponente_id')->references('id_proposta_proponente')->on('proposta_proponente');
             $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('proposta_proponente_assistente', function(Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_proponente_assistente');
             $table->enum('regime_prestacao_servicos', ['tempo_parcial', 'tempo_parcial_60', 'tempo_integral', 'dedicacao_exclusiva']);
             $table->integer('percentagem_prestacao_servicos');
             $table->string('fundamentacao')->nullable();
@@ -101,26 +101,26 @@ class InitialMigration extends Migration
             $table->string('duracao');
             $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa']);
             $table->integer('proposta_proponente_id')->unsigned();
-            $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
+            $table->foreign('proposta_proponente_id')->references('id_proposta_proponente')->on('proposta_proponente');
             //Signature???
             $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('proposta_proponente_monitor', function (Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_proponente_monitor');
             $table->enum('regime_prestacao_servicos', ['tempo_parcial']);
             $table->integer('percentagem_prestacao_servicos');
             $table->string('periodo');
             $table->string('duracao');
             $table->integer('proposta_proponente_id')->unsigned();
-            $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
+            $table->foreign('proposta_proponente_id')->references('id_proposta_proponente')->on('proposta_proponente');
             $table->softDeletes();
             $table->timestamps();
         });
 
         Schema::create('ucs_proposta_proponente', function(Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_ucs_proposta_proponente');
             $table->string('codigo_uc');
             $table->enum('regime', ['Diurno', 'Pos-Laboral']);
             $table->enum('tipo', ['Semestral', 'Anual']);
@@ -129,12 +129,12 @@ class InitialMigration extends Migration
             $table->integer('departamento_id')->unsigned()->nullable(); //! Para já
             $table->foreign('departamento_id')->references('id')->on('departamento');
             $table->integer('proposta_proponente_id')->unsigned();
-            $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
+            $table->foreign('proposta_proponente_id')->references('id_proposta_proponente')->on('proposta_proponente');
             $table->string("turno");
         });
 
         Schema::create('proposta_diretor_uo', function(Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_diretor_uo');
             $table->boolean('reconhecimento')->default(false);
             $table->enum('parecer', ['Favoravel', 'Desfavoravel']);
             //Signature??
@@ -144,7 +144,7 @@ class InitialMigration extends Migration
         });
 
         Schema::create('proposta_ctc', function(Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_ctc');
             $table->integer('votos_a_favor')->default(0);
             $table->integer('votos_contra')->default(0);
             $table->integer('votos_brancos')->default(0);
@@ -157,7 +157,7 @@ class InitialMigration extends Migration
         });
 
         Schema::create('proposta_secretariado_direcao', function(Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_secretariado_direcao');
             $table->string('convite');
             $table->softDeletes();
             $table->timestamps();
@@ -165,7 +165,7 @@ class InitialMigration extends Migration
         });
 
         Schema::create('proposta_recursos_humanos', function (Blueprint $table){
-            $table->increments('id');
+            $table->increments('id_proposta_recursos_humanos');
             $table->decimal('remuneracao', 6, 2);
             $table->string('escalao');
             $table->string('indice');
@@ -189,15 +189,15 @@ class InitialMigration extends Migration
         Schema::create('proposta', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('proposta_proponente_id')->unsigned()->nullable();
-            $table->foreign('proposta_proponente_id')->references('id')->on('proposta_proponente');
+            $table->foreign('proposta_proponente_id')->references('id_proposta_proponente')->on('proposta_proponente');
             $table->integer('proposta_diretor_uo_id')->unsigned()->nullable();
-            $table->foreign('proposta_diretor_uo_id')->references('id')->on('proposta_diretor_uo');
+            $table->foreign('proposta_diretor_uo_id')->references('id_proposta_diretor_uo')->on('proposta_diretor_uo');
             $table->integer('proposta_ctc_id')->unsigned()->nullable();
-            $table->foreign('proposta_ctc_id')->references('id')->on('proposta_ctc');
+            $table->foreign('proposta_ctc_id')->references('id_proposta_ctc')->on('proposta_ctc');
             $table->integer('proposta_secretariado_direcao_id')->unsigned()->nullable();
-            $table->foreign('proposta_secretariado_direcao_id')->references('id')->on('proposta_secretariado_direcao');
+            $table->foreign('proposta_secretariado_direcao_id')->references('id_proposta_secretariado_direcao')->on('proposta_secretariado_direcao');
             $table->integer('proposta_recursos_humanos_id')->unsigned()->nullable();
-            $table->foreign('proposta_recursos_humanos_id')->references('id')->on('proposta_recursos_humanos');
+            $table->foreign('proposta_recursos_humanos_id')->references('id_proposta_recursos_humanos')->on('proposta_recursos_humanos');
             $table->enum('status', ['pendente', 'recusada', 'finalizada']);
             $table->softDeletes();
             $table->timestamps();

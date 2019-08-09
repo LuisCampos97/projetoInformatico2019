@@ -82,11 +82,12 @@ export default {
             .post("/api/diretorUO/propostaDiretor", this.propostaDiretor)
             .then(response => {
               console.log(response);
+              console.log(this.propostaSelecionada)
               let parecer = response.data.parecer;
               axios
                 .patch(
                   "/api/proposta/" +
-                    parseInt(response.data.id) +
+                    parseInt(response.data.id_proposta_diretor_uo) +
                     "/" +
                     this.propostaSelecionada.id +
                     "/" +

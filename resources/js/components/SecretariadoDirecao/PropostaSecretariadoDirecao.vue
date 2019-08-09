@@ -71,7 +71,7 @@ export default {
               }); // raise an event on the server
               */
               console.log(response);
-              let idPropostaSecretariadoDirecao = response.data.id;
+              let idPropostaSecretariadoDirecao = response.data.id_proposta_secretariado_direcao;
               axios
                 .patch(
                   "/api/propostaSecretariadoDirecao/" + idPropostaSecretariadoDirecao + 

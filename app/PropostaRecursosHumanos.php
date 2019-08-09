@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class PropostaRecursosHumanos extends Model
 {
+
+    protected $table='proposta_recursos_humanos';
+    protected $primaryKey = 'id_proposta_recursos_humanos';
+
     protected $fillable = [
         'remuneracao', 'escalao', 'indice', 'numero_funcionario', 'contratacao_comunicada', 'inscricao_seguranca_social',
         'inscricao_caiga_geral_aposentacoes', 'despacho_presidente_ipl', 'contrato_redigido', 'contrato_anexo', 

@@ -202,21 +202,22 @@ export default {
     }
   },
   mounted() {
-
+    console.log(this.propostaSelecionada)
     axios
       .get(
         "/api/diretorUO/getPropostaProponente/" +
           this.propostaSelecionada.role +
           "/" +
-          this.propostaSelecionada.id
+          this.propostaSelecionada.id_proposta_proponente
       )
       .then(response => {
         this.tipoPropostaRole = response.data;
       });
+
     axios
       .get(
         "api/diretorUO/getUCSPropostaSelecionada/" +
-          this.propostaSelecionada.id
+          this.propostaSelecionada.id_proposta_proponente
       )
       .then(response => {
         this.ucsDaPropostaSelecionada = response.data;

@@ -88,8 +88,8 @@ export default {
         this.isResumoChecked=true;
       },
       mostrarCTC(){
-      this.isResumoChecked = false;
-      this.mostrarCTCComponent = true;
+        this.isResumoChecked = false;
+        this.mostrarCTCComponent = true;
       }
   },
   mounted() {

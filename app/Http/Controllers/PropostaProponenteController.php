@@ -83,6 +83,7 @@ class PropostaProponenteController extends Controller
     }
     
     public function inserirFundamentacaoCoordenadorDepartamento($propostaProponenteID, Request $request){
+
         $propostaAAtualizar = PropostaProponente::findOrFail($propostaProponenteID);
         $propostaAAtualizar->fundamentacao_coordenador_departamento = $request->fundamentacao_coordenador_departamento;
         $propostaAAtualizar->data_de_assinatura_coordenador_departamento = $request->data_de_assinatura_coordenador_departamento;

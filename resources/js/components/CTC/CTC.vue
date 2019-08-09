@@ -115,7 +115,7 @@ export default {
           axios
             .post("/api/ctc/propostaCTC", this.propostaCTC)
             .then(response => {
-              let proposta_ctc_id = response.data.id;
+              let proposta_ctc_id = response.data.id_proposta_ctc;
               let aprovacao = response.data.aprovacao.replace(' ', '');
               axios
                 .patch(
