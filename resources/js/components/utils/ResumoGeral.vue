@@ -148,7 +148,7 @@
     </div>
     <div
       v-if="propostaSelecionada.proposta_ctc_id != null &&
-        (this.$store.state.user == 'ctc'
+        (this.$store.state.user.roleDB == 'ctc'
         || this.$store.state.user.roleDB == 'secretariado_direcao' 
         || this.$store.state.user.roleDB == 'recursos_humanos')"
     >
@@ -163,6 +163,16 @@
       </b-form-group>
       <b-form-group label="Votos nulos do Conselho Tecnico-Científico">
         <b-form-input :readonly="true" v-model="propostaSelecionada.votos_nulos"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Ata CTC">
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ataCTC"
+          @click="downloadFicheiro(ataCTC.proposta_id, 'Ata do CTC')"
+        >
+          <i class="far fa-file-pdf"></i> Ata do CTC
+        </b-button>
       </b-form-group>
     </div>
     <!--
@@ -260,6 +270,7 @@ export default {
       ficheiroCurriculo:"",
       ficheiroRelatorioProponentes:"",
       ficheiroCertificadoHabilitacoes:"",
+      ataCTC:"",
       propostaID:"",
     };
   },
@@ -302,6 +313,7 @@ export default {
         this.ficheiroRelatorioProponentes = this.ficheiros[0];
         this.ficheiroCurriculo = this.ficheiros[1];
         this.ficheiroCertificadoHabilitacoes = this.ficheiros[2];
+        this.ataCTC = this.ficheiros[3];
 
       })
     })

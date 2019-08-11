@@ -43,10 +43,13 @@
 
     <b-form-group label="Ata da reunião do Conselho Tecnico-Científico">
       <b-form-file
-        v-model="ata"
-        :state="Boolean(ata)"
+        v-model="ataCTC"
         placeholder="Escolha um ficheiro"
         drop-placeholder="Arraste para aqui um ficheiro"
+        name="ataCTC"
+        v-validate="{ required: true }"
+        :state="validateState('ataCTC')"
+        @change="onFileSelected"
       ></b-form-file>
     </b-form-group>
 
@@ -78,13 +81,12 @@ export default {
         aprovacao: "",
         data_assinatura: ""
       },
-      ata: null,
+      
       ficheiro: {
-        nome: "",
-        descricao: "Ata da reuniao do Conselho Tecnico-Cientifico",
-        proposta_id: ""
+        ata: {},
       },
-
+      ficheiros:[],
+      ataCTC:"",
       aprovacaoArray: [
         { text: "Aprovado", value: "aprovado" },
         { text: "Nao aprovado", value: "nao aprovado" }
@@ -103,9 +105,19 @@ export default {
     //ata: { required }
   },
   methods: {
+    validateState(ref) {
+      return this.veeErrors.has(ref) ? false : null;
+    },
+    onFileSelected(event) {
+      this.ficheiros[event.target.name] = event.target.files[0];
+    },
+
     finalizarAprovacaoCTC(propostaCTC) {
-      console.log(this.propostaSelecionada);
-      this.ficheiro.nome = this.ata.name;
+
+      this.ficheiro.ata = new FormData();
+      this.ficheiro.ata.append("file", this.ficheiros["ataCTC"]);
+      this.ficheiro.ata.append("descricao", "Ata do CTC");
+    
       let confirmacao = confirm(
         "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
       );
@@ -117,6 +129,10 @@ export default {
             .then(response => {
               let proposta_ctc_id = response.data.id_proposta_ctc;
               let aprovacao = response.data.aprovacao.replace(' ', '');
+              this.ficheiro.ata.append("proposta_id", proposta_ctc_id);
+              axios.post('/api/ficheiro', this.ficheiro.ata).then(response => {
+                
+              });
               axios
                 .patch(
                   "/api/propostaCTC/" +
