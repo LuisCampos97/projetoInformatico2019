@@ -38,7 +38,7 @@
         class="btn btn-success mt-3 font-weight-bold"
         v-on:click.prevent="finalizarParecer(propostaDiretor)"
       >
-        Finalizar
+        Submeter
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>

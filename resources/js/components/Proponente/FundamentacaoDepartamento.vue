@@ -26,7 +26,7 @@
       class="btn btn-success mt-3 font-weight-bold"
       v-on:click.prevent="inserirFundamentacao(propostaProponente)"
     >
-      Finalizar
+      Submeter
       <i class="fas fa-arrow-right"></i>
     </button>
     </div>

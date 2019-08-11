@@ -48,6 +48,7 @@
 
       <b-form-group label="Despacho do Sr.Presidente do IPL" label-for="inputDespacho">
         <b-form-input
+          type="date"
           id="inputDespacho"
           :state="$v.propostaRecursosHumanos.despacho_presidente_ipl.$dirty ? !$v.propostaRecursosHumanos.despacho_presidente_ipl.$error : null"
           v-model="propostaRecursosHumanos.despacho_presidente_ipl"
@@ -114,6 +115,7 @@
 
       <b-form-group label="Data de nascimento" label-for="inputDataNascimento">
         <b-form-input
+          type="date"
           id="inputDataNascimento"
           :state="$v.propostaRecursosHumanos.data_nascimento.$dirty ? !$v.propostaRecursosHumanos.data_nascimento.$error : null"
           v-model="propostaRecursosHumanos.data_nascimento"
@@ -133,8 +135,8 @@
       <b-form-group label="E-mail pessoal" label-for="inputEmailPessoal">
         <b-form-input
           id="inputEmailPessoal"
-          :state="$v.propostaRecursosHumanos.email.$dirty ? !$v.propostaRecursosHumanos.email.$error : null"
-          v-model="propostaRecursosHumanos.email"
+          :state="$v.propostaRecursosHumanos.email_recursos_humanos.$dirty ? !$v.propostaRecursosHumanos.email_recursos_humanos.$error : null"
+          v-model="propostaRecursosHumanos.email_recursos_humanos"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">Tem de preencher este campo</b-form-invalid-feedback>
       </b-form-group>
@@ -150,6 +152,7 @@
 
       <b-form-group label="Data" label-for="inputDataGIAF">
         <b-form-input
+          type="date"
           id="inputDataGIAF"
           :state="$v.propostaRecursosHumanos.data_carregamento_dados_GIAF.$dirty ? !$v.propostaRecursosHumanos.data_carregamento_dados_GIAF.$error : null"
           v-model="propostaRecursosHumanos.data_carregamento_dados_GIAF"
@@ -189,7 +192,7 @@ export default {
         NISS_ou_numero_CGA: "",
         data_nascimento: "",
         numero_CC: "",
-        email: "",
+        email_recursos_humanos: "",
         dados_GIAF_carregados_por: "",
         data_carregamento_dados_GIAF: ""
       }
@@ -202,8 +205,7 @@ export default {
       indice: { required },
       numero_funcionario: { required },
       contratacao_comunicada: { required },
-      inscricao_seguranca_social: { required },
-      inscricao_caixa_geral_aposentacoes: { required },
+      inscricao: { required },
       despacho_presidente_ipl: { required },
       contrato_redigido: { required },
       contrato_anexo: { required },
@@ -211,24 +213,25 @@ export default {
       NISS_ou_numero_CGA: { required },
       data_nascimento: { required },
       numero_CC: { required },
-      email: { required },
+      email_recursos_humanos: { required },
       dados_GIAF_carregados_por: { required },
       data_carregamento_dados_GIAF: { required }
     }
   },
   methods: {
     finalizarPropostaRecursosHumanos(propostaRecursosHumanos){
-      this.$v.propostaSecretariadoDirecao.convite.$touch();
-      if (!this.$v.propostaSecretariadoDirecao.convite.$invalid) {
+      this.$v.propostaRecursosHumanos.$touch();
+      if (!this.$v.propostaRecursosHumanos.$invalid) {
         let confirmacao = confirm(
           "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
         );
         if (confirmacao) {
           axios.post('/api/recursosHumanos/propostaRecursosHumanos', propostaRecursosHumanos)
           .then(response => {
-            let idPropostaRecursosHumanos = response.data.id;
+            console.log(response)
+            let idPropostaRecursosHumanos = response.data.id_proposta_recursos_humanos;
             axios.patch('/api/propostaRecursosHumanos/' + idPropostaRecursosHumanos + "/" 
-            + propostaSelecionada.id).then(response => {
+            + this.propostaSelecionada.id).then(response => {
               this.$socket.emit("email-recursos-humanos", {
                 msg: "Pedido de email enviado..."
               });

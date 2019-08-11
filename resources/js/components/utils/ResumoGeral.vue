@@ -2,50 +2,32 @@
   <div>
     <div v-if="this.$store.state.user.roleDB == 'proponente_departamento'">
       <h3>Resumo da proposta de contratação</h3>
-    <button
-      class="btn btn-danger"
-      @click="voltarProponentes"
-    >Voltar</button>
+      <button class="btn btn-danger" @click="voltarProponentes">Voltar</button>
     </div>
-    
+
     <div v-if="this.$store.state.user.roleDB == 'proponente_curso'">
       <h3>Resumo da proposta de contratação</h3>
-      <button
-        class="btn btn-danger"
-        @click="voltarProponentes"
-      >Voltar</button>
+      <button class="btn btn-danger" @click="voltarProponentes">Voltar</button>
     </div>
 
     <div v-if="this.$store.state.user.roleDB == 'diretor_uo'">
       <h3>Resumo da proposta de contratação</h3>
-      <button
-        class="btn btn-danger"
-        @click="voltarDiretor"
-      >Voltar</button>
+      <button class="btn btn-danger" @click="voltarDiretor">Voltar</button>
     </div>
 
     <div v-if="this.$store.state.user.roleDB == 'ctc'">
       <h3>Resumo da proposta de contratação</h3>
-      <button
-        class="btn btn-danger"
-        @click="voltarCTC"
-      >Voltar</button>
+      <button class="btn btn-danger" @click="voltarCTC">Voltar</button>
     </div>
-    
+
     <div v-if="this.$store.state.user.roleDB == 'secretariado_direcao'">
       <h3>Resumo da proposta de contratação</h3>
-      <button
-        class="btn btn-danger"
-        @click="voltarSecretariado"
-      >Voltar</button>
+      <button class="btn btn-danger" @click="voltarSecretariado">Voltar</button>
     </div>
 
     <div v-if="this.$store.state.user.roleDB == 'recursos_humanos'">
       <h3>Resumo da proposta de contratação</h3>
-      <button
-        class="btn btn-danger"
-        @click="voltarRecursosHumanos"
-      >Voltar</button>
+      <button class="btn btn-danger" @click="voltarRecursosHumanos">Voltar</button>
     </div>
 
     <b-form-group label="Unidade Orgânica">
@@ -121,7 +103,9 @@
         v-model="propostaSelecionada.fundamentacao_coordenador_departamento"
       ></b-form-input>
     </b-form-group>
-    <div v-if="propostaSelecionada.proposta_diretor_uo_id != null &&(this.$store.state.user.roleDB == 'diretor_uo' 
+
+    <div
+      v-if="propostaSelecionada.proposta_diretor_uo_id != null &&(this.$store.state.user.roleDB == 'diretor_uo' 
     || this.$store.state.user.roleDB == 'ctc' || this.$store.state.user.roleDB == 'secretariado_direcao' || 
     this.$store.state.user.roleDB == 'recursos_humanos' )"
     >
@@ -129,9 +113,11 @@
         <b-form-input :readonly="true" v-model="propostaSelecionada.parecer"></b-form-input>
       </b-form-group>
     </div>
-    <div v-if="propostaSelecionada.proposta_ctc_id != null &&( this.$store.state.user != 'proponente' || this.$store.state.user != 'ctc'
-    || this.$store.state.user.roleDB == 'secretariado_direcao' || 
-    this.$store.state.user.roleDB == 'recursos_humanos' )"
+    <div
+      v-if="propostaSelecionada.proposta_ctc_id != null &&
+        (this.$store.state.user == 'ctc'
+        || this.$store.state.user.roleDB == 'secretariado_direcao' 
+        || this.$store.state.user.roleDB == 'recursos_humanos')"
     >
       <b-form-group label="Votos a favor do Conselho Tecnico-Científico">
         <b-form-input :readonly="true" v-model="propostaSelecionada.votos_a_favor"></b-form-input>
@@ -146,17 +132,70 @@
         <b-form-input :readonly="true" v-model="propostaSelecionada.votos_nulos"></b-form-input>
       </b-form-group>
     </div>
-
+    <!--
+    <div v-if="propostaSelecionada.proposta_ctc_id != null &&(
+      this.$store.state.user.roleDB == 'secretariado_direcao' || 
+      this.$store.state.user.roleDB == 'recursos_humanos')">
+      <b-form-group label="Convite" >
+        <b-form-textarea
+        :readonly="true"
+          v-model="propostaSelecionada.convite"
+        ></b-form-textarea>
+        <b-form-invalid-feedback id="input-1-live-feedback">A fundamentação é obrigatória!</b-form-invalid-feedback>
+      </b-form-group>
+    </div>
+    -->
+    <div
+      v-if="propostaSelecionada.proposta_recursos_humanos_id != null &&
+      this.$store.state.user.roleDB == 'recursos_humanos'"
+    >
+      <b-form-group label="Remuneração">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.remuneracao"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Indice">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.indice"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Escalao">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.escalao"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Numero Funcionário">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.numero_funcionario"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Inscrição">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.inscricao"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Despacho Presidente IPL">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.despacho_presidente_ipl"></b-form-input>
+      </b-form-group>
+      <b-form-group label="NISS ou nº CGA">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.NISS_ou_numero_CGA"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Data Nascimento">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.data_nascimento"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Número Cartão Cidadão">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.numero_CC"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Email RH">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.email_recursos_humanos"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Dados GIAF carregados por">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.dados_GIAF_carregados_por"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Data de carregamento de dados no GIAF">
+        <b-form-input :readonly="true" v-model="propostaSelecionada.data_carregamento_dados_GIAF"></b-form-input>
+      </b-form-group>
+    </div>
     <fundamentacao-departamento
       v-if="this.$store.state.user.roleDB == 'proponente_departamento' &&
       this.propostaSelecionada.fundamentacao_coordenador_departamento == null"
-      :propostaSelecionada = "propostaSelecionada"
+      :propostaSelecionada="propostaSelecionada"
     ></fundamentacao-departamento>
 
     <fundamentacao-curso
       v-if="this.$store.state.user.roleDB == 'proponente_curso' &&
             this.propostaSelecionada.fundamentacao_coordenador_curso == null"
-      :propostaSelecionada = "propostaSelecionada"
+      :propostaSelecionada="propostaSelecionada"
     ></fundamentacao-curso>
 
     <diretor
@@ -168,11 +207,13 @@
       :propostaSelecionada="propostaSelecionada"
     ></ctc>
     <proposta-secretariado
-     v-if="propostaSelecionada.proposta_secretariado_direcao_id == null &&this.$store.state.user.roleDB == 'secretariado_direcao'"
-     :propostaSelecionada="propostaSelecionada"></proposta-secretariado>
-     <proposta-recursos
+      v-if="propostaSelecionada.proposta_secretariado_direcao_id == null &&this.$store.state.user.roleDB == 'secretariado_direcao'"
+      :propostaSelecionada="propostaSelecionada"
+    ></proposta-secretariado>
+    <proposta-recursos
       v-if="propostaSelecionada.proposta_recursos_humanos_id == null && this.$store.state.user.roleDB == 'recursos_humanos'"
-      :propostaSelecionada="propostaSelecionada"></proposta-recursos>
+      :propostaSelecionada="propostaSelecionada"
+    ></proposta-recursos>
   </div>
 </template>
 <script>
@@ -181,11 +222,12 @@ export default {
   data() {
     return {
       tipoPropostaRole: [],
-      ucsDaPropostaSelecionada: []
+      ucsDaPropostaSelecionada: [],
+      ficheiros: [],
     };
   },
   methods: {
-    voltarProponentes(){
+    voltarProponentes() {
       this.$emit("mostrar-proponentes");
     },
     voltarDiretor() {
@@ -197,12 +239,11 @@ export default {
     voltarSecretariado() {
       this.$emit("mostrar-secretariado");
     },
-    voltarRecursosHumanos(){
+    voltarRecursosHumanos() {
       this.$emit("mostrar-recursos");
     }
   },
   mounted() {
-    console.log(this.propostaSelecionada)
     axios
       .get(
         "/api/diretorUO/getPropostaProponente/" +
@@ -221,8 +262,6 @@ export default {
       )
       .then(response => {
         this.ucsDaPropostaSelecionada = response.data;
-                console.log(response);
-
       });
   }
 };

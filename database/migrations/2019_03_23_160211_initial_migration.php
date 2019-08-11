@@ -171,7 +171,7 @@ class InitialMigration extends Migration
             $table->string('indice');
             $table->integer('numero_funcionario')->unsigned();
             $table->enum('inscricao', ['seguranca_social', 'CGA']);
-            $table->boolean('inscricao_caiga_geral_aposentacoes')->default(false);
+            $table->boolean('contratacao_comunicada')->default(false);
             $table->datetime('despacho_presidente_ipl');
             $table->boolean('contrato_redigido')->default(false);
             $table->boolean('contrato_anexo')->default(false);
@@ -179,7 +179,7 @@ class InitialMigration extends Migration
             $table->integer('NISS_ou_numero_CGA')->unsigned();
             $table->datetime('data_nascimento');
             $table->integer('numero_CC')->unsigned();
-            $table->string('email')->unique();
+            $table->string('email_recursos_humanos')->unique();
             $table->string('dados_GIAF_carregados_por');
             $table->datetime('data_carregamento_dados_GIAF');
             $table->softDeletes();

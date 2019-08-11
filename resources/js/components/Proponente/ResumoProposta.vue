@@ -194,7 +194,7 @@
       @click="makeToast('success')"
       v-if="proposta.role=='professor'"
     >
-      <i class="fas fa-save"></i> Finalizar
+      <i class="fas fa-save"></i> Submeter
     </button>
     <button
       type="button"
@@ -203,7 +203,7 @@
       @click="makeToast('success')"
       v-if="proposta.role=='assistente'"
     >
-      <i class="fas fa-save"></i> Finalizar
+      <i class="fas fa-save"></i> Submeter
     </button>
     <button
       type="button"
@@ -212,7 +212,7 @@
       @click="makeToast('success')"
       v-if="proposta.role=='monitor'"
     >
-      <i class="fas fa-save"></i> Finalizar
+      <i class="fas fa-save"></i> Submeter
     </button>
   </div>
 </template>
@@ -244,7 +244,8 @@ module.exports = {
           axios
             .post("/api/propostaProponente", this.proposta)
             .then(response => {
-              this.idParaUcsPropostaProponente = response.data.id;
+              console.log(response);
+              this.idParaUcsPropostaProponente = response.data.id_proposta_proponente;
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
               });
