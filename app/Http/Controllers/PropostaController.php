@@ -55,4 +55,10 @@ class PropostaController extends Controller
         $proposta->status = 'finalizada';
         $proposta->save();
     }
+
+    public function getPropostaDePropostaProponente($propostaID){
+        //dd($propostaID);
+        $proposta = Proposta::where('proposta_proponente_id','=', $propostaID)->get();
+        return $proposta;
+    }
 }

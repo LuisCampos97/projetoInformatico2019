@@ -68,6 +68,8 @@ Route::patch('/proposta/{idPropostaDiretorUO}/{propostaID}/{parecer}', 'Proposta
 Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}/{aprovacao}', 'PropostaController@atualizarPropostaCTC');
 Route::patch('/propostaSecretariadoDirecao/{propostaSecretariadoDirecaoID}/{propostaID}', 'PropostaController@atualizarPropostaSecretariadoDirecao');
 Route::patch('/propostaRecursosHumanos/{propostaRecursoHumanosID}/{propostaID}', 'PropostaController@atualizarPropostaRecursosHumanos');
+Route::get('/propostaDePropostaProponente/{propostaID}', 'PropostaController@getPropostaDePropostaProponente');
+
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis', 'CursoController@getCursos');
 

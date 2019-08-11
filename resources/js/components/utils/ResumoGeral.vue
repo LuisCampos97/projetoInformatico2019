@@ -103,6 +103,39 @@
         v-model="propostaSelecionada.fundamentacao_coordenador_departamento"
       ></b-form-input>
     </b-form-group>
+    
+    <b-form-group label="Curriculo do docente">
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroCurriculo"
+          @click="downloadFicheiro(ficheiroCurriculo.proposta_id, 'Curriculo do docente a ser contratado')"
+        >
+          <i class="far fa-file-pdf"></i> Atual Curriculo do Docente
+        </b-button>
+      </b-form-group>
+
+      <b-form-group label="Certificado de Habilitações do docente">
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroCertificadoHabilitacoes"
+          @click="downloadFicheiro(ficheiroCertificadoHabilitacoes.proposta_id, 'Habilitacoes do docente a ser contratado')"
+        >
+          <i class="far fa-file-pdf"></i> Atual Certificado de Habilitações do Docente
+        </b-button>
+      </b-form-group>
+      
+      <b-form-group label="Relatório dos dois proponentes">
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroRelatorioProponentes"
+          @click="downloadFicheiro(ficheiroRelatorioProponentes.proposta_id, 'Relatorio dos 2 proponentes')"
+        >
+          <i class="far fa-file-pdf"></i> Atual Certificado de Habilitações do Docente
+        </b-button>
+      </b-form-group>
 
     <div
       v-if="propostaSelecionada.proposta_diretor_uo_id != null &&(this.$store.state.user.roleDB == 'diretor_uo' 
@@ -224,6 +257,10 @@ export default {
       tipoPropostaRole: [],
       ucsDaPropostaSelecionada: [],
       ficheiros: [],
+      ficheiroCurriculo:"",
+      ficheiroRelatorioProponentes:"",
+      ficheiroCertificadoHabilitacoes:"",
+      propostaID:"",
     };
   },
   methods: {
@@ -241,9 +278,33 @@ export default {
     },
     voltarRecursosHumanos() {
       this.$emit("mostrar-recursos");
+    },
+    downloadFicheiro(proposta_id, descricao) {
+      axios
+        .get("/api/downloadFicheiro/" + proposta_id + "/" + descricao, {
+          responseType: "arraybuffer"
+        })
+        .then(response => {
+          let blob = new Blob([response.data]);
+          let link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = descricao + ".pdf";
+          link.click();
+        });
     }
   },
   mounted() {
+    axios.get('/api/propostaDePropostaProponente/'+this.propostaSelecionada.id_proposta_proponente)
+    .then(response => {
+      this.propostaID = response.data[0].id;
+      axios.get('/api/ficheiros/'+this.propostaID).then(response => {
+        this.ficheiros = response.data;
+        this.ficheiroRelatorioProponentes = this.ficheiros[0];
+        this.ficheiroCurriculo = this.ficheiros[1];
+        this.ficheiroCertificadoHabilitacoes = this.ficheiros[2];
+
+      })
+    })
     axios
       .get(
         "/api/diretorUO/getPropostaProponente/" +
