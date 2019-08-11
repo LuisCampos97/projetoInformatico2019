@@ -3,33 +3,33 @@
     <h2>
       <strong>Resumo da Proposta de contratação</strong>
     </h2>
-    <br>
+    <br />
     <h4>
       <strong>Informações gerais</strong>
     </h4>
     <div class="jumbotron">
-      <br>
+      <br />
       <h5>
         <strong>Tipo de contratação:</strong>
         {{ proposta.tipo_contrato }}
       </h5>
-      <br>
+      <br />
       <h5>
         <strong>Unidade Organica:</strong>
         {{ proposta.unidade_organica }}
       </h5>
-      <br>
+      <br />
       <h5>
         <strong>Nome completo:</strong>
         {{ proposta.nome_completo }}
       </h5>
-      <br>
+      <br />
       <h5>
         <strong>Papel do docente:</strong>
         {{ proposta.role }}
       </h5>
     </div>
-    <br>
+    <br />
     <h4>
       <strong>Unidades Curriculares</strong>
     </h4>
@@ -54,13 +54,13 @@
           </tr>
         </tbody>
       </table>
-      <br>
+      <br />
     </div>
-    <br>
+    <br />
     <h4>
       <strong>Informações Especificas</strong>
     </h4>
-    <br>
+    <br />
     <div class="jumbotron">
       <div v-if="proposta.role=='professor'">
         <h5>
@@ -68,7 +68,7 @@
           {{ propostaProponenteProfessor.role_professor }}
         </h5>
       </div>
-      <br>
+      <br />
       <h5>
         <strong>Regime de prestação de serviços:</strong>
       </h5>
@@ -82,7 +82,7 @@
       <div v-if="propostaProponenteMonitor">
         <h5>{{ propostaProponenteMonitor.regime_prestacao_servicos }}</h5>
       </div>
-      <br>
+      <br />
 
       <div v-if="propostaProponenteProfessor">
         <h5>
@@ -117,7 +117,7 @@
       <div v-if="propostaProponenteAssistente">
         <h5>{{ propostaProponenteAssistente.duracao }}</h5>
       </div>
-      <br>
+      <br />
       <h5>
         <strong>Periodo:</strong>
       </h5>
@@ -131,7 +131,7 @@
       <div v-if="propostaProponenteMonitor">
         <h5>{{ propostaProponenteMonitor.periodo }}</h5>
       </div>
-      <br>
+      <br />
     </div>
 
     <!-- Coordenador de curso -->
@@ -245,7 +245,8 @@ module.exports = {
             .post("/api/propostaProponente", this.proposta)
             .then(response => {
               console.log(response);
-              this.idParaUcsPropostaProponente = response.data.id_proposta_proponente;
+              this.idParaUcsPropostaProponente =
+                response.data.id_proposta_proponente;
               this.unidadesCurriculares.forEach(unidadeCurricular => {
                 unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
               });
@@ -254,13 +255,6 @@ module.exports = {
                   .post("/api/ucsPropostaProponente", unidadeCurricular)
                   .then(response => {});
                 this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
-
-                axios
-                  .post(
-                    "/api/propostaProponenteProfessor",
-                    this.propostaProponenteProfessor
-                  )
-                  .then(response => {});
               });
 
               axios
@@ -302,6 +296,12 @@ module.exports = {
             });
         }
       }
+      axios
+        .post(
+          "/api/propostaProponenteProfessor",
+          this.propostaProponenteProfessor
+        )
+        .then(response => {});
     },
     submeterPropostaAssistente(propostaProponenteAssistente) {
       if (this.unidadesCurriculares.length > 0) {
@@ -315,13 +315,6 @@ module.exports = {
               .post("/api/ucsPropostaProponente", unidadeCurricular)
               .then(response => {});
             this.propostaProponenteAssistente.proposta_proponente_id = this.idParaUcsPropostaProponente;
-
-            axios
-              .post(
-                "/api/propostaProponenteAssistente",
-                propostaProponenteAssistente
-              )
-              .then(response => {});
           });
 
           axios
@@ -354,6 +347,9 @@ module.exports = {
             });
         });
       }
+      axios
+        .post("/api/propostaProponenteAssistente", propostaProponenteAssistente)
+        .then(response => {});
     },
     submeterPropostaMonitor(propostaProponenteMonitor) {
       if (this.unidadesCurriculares.length > 0) {
@@ -367,10 +363,6 @@ module.exports = {
               .post("/api/ucsPropostaProponente", unidadeCurricular)
               .then(response => {});
             this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
-
-            axios
-              .post("/api/propostaProponenteMonitor", propostaProponenteMonitor)
-              .then(response => {});
           });
           axios
             .post("/api/proposta/" + this.idParaUcsPropostaProponente)
@@ -403,12 +395,13 @@ module.exports = {
             });
         });
       }
+      axios
+        .post("/api/propostaProponenteMonitor", propostaProponenteMonitor)
+        .then(response => {});
     },
     makeToast(variant = null) {
       this.$bvToast.toast("", {
-        title: `O Diretor da ${
-          this.proposta.unidade_organica
-        } foi notificado via email!`,
+        title: `O Diretor da ${this.proposta.unidade_organica} foi notificado via email!`,
         variant: variant,
         solid: true,
         toaster: "b-toaster-top-right"

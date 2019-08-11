@@ -69,7 +69,7 @@ class LoginController extends Controller
                 $user->roleDB = 'diretor_uo';
                 $user->save();
             }
-            elseif(strpos($role, 'Conselho') !== false || strpos($role, 'Estudante') !== false) {
+            elseif(strpos($role, 'Conselho') !== false ) {
                 $user->roleDB = 'ctc';
                 $user->save();
             }
@@ -77,7 +77,7 @@ class LoginController extends Controller
                 $user->roleDB = 'secretariado_direcao';
                 $user->save();
             }
-            elseif(strpos($role, 'Recursos') !== false ) {
+            elseif(strpos($role, 'Recursos') !== false || strpos($role, 'Estudante') !== false) {
                 $user->roleDB = 'recursos_humanos';
                 $user->save();
             }
