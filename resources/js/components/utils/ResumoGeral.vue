@@ -84,6 +84,29 @@
         <label><strong>Duração:</strong> {{ tipoPropostaRole.duracao }}</label>
         <br />
       </div>
+      
+      <div v-if="propostaSelecionada.role == 'assistente'">
+        <label><strong>Regime de prestação de serviços:</strong> {{ tipoPropostaRole.regime_prestacao_servicos }}</label>
+        <br />
+        <label><strong>Percentagem de prestação de serviços:</strong> {{ tipoPropostaRole.percentagem_prestacao_servicos }}</label>
+        <br />
+        <label><strong>Período: </strong>{{ tipoPropostaRole.periodo }}</label>
+        <br />
+        <label><strong>Duração:</strong> {{ tipoPropostaRole.duracao }}</label>
+      </div>
+
+      <div v-if="propostaSelecionada.role == 'monitor'">
+        <label><strong>Categoria de professor:</strong> {{ tipoPropostaRole.role_professor }}</label>
+        <br />
+        <label><strong>Regime de prestação de serviços:</strong> {{ tipoPropostaRole.regime_prestacao_servicos }}</label>
+        <br />
+        <label><strong>Percentagem de prestação de serviços:</strong> {{ tipoPropostaRole.percentagem_prestacao_servicos }}</label>
+        <br />
+        <label><strong>Período: </strong>{{ tipoPropostaRole.periodo }}</label>
+        <br />
+        <label><strong>Duração:</strong> {{ tipoPropostaRole.duracao }}</label>
+        <br />
+      </div>
 
       <label><strong>Fundamentação do Coordenador de Curso:</strong> {{ propostaSelecionada.fundamentacao_coordenador_curso }}</label>
       <br />
@@ -141,7 +164,7 @@
         <label><strong>Votos brancos do Conselho Tecnico-Cientifico:</strong> {{ propostaSelecionada.votos_brancos }}</label>
         <br />
         <label><strong>Votos nulos do Conselho Tecnico-Cientifico:</strong> {{ propostaSelecionada.votos_nulos }}</label>
-
+        <br />
         <b-button
           size="md"
           variant="dark"
@@ -164,6 +187,15 @@
         <br />
         <label><strong>Número do funcionário dos Recursos Humanos: </strong>{{ propostaSelecionada.numero_funcionario }}</label>
         <br />
+        <label><strong>O docente já se encontra/foi convidado a exercer noutras UO?: </strong>{{ propostaSelecionada.verificacao_outras_uo }}</label>
+        <br />
+        <div v-if="propostaSelecionada.verificacao_outras_uo == 'sim'">
+          <label><strong>Unidade Orgânica: </strong>{{ propostaSelecionada.nome_uo }}</label>
+          <br />
+          <label><strong>Tempo Parcial: </strong>{{ propostaSelecionada.tempo_parcial_uo }}</label>
+          <br />
+          <label><strong>Período: </strong>{{ propostaSelecionada.periodo_uo }}</label>
+        </div>
         <label><strong>Inscrição (CGA ou SS): </strong>{{ propostaSelecionada.inscricao }}</label>
         <br />
         <label><strong>Despacho Sr. Presidente do IPL: </strong>{{ propostaSelecionada.despacho_presidente_ipl }}</label>
@@ -211,7 +243,8 @@
       :propostaSelecionada="propostaSelecionada"
     ></proposta-secretariado>
     <proposta-recursos
-      v-if=" this.$store.state.user.roleDB == 'recursos_humanos'"
+      v-if="this.propostaSelecionada.proposta_recursos_humanos_id == null &&
+       this.$store.state.user.roleDB == 'recursos_humanos'"
       :propostaSelecionada="propostaSelecionada"
     ></proposta-recursos>
   </div>
@@ -290,7 +323,8 @@ export default {
           this.propostaSelecionada.id_proposta_proponente
       )
       .then(response => {
-        this.tipoPropostaRole = response.data;
+        console.log(response.data);
+        this.tipoPropostaRole = response.data[0];
       });
 
     axios

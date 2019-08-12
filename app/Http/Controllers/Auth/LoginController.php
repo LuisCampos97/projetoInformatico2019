@@ -69,7 +69,7 @@ class LoginController extends Controller
                 $user->roleDB = 'diretor_uo';
                 $user->save();
             }
-            elseif(strpos($role, 'Conselho') !== false ) {
+            elseif(strpos($role, 'Conselho') !== false) {
                 $user->roleDB = 'ctc';
                 $user->save();
             }

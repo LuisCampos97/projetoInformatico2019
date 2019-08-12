@@ -244,7 +244,6 @@ module.exports = {
           axios
             .post("/api/propostaProponente", this.proposta)
             .then(response => {
-              console.log(response);
               this.idParaUcsPropostaProponente =
                 response.data.id_proposta_proponente;
               this.unidadesCurriculares.forEach(unidadeCurricular => {
@@ -256,6 +255,12 @@ module.exports = {
                   .then(response => {});
                 this.propostaProponenteProfessor.proposta_proponente_id = this.idParaUcsPropostaProponente;
               });
+              axios
+                .post(
+                  "/api/propostaProponenteProfessor",
+                  this.propostaProponenteProfessor
+                )
+                .then(response => {});
 
               axios
                 .post("/api/proposta/" + this.idParaUcsPropostaProponente)
@@ -296,108 +301,135 @@ module.exports = {
             });
         }
       }
-      axios
-        .post(
-          "/api/propostaProponenteProfessor",
-          this.propostaProponenteProfessor
-        )
-        .then(response => {});
     },
     submeterPropostaAssistente(propostaProponenteAssistente) {
       if (this.unidadesCurriculares.length > 0) {
-        axios.post("/api/propostaProponente", this.proposta).then(response => {
-          this.idParaUcsPropostaProponente = response.data.id;
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-          });
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            axios
-              .post("/api/ucsPropostaProponente", unidadeCurricular)
-              .then(response => {});
-            this.propostaProponenteAssistente.proposta_proponente_id = this.idParaUcsPropostaProponente;
-          });
-
+        let confirmacao = confirm(
+          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
+        );
+        if (confirmacao) {
           axios
-            .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+            .post("/api/propostaProponente", this.proposta)
             .then(response => {
-              this.ficheiro.fileCurriculo.append("proposta_id", response.data);
-              if (this.proposta.tipo_contrato == "contratacao_inicial") {
-                this.ficheiro.fileHabilitacoes.append(
-                  "proposta_id",
-                  response.data
-                );
-              }
-              this.ficheiro.fileRelatorio.append("proposta_id", response.data);
-
-              this.$socket.emit("email-diretor", {
-                msg: "Pedido de email enviado..."
-              }); // raise an event on the server
-
-              axios
-                .post("/api/ficheiro", this.ficheiro.fileCurriculo)
-                .then(response => {});
-              axios
-                .post("/api/ficheiro", this.ficheiro.fileRelatorio)
-                .then(response => {});
-              if (this.proposta.tipo_contrato == "contratacao_inicial") {
+              this.idParaUcsPropostaProponente = response.data.id_proposta_proponente;
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
                 axios
-                  .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                  .post("/api/ucsPropostaProponente", unidadeCurricular)
                   .then(response => {});
-              }
+                this.propostaProponenteAssistente.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              axios
+                .post(
+                  "/api/propostaProponenteAssistente",
+                  propostaProponenteAssistente
+                )
+                .then(response => {});
+
+              axios
+                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+                .then(response => {
+                  this.ficheiro.fileCurriculo.append(
+                    "proposta_id",
+                    response.data
+                  );
+                  if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                    this.ficheiro.fileHabilitacoes.append(
+                      "proposta_id",
+                      response.data
+                    );
+                  }
+                  this.ficheiro.fileRelatorio.append(
+                    "proposta_id",
+                    response.data
+                  );
+
+                  this.$socket.emit("email-diretor", {
+                    msg: "Pedido de email enviado..."
+                  }); // raise an event on the server
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+                    .then(response => {});
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+                    .then(response => {});
+                  if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                    axios
+                      .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                      .then(response => {});
+                  }
+                });
             });
-        });
+        }
       }
-      axios
-        .post("/api/propostaProponenteAssistente", propostaProponenteAssistente)
-        .then(response => {});
     },
     submeterPropostaMonitor(propostaProponenteMonitor) {
       if (this.unidadesCurriculares.length > 0) {
-        axios.post("/api/propostaProponente", this.proposta).then(response => {
-          this.idParaUcsPropostaProponente = response.data.id;
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
-          });
-          this.unidadesCurriculares.forEach(unidadeCurricular => {
-            axios
-              .post("/api/ucsPropostaProponente", unidadeCurricular)
-              .then(response => {});
-            this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
-          });
+        let confirmacao = confirm(
+          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
+        );
+        if (confirmacao) {
           axios
-            .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+            .post("/api/propostaProponente", this.proposta)
             .then(response => {
-              this.ficheiro.fileCurriculo.append("proposta_id", response.data);
-              if (this.proposta.tipo_contrato == "contratacao_inicial") {
-                this.ficheiro.fileHabilitacoes.append(
-                  "proposta_id",
-                  response.data
-                );
-              }
-              this.ficheiro.fileRelatorio.append("proposta_id", response.data);
-
-              this.$socket.emit("email-diretor", {
-                msg: "Pedido de email enviado..."
-              }); // raise an event on the server
-
-              axios
-                .post("/api/ficheiro", this.ficheiro.fileRelatorio)
-                .then(response => {});
-
-              axios
-                .post("/api/ficheiro", this.ficheiro.fileCurriculo)
-                .then(response => {});
-              if (this.proposta.tipo_contrato == "contratacao_inicial") {
+              this.idParaUcsPropostaProponente = response.data.id_proposta_proponente;
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
+                unidadeCurricular.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              this.unidadesCurriculares.forEach(unidadeCurricular => {
                 axios
-                  .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                  .post("/api/ucsPropostaProponente", unidadeCurricular)
                   .then(response => {});
-              }
+                this.propostaProponenteMonitor.proposta_proponente_id = this.idParaUcsPropostaProponente;
+              });
+              axios
+                .post(
+                  "/api/propostaProponenteMonitor",
+                  propostaProponenteMonitor
+                )
+                .then(response => {});
+
+              axios
+                .post("/api/proposta/" + this.idParaUcsPropostaProponente)
+                .then(response => {
+                  this.ficheiro.fileCurriculo.append(
+                    "proposta_id",
+                    response.data
+                  );
+                  if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                    this.ficheiro.fileHabilitacoes.append(
+                      "proposta_id",
+                      response.data
+                    );
+                  }
+                  this.ficheiro.fileRelatorio.append(
+                    "proposta_id",
+                    response.data
+                  );
+
+                  this.$socket.emit("email-diretor", {
+                    msg: "Pedido de email enviado..."
+                  }); // raise an event on the server
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileRelatorio)
+                    .then(response => {});
+
+                  axios
+                    .post("/api/ficheiro", this.ficheiro.fileCurriculo)
+                    .then(response => {});
+                  if (this.proposta.tipo_contrato == "contratacao_inicial") {
+                    axios
+                      .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
+                      .then(response => {});
+                  }
+                });
             });
-        });
+        }
       }
-      axios
-        .post("/api/propostaProponenteMonitor", propostaProponenteMonitor)
-        .then(response => {});
     },
     makeToast(variant = null) {
       this.$bvToast.toast("", {

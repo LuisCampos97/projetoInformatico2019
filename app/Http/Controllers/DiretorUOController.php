@@ -52,14 +52,16 @@ class DiretorUOController extends Controller
       
       $proposta_proponente_role = null;
       if($role == "professor"){
-         $proposta_proponente_role = PropostaProponenteProfessor::findOrFail($proposta_proponente_id);
-         //dd($proposta_proponente_role);
+         $proposta_proponente_role = DB::table('proposta_proponente_professor')
+         ->where('proposta_proponente_id', $proposta_proponente_id)->get();
       }
       if($role == "assistente"){
-         $proposta_proponente_role = PropostaProponenteAssistente::findOrFail($proposta_proponente_id);
+         $proposta_proponente_role = DB::table('proposta_proponente_assistente')
+         ->where('proposta_proponente_id', $proposta_proponente_id)->get();
       }
       if($role == "monitor"){
-         $proposta_proponente_role = PropostaProponenteMonitor::findOrFail($proposta_proponente_id);
+         $proposta_proponente_role = DB::table('proposta_proponente_monitor')
+         ->where('proposta_proponente_id', $proposta_proponente_id)->get();
       }
 
       return $proposta_proponente_role;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="jumbotron">
     <h2>Aprovação por parte do conselho Tecnico-Cientifico para esta proposta</h2>
     <b-form-group label="Votos a favor" label-for="inputVotosAFavor">
       <b-form-input

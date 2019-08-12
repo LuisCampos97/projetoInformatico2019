@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button class="btn btn-danger" @click="voltar">Voltar</button>
     <b-form-group
       description="Legislação: art. 8.º do ECPDESP na redacção que lhe foi dada pelo Decreto-Lei
 n.º 207/2009, de 31 de Agosto, alterado pela Lei nº 7/2010, de 13 de Maio e
@@ -481,6 +482,9 @@ export default {
     }
   },
   methods: {
+    voltar(){
+      this.$emit('voltar');
+    },
     validateState(ref) {
       return this.veeErrors.has(ref) ? false : null;
     },

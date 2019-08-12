@@ -38,7 +38,8 @@
           </button>
 
           <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
-          <proponente v-if="isNovaPropostaVisible"></proponente>
+          <proponente v-if="isNovaPropostaVisible"
+          v-on:voltar="mostrarProponentes"></proponente>
           <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
           <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
           <div v-if="user.roleDB == 'docente_temp'">TESTE DOCENTE</div>
@@ -88,7 +89,6 @@
                         <th>Nome docente a ser contratado</th>
                         <th>Tipo contrato</th>
                         <th>Unidade Organica</th>
-                        <th>Role</th>
                         <th>Ações</th>
                       </thead>
                       <tbody>
@@ -98,7 +98,6 @@
                         >
                           <td>{{ propostaHistorico.nome_completo }}</td>
                           <td>{{ propostaHistorico.tipo_contrato }}</td>
-                          <td>{{ propostaHistorico.role }}</td>
                           <td>{{ propostaHistorico.unidade_organica }}</td>
                           <td>
                             <button
@@ -251,7 +250,7 @@ module.exports = {
       this.mostrarTabela = true;
       this.isResumoPropostaVisible = false;
       this.isDashboardVisible = true;
-    }
+    },
   },
   computed: {
     user() {
