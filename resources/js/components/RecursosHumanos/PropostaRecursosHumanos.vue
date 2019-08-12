@@ -46,6 +46,37 @@
         ></b-form-radio-group>
       </b-form-group>
 
+      <b-form-group label="O docente proposto já se encontra/ja foi convidado a exercer funções numa outra UO do IPL?">
+        <b-form-radio-group
+          v-model="propostaRecursosHumanos.verificacao_outras_uo"
+          :options="verificacao_outras_uo_array"
+          stacked
+        ></b-form-radio-group>
+      </b-form-group>
+
+      <b-form-group v-if="propostaRecursosHumanos.verificacao_outras_uo == 'sim'">
+        <b-form-group label="Indique o nome da Unidade Orgânica" label-for="inputNomeUO">
+          <b-form-input
+            id="inputNomeUO"
+            v-model="propostaRecursosHumanos.nome_uo"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Indique o tempo parcial" label-for="inputTempoParcial">
+          <b-form-input
+            id="inputTempoParcial"
+            v-model="propostaRecursosHumanos.tempo_parcial_uo"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Indique o período" label-for="inputPeriodo">
+          <b-form-input
+            id="inputPeriodo"
+            v-model="propostaRecursosHumanos.periodo_uo"
+          ></b-form-input>
+        </b-form-group>
+      </b-form-group>
+
       <b-form-group label="Despacho do Sr.Presidente do IPL" label-for="inputDespacho">
         <b-form-input
           type="date"
@@ -178,10 +209,18 @@ export default {
         { text: "Segurança Social", value: "seguranca_social" },
         { text: "Caixa Geral de Aposentações", value: "CGA" }
       ],
+      verificacao_outras_uo_array: [
+        { text: "Sim", value: "sim" },
+        { text: "Não", value: "nao" }
+      ],
       propostaRecursosHumanos: {
         remuneracao: "",
         escalao: "",
         indice: "",
+        verificacao_outras_uo:"",
+        nome_uo:"",
+        tempo_parcial_uo:"",
+        periodo_uo:"",
         numero_funcionario: "",
         contratacao_comunicada: "",
         inscricao: "",
@@ -203,6 +242,7 @@ export default {
       remuneracao: { required },
       escalao: { required },
       indice: { required },
+      verificacao_outras_uo: { required },
       numero_funcionario: { required },
       contratacao_comunicada: { required },
       inscricao: { required },

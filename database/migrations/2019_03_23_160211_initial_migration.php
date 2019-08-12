@@ -169,6 +169,10 @@ class InitialMigration extends Migration
             $table->decimal('remuneracao', 6, 2);
             $table->string('escalao');
             $table->string('indice');
+            $table->enum('verificacao_outras_uo', ['sim', 'nao']);
+            $table->string('nome_uo')->nullable();
+            $table->integer('tempo_parcial_uo')->nullable()->unsigned();
+            $table->string('periodo_uo')->nullable();
             $table->integer('numero_funcionario')->unsigned();
             $table->enum('inscricao', ['seguranca_social', 'CGA']);
             $table->boolean('contratacao_comunicada')->default(false);

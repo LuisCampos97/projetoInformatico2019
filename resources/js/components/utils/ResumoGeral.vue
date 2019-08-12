@@ -30,17 +30,17 @@
       <button class="btn btn-danger" @click="voltarRecursosHumanos">Voltar</button>
     </div>
     <div id="proposta">
-      <label>Unidade Orgânica: {{ propostaSelecionada.unidade_organica }}</label>
+      <label><strong>Unidade Orgânica:</strong> {{ propostaSelecionada.unidade_organica }}</label>
       <br />
-      <label>Nome do Docente: {{ propostaSelecionada.nome_completo}}</label>
+      <label><strong>Nome do Docente:</strong> {{ propostaSelecionada.nome_completo}}</label>
       <br />
-      <label>Tipo de Contratação: {{ propostaSelecionada.tipo_contratato }}</label>
+      <label><strong>Tipo de Contratação:</strong> {{ propostaSelecionada.tipo_contrato }}</label>
       <br />
-      <label>Email do docente: {{ propostaSelecionada.email }}</label>
+      <label><strong>Email do docente:</strong> {{ propostaSelecionada.email }}</label>
       <br />
-      <label>Número de telefone do docente: {{ propostaSelecionada.numero_telefone }}</label>
+      <label><strong>Número de telefone do docente:</strong> {{ propostaSelecionada.numero_telefone }}</label>
       <br />
-      <label>Unidades Curriculares:</label>
+      <label><strong>Unidades Curriculares:</strong></label>
       <br />
       <b-form-group>
         <table class="table mt-3">
@@ -64,71 +64,68 @@
           </tbody>
         </table>
       </b-form-group>
-      <label>Grau de Habilitações Académicas: {{ propostaSelecionada.grau }}</label>
+      <label><strong>Grau de Habilitações Académicas:</strong> {{ propostaSelecionada.grau }}</label>
       <br />
-      <label>Área Científica: {{ propostaSelecionada.area_cientifica }}</label>
+      <label><strong>Área Científica: </strong>{{ propostaSelecionada.area_cientifica }}</label>
       <br />
-      <label>Curso: {{ propostaSelecionada.curso }}</label>
+      <label><strong>Curso:</strong> {{ propostaSelecionada.curso }}</label>
       <br />
-      <label>Papel a desempenhar: {{ propostaSelecionada.role }}</label>
+      <label><strong>Papel a desempenhar:</strong> {{ propostaSelecionada.role }}</label>
       <br />
       <div v-if="propostaSelecionada.role == 'professor'">
-        <label>Categoria de professor: {{ tipoPropostaRole.role_professor }}</label>
+        <label><strong>Categoria de professor:</strong> {{ tipoPropostaRole.role_professor }}</label>
         <br />
-        <label>Regime de prestação de serviços: {{ tipoPropostaRole.regime_prestacao_servicos }}</label>
+        <label><strong>Regime de prestação de serviços:</strong> {{ tipoPropostaRole.regime_prestacao_servicos }}</label>
         <br />
-        <label>Percentagem de prestação de serviços: {{ tipoPropostaRole.percentagem_prestacao_servicos }}</label>
+        <label><strong>Percentagem de prestação de serviços:</strong> {{ tipoPropostaRole.percentagem_prestacao_servicos }}</label>
         <br />
-        <label>Período: {{ tipoPropostaRole.periodo }}</label>
+        <label><strong>Período: </strong>{{ tipoPropostaRole.periodo }}</label>
         <br />
-        <label>Duração: {{ tipoPropostaRole.duracao }}</label>
+        <label><strong>Duração:</strong> {{ tipoPropostaRole.duracao }}</label>
         <br />
       </div>
 
-      <label>Fundamentação do Coordenador de Curso: {{ propostaSelecionada.fundamentacao_coordenador_curso }}</label>
+      <label><strong>Fundamentação do Coordenador de Curso:</strong> {{ propostaSelecionada.fundamentacao_coordenador_curso }}</label>
       <br />
-      <label>Fundamentação do Coordenador de Departamento: {{ propostaSelecionada.fundamentacao_coordenador_departamento }}</label>
-      <br />
-
-      <b-form-group label="Curriculo do docente">
+      <label><strong>Fundamentação do Coordenador de Departamento:</strong> {{ propostaSelecionada.fundamentacao_coordenador_departamento }}</label>
+      <b-form-group>
         <b-button
           size="md"
           variant="dark"
           v-if="ficheiroCurriculo"
           @click="downloadFicheiro(ficheiroCurriculo.proposta_id, 'Curriculo do docente a ser contratado')"
         >
-          <i class="far fa-file-pdf"></i> Atual Curriculo do Docente
+          <i class="far fa-file-pdf"></i> Clique para ver o currículo do docente proposto
         </b-button>
       </b-form-group>
-
-      <b-form-group label="Certificado de Habilitações do docente">
+      <b-form-group>
         <b-button
           size="md"
           variant="dark"
           v-if="ficheiroCertificadoHabilitacoes"
           @click="downloadFicheiro(ficheiroCertificadoHabilitacoes.proposta_id, 'Habilitacoes do docente a ser contratado')"
         >
-          <i class="far fa-file-pdf"></i> Atual Certificado de Habilitações do Docente
+          <i class="far fa-file-pdf"></i>Clique aqui para ver o certificado de habilitações do docente proposto
         </b-button>
       </b-form-group>
-
-      <b-form-group label="Relatório dos dois proponentes">
+      
+      <b-form-group>
         <b-button
           size="md"
           variant="dark"
           v-if="ficheiroRelatorioProponentes"
           @click="downloadFicheiro(ficheiroRelatorioProponentes.proposta_id, 'Relatorio dos 2 proponentes')"
         >
-          <i class="far fa-file-pdf"></i> Atual Certificado de Habilitações do Docente
+          <i class="far fa-file-pdf"></i> Clique aqui para ver o relatório dos proponentes
         </b-button>
       </b-form-group>
-
+      
       <div
         v-if="propostaSelecionada.proposta_diretor_uo_id != null &&(this.$store.state.user.roleDB == 'diretor_uo' 
     || this.$store.state.user.roleDB == 'ctc' || this.$store.state.user.roleDB == 'secretariado_direcao' || 
     this.$store.state.user.roleDB == 'recursos_humanos' )"
       >
-        <label>Parecer sobre a proposta do Diretor da Unidade Orgânica: {{ propostaSelecionada.parecer }}</label>
+        <label><strong>Parecer sobre a proposta do Diretor da Unidade Orgânica: </strong>{{ propostaSelecionada.parecer }}</label>
         <br />
       </div>
       <div
@@ -137,53 +134,51 @@
         || this.$store.state.user.roleDB == 'secretariado_direcao' 
         || this.$store.state.user.roleDB == 'recursos_humanos')"
       >
-        <label>Votos a favor do Conselho Tecnico-Cientifico: {{ propostaSelecionada.votos_a_favor }}</label>
+        <label><strong>Votos a favor do Conselho Tecnico-Cientifico:</strong> {{ propostaSelecionada.votos_a_favor }}</label>
         <br />
-        <label>Votos contra do Conselho Tecnico-Cientifico: {{ propostaSelecionada.votos_contra }}</label>
+        <label><strong>Votos contra do Conselho Tecnico-Cientifico: </strong>{{ propostaSelecionada.votos_contra }}</label>
         <br />
-        <label>Votos brancos do Conselho Tecnico-Cientifico: {{ propostaSelecionada.votos_brancos }}</label>
+        <label><strong>Votos brancos do Conselho Tecnico-Cientifico:</strong> {{ propostaSelecionada.votos_brancos }}</label>
         <br />
-        <label>Votos nulos do Conselho Tecnico-Cientifico: {{ propostaSelecionada.votos_nulos }}</label>
-        <br />
-        <b-form-group label="Ata CTC">
-          <b-button
-            size="md"
-            variant="dark"
-            v-if="ataCTC"
-            @click="downloadFicheiro(ataCTC.proposta_id, 'Ata do CTC')"
-          >
-            <i class="far fa-file-pdf"></i> Ata do CTC
-          </b-button>
-        </b-form-group>
+        <label><strong>Votos nulos do Conselho Tecnico-Cientifico:</strong> {{ propostaSelecionada.votos_nulos }}</label>
+
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ataCTC"
+          @click="downloadFicheiro(ataCTC.proposta_id, 'Ata do CTC')"
+        >
+          <i class="far fa-file-pdf"></i> Ata do CTC
+        </b-button>
       </div>
 
       <div
         v-if="propostaSelecionada.proposta_recursos_humanos_id != null &&
       this.$store.state.user.roleDB == 'recursos_humanos'"
       >
-        <label>Remuneração: {{ propostaSelecionada.remuneracao }}</label>
+        <label><strong>Remuneração: </strong>{{ propostaSelecionada.remuneracao }} €</label>
         <br />
-        <label>Índice: {{ propostaSelecionada.indice }}</label>
+        <label><strong>Índice: </strong>{{ propostaSelecionada.indice }}</label>
         <br />
-        <label>Escalão: {{ propostaSelecionada.escalao }}</label>
+        <label><strong>Escalão: </strong>{{ propostaSelecionada.escalao }}</label>
         <br />
-        <label>Número do funcionário dos Recursos Humanos: {{ propostaSelecionada.numero_funcionario }}</label>
+        <label><strong>Número do funcionário dos Recursos Humanos: </strong>{{ propostaSelecionada.numero_funcionario }}</label>
         <br />
-        <label>Inscrição (CGA ou SS): {{ propostaSelecionada.inscricao }}</label>
+        <label><strong>Inscrição (CGA ou SS): </strong>{{ propostaSelecionada.inscricao }}</label>
         <br />
-        <label>Despacho Sr. Presidente do IPL: {{ propostaSelecionada.despacho_presidente_ipl }}</label>
+        <label><strong>Despacho Sr. Presidente do IPL: </strong>{{ propostaSelecionada.despacho_presidente_ipl }}</label>
         <br />
-        <label>NISS ou nº CGA: {{ propostaSelecionada.NISS_ou_numero_CGA }}</label>
+        <label><strong>NISS ou nº CGA:</strong> {{ propostaSelecionada.NISS_ou_numero_CGA }}</label>
         <br />
-        <label>Data de nascimento: {{ propostaSelecionada.data_nascimento }}</label>
+        <label><strong>Data de nascimento:</strong> {{ propostaSelecionada.data_nascimento }}</label>
         <br />
-        <label>Número Cartão de Cidadão: {{ propostaSelecionada.numeroCC }}</label>
+        <label><strong>Número Cartão de Cidadão:</strong> {{ propostaSelecionada.numeroCC }}</label>
         <br />
-        <label>Email RH: {{ propostaSelecionada.email_recursos_humanos }}</label>
+        <label><strong>Email RH: </strong>{{ propostaSelecionada.email_recursos_humanos }}</label>
         <br />
-        <label>Dados carregados no GIAF por: {{ propostaSelecionada.dados_GIAF_carregados_por }}</label>
+        <label><strong>Dados carregados no GIAF por: </strong>{{ propostaSelecionada.dados_GIAF_carregados_por }}</label>
         <br />
-        <label>Data de carregamento de dados no GIAF: {{ propostaSelecionada.data_carregamento_dados_GIAF }}</label>
+        <label><strong>Data de carregamento de dados no GIAF: </strong>{{ propostaSelecionada.data_carregamento_dados_GIAF }}</label>
         <br />
 
         <b-button size="md" variant="dark" @click="exportarPDF()">
@@ -216,7 +211,7 @@
       :propostaSelecionada="propostaSelecionada"
     ></proposta-secretariado>
     <proposta-recursos
-      v-if="propostaSelecionada.proposta_recursos_humanos_id == null && this.$store.state.user.roleDB == 'recursos_humanos'"
+      v-if=" this.$store.state.user.roleDB == 'recursos_humanos'"
       :propostaSelecionada="propostaSelecionada"
     ></proposta-recursos>
   </div>
@@ -268,7 +263,7 @@ export default {
     exportarPDF() {
       var doc = new jsPDF();
       doc.fromHTML($("#proposta").get(0), 20, 20);
-      doc.save("proposta.pdf");
+      doc.save("Proposta Contratação " + this.propostaSelecionada.nome_completo+".pdf");
     }
   },
   mounted() {

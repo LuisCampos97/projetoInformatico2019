@@ -41,7 +41,7 @@
       <b-form-radio-group v-model="propostaCTC.aprovacao" :options="aprovacaoArray"></b-form-radio-group>
     </b-form-group>
 
-    <b-form-group label="Ata da reunião do Conselho Tecnico-Científico">
+    <b-form-group label="Ata da reunião do Conselho Tecnico-Científico (PDF)">
       <b-form-file
         v-model="ataCTC"
         placeholder="Escolha um ficheiro"

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h2 class="pb-4">Nova Proposta</h2>
+    <b-form-group
+      description="Legislação: art. 8.º do ECPDESP na redacção que lhe foi dada pelo Decreto-Lei
+n.º 207/2009, de 31 de Agosto, alterado pela Lei nº 7/2010, de 13 de Maio e
+Regulamento de Contratação de Pessoal Docente Especialmente Contratado ao
+abrigo do art. 8.º do ECPDESP, do IPL"
+    ><h3>Proposta de contratação</h3></b-form-group>
     <b-form-group label="Tipo de Proposta" v-show="isShow">
       <b-form-radio-group
         v-model="proposta.tipo_contrato"
@@ -19,8 +24,7 @@
           @change="associarProposta()"
         ></b-form-select>
       </b-form-group>
-      <br>
-      <b-form-group label="Currículo">
+      <b-form-group label="Currículo (PDF)">
         <b-form-file
           v-model="ficheiroCurriculo"
           placeholder="Escolha um ficheiro"
@@ -44,7 +48,6 @@
           <i class="far fa-file-pdf"></i> Atual Curriculo do Docente
         </b-button>
       </b-form-group>
-      <br>
       <b-form-group label="Unidade Orgânica">
         <b-form-input :readonly="true" v-model="proposta.unidade_organica"></b-form-input>
       </b-form-group>
@@ -256,7 +259,7 @@
                 <b-form-invalid-feedback id="input-1-live-feedback">A Área Científica é obrigatória!</b-form-invalid-feedback>
 
                 <b-form-group
-                  label="Certificado de Habilitações"
+                  label="Certificado de Habilitações (PDF)"
                   v-if="proposta.tipo_contrato == 'contratacao_inicial'"
                   class="mt-3"
                 >
@@ -287,7 +290,7 @@
         </b-collapse>
       </b-card>
 
-      <b-form-group label="Relatório dos proponentes" class="mt-3">
+      <b-form-group label="Relatório dos proponentes (PDF)" class="mt-3">
         <b-form-file
           v-model="ficheiroRelatorio"
           placeholder="Escolha um ficheiro"
@@ -309,7 +312,6 @@
           <i class="far fa-file-pdf"></i> Atual Relatório dos 2 proponentes
         </b-button>
       </b-form-group>
-      <br>
 
       <b-form-group
         label="Qual será o papel a desempenhar pelo docente a ser contratado?"
@@ -371,6 +373,9 @@
         <strong>{{ progresso.valor }} / {{ progresso.max }}</strong>
       </b-progress-bar>
     </b-progress>
+    <br />
+     Os dados recolhidos no âmbito deste processo têm como finalidade a celebração de contrato de trabalho em funções públicas e serão objeto de
+tratamento nos termos da legislação de proteção de dados em vigor. 
     <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
   </div>
 </template>
