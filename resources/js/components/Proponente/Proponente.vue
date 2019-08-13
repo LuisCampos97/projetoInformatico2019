@@ -261,7 +261,6 @@ abrigo do art. 8.º do ECPDESP, do IPL"
 
                 <b-form-group
                   label="Certificado de Habilitações (PDF)"
-                  v-if="proposta.tipo_contrato == 'contratacao_inicial'"
                   class="mt-3"
                 >
                   <b-form-file

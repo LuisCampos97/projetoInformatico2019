@@ -14,6 +14,7 @@ class PropostaProponenteAssistenteController extends Controller
             'fundamentacao' => 'nullable',
             'duracao' => 'required',
             'periodo' => 'required',
+            'avaliacao_periodo_anterior' => 'nullable',
             'proposta_proponente_id' => 'required',
         ]);
         $propostaProponenteAssistente = new PropostaProponenteAssistente();

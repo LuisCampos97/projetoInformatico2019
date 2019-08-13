@@ -83,6 +83,8 @@
         <br />
         <label><strong>Duração:</strong> {{ tipoPropostaRole.duracao }}</label>
         <br />
+        <label><strong>Avaliação período anterior:</strong> {{ tipoPropostaRole.avaliacao_periodo_anterior }}</label>        
+        <br />
       </div>
       
       <div v-if="propostaSelecionada.role == 'assistente'">
@@ -93,6 +95,8 @@
         <label><strong>Período: </strong>{{ tipoPropostaRole.periodo }}</label>
         <br />
         <label><strong>Duração:</strong> {{ tipoPropostaRole.duracao }}</label>
+        <br />
+        <label><strong>Avaliação período anterior:</strong> {{ tipoPropostaRole.avaliacao_periodo_anterior }}</label>        
       </div>
 
       <div v-if="propostaSelecionada.role == 'monitor'">

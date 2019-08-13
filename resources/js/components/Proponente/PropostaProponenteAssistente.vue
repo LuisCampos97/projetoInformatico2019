@@ -75,6 +75,17 @@
         <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
       </b-form-group>
 
+      <b-form-group
+        label="Avaliação período anterior"
+        label-for="inputAvaliacao"
+        v-if="proposta.tipo_contrato == 'renovacao' || proposta.tipo_contrato == 'alteracao'">
+        <b-form-select
+          id="inputAvaliacao"
+          v-model="propostaProponenteAssistente.avaliacao_periodo_anterior"
+          :options="avaliacao_periodo_anterior_array"
+        ></b-form-select>
+      </b-form-group>
+
       <button class="btn btn-info mt-3 font-weight-bold" v-on:click.prevent="anterior">
         <i class="fas fa-arrow-left"></i> Anterior
       </button>
@@ -123,12 +134,17 @@ export default {
         { text: "Tempo Integral", value: "tempo_integral" },
         { text: "Dedicação Exclusiva", value: "dedicacao_exclusiva" }
       ],
+      avaliacao_periodo_anterior_array: [
+        { text: "Positiva", value: "positiva"},
+        { text: "Negativa", value: "negativa"},
+      ],
       propostaProponenteAssistente: {
         regime_prestacao_servicos: "",
         percentagem_prestacao_servicos: "",
         fundamentacao: "",
         duracao: "",
         periodo: "",
+        avaliacao_periodo_anterior:"",
         proposta_proponente_id: ""
       },
       avancar: false,
@@ -137,6 +153,15 @@ export default {
   },
   //? Validations Vuelidate
   validations() {
+    /*
+    if(this.proposta.tipo_contrato == 'renovacao' || this.proposta.tipo_contrato == 'alteracao'){
+      return{
+        propostaProponenteAssistente: {
+          avaliacao_periodo_anterior: { required },
+        }
+      };
+    }
+    */
     if (
       this.propostaProponenteAssistente.regime_prestacao_servicos ==
         "tempo_integral" ||
@@ -148,7 +173,7 @@ export default {
           regime_prestacao_servicos: { required },
           fundamentacao: { required },
           duracao: { required },
-          periodo: { required }
+          periodo: { required },
         }
       };
     } else {
@@ -162,7 +187,7 @@ export default {
             fundamentacao: { required },
             percentagem_prestacao_servicos: { required },
             duracao: { required },
-            periodo: { required }
+            periodo: { required },
           }
         };
       } else {
@@ -171,7 +196,7 @@ export default {
             regime_prestacao_servicos: { required },
             percentagem_prestacao_servicos: { required },
             duracao: { required },
-            periodo: { required }
+            periodo: { required },
           }
         };
       }

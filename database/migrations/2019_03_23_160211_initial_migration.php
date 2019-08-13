@@ -99,7 +99,7 @@ class InitialMigration extends Migration
             $table->string('fundamentacao')->nullable();
             $table->string('periodo');
             $table->string('duracao');
-            $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa']);
+            $table->enum('avaliacao_periodo_anterior', ['positiva', 'negativa'])->nullable();
             $table->integer('proposta_proponente_id')->unsigned();
             $table->foreign('proposta_proponente_id')->references('id_proposta_proponente')->on('proposta_proponente');
             //Signature???

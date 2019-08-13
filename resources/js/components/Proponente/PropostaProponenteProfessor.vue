@@ -71,6 +71,17 @@
         <b-form-invalid-feedback id="input-1-live-feedback">O periodo do contrato é obrigatório!</b-form-invalid-feedback>
       </b-form-group>
 
+      <b-form-group
+        label="Avaliação período anterior"
+        label-for="inputAvaliacao"
+        v-if="proposta.tipo_contrato == 'renovacao' || proposta.tipo_contrato == 'alteracao'">
+        <b-form-select
+          id="inputAvaliacao"
+          v-model="propostaProponenteProfessor.avaliacao_periodo_anterior"
+          :options="avaliacao_periodo_anterior_array"
+        ></b-form-select>
+      </b-form-group>
+
       <button class="btn btn-info mt-3 font-weight-bold" v-on:click.prevent="anterior">
         <i class="fas fa-arrow-left"></i> Anterior
       </button>
@@ -118,6 +129,10 @@ export default {
         { text: "20% (3 horas)", value: "20" },
         { text: "15% (2 horas)", value: "15" }
       ],
+      avaliacao_periodo_anterior_array: [
+        { text: "Positiva", value: "positiva"},
+        { text: "Negativa", value: "negativa"},
+      ],
       propostaProponenteProfessor: {
         role_professor: "",
         regime_prestacao_servicos: "",
@@ -125,7 +140,8 @@ export default {
         fundamentacao: "",
         duracao: "",
         periodo: "",
-        proposta_proponente_id: ""
+        proposta_proponente_id: "",
+        avaliacao_periodo_anterior:"",
       },
       avancar: false,
       isShowProfessor: true
@@ -133,6 +149,15 @@ export default {
   },
   //? Validations Vuelidate
   validations() {
+    /*
+    if(this.proposta.tipo_contrato == 'renovacao' || this.proposta.tipo_contrato == 'alteracao'){
+      return{
+        propostaProponenteProfessor: {
+          avaliacao_periodo_anterior: { required },
+        }
+      };
+    }
+    */
     if (
       this.propostaProponenteProfessor.regime_prestacao_servicos ==
         "tempo_integral" ||
