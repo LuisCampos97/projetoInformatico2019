@@ -102,3 +102,6 @@ Route::post('/recursosHumanos/propostaRecursosHumanos', 'RecursosHumanosControll
 
 //_--------------------------Users--------------------------------------------------------------
 Route::post('/users/criarUserTemporario', 'UserController@store');
+
+//-------------------------------------------Novos Docentes--------------------------------------------
+Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');

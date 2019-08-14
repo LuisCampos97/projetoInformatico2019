@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn btn-danger" @click="voltar">Voltar</button>
+    <button class="btn btn-danger" @click="voltar" v-if="voltarVar">Voltar</button>
     <b-form-group
       description="Legislação: art. 8.º do ECPDESP na redacção que lhe foi dada pelo Decreto-Lei
 n.º 207/2009, de 31 de Agosto, alterado pela Lei nº 7/2010, de 13 de Maio e
@@ -454,7 +454,8 @@ export default {
       ficheiros: [],
       ficheiroCurriculo: "",
       ficheiroHabilitacoes: "",
-      ficheiroRelatorio: ""
+      ficheiroRelatorio: "",
+      voltarVar:true,
     };
   },
   //? Validations Vuelidate
@@ -546,6 +547,7 @@ export default {
             this.isFinalized = true;
             this.isShow = false;
             this.progresso.valor++;
+            this.voltarVar = false;
           }
         }
       });
@@ -582,6 +584,7 @@ export default {
       this.isShow = true;
       this.isFinalized = false;
       this.progresso.valor--;
+      this.voltarVar = true;
     },
     associarProposta() {
       //* Limpar Objectos

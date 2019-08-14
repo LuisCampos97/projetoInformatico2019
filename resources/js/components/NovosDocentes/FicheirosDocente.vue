@@ -127,6 +127,12 @@ export default {
         fileDeclaracaoRenunciaADSE:"",
         fileRespostaOutrasEscolas:"",
     };
+  },
+  mounted() {
+    axios.get('/api/getPropostaParaNovoDocente/'+this.$store.state.user.email).then(response => {
+      console.log(response);
+    })
   }
 };
+
 </script>
