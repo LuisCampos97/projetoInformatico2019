@@ -90,6 +90,12 @@ export default {
       mostrarCTC(){
         this.isResumoChecked = false;
         this.mostrarCTCComponent = true;
+        axios.get("/api/ctc/getPropostasPendentesCTC").then(response => {
+      this.propostasPendentesCTC = response.data;
+    });
+    axios.get('/api/ctc/getHistoricoPropostasCTC').then(response => {
+       this.historicoPropostasCTC = response.data;
+    })
       }
   },
   mounted() {

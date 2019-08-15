@@ -226,30 +226,36 @@
       v-if="this.$store.state.user.roleDB == 'proponente_departamento' &&
       this.propostaSelecionada.fundamentacao_coordenador_departamento == null"
       :propostaSelecionada="propostaSelecionada"
+      v-on:voltarProponentes="voltarProponentes"
     ></fundamentacao-departamento>
 
     <fundamentacao-curso
       v-if="this.$store.state.user.roleDB == 'proponente_curso' &&
             this.propostaSelecionada.fundamentacao_coordenador_curso == null"
       :propostaSelecionada="propostaSelecionada"
+      v-on:voltarProponentes="voltarProponentes"
     ></fundamentacao-curso>
 
     <diretor
       v-if="this.$store.state.user.roleDB == 'diretor_uo' && this.propostaSelecionada.proposta_diretor_uo_id == null"
       :propostaSelecionada="propostaSelecionada"
+       v-on:mostrarDiretor="voltarDiretor"
     ></diretor>
     <ctc
       v-if="propostaSelecionada.proposta_ctc_id == null && this.$store.state.user.roleDB == 'ctc'"
       :propostaSelecionada="propostaSelecionada"
+      v-on:mostrarCTC="voltarCTC"
     ></ctc>
     <proposta-secretariado
       v-if="propostaSelecionada.proposta_secretariado_direcao_id == null &&this.$store.state.user.roleDB == 'secretariado_direcao'"
       :propostaSelecionada="propostaSelecionada"
+      v-on:mostrarSecretariado="voltarSecretariado"
     ></proposta-secretariado>
     <proposta-recursos
       v-if="this.propostaSelecionada.proposta_recursos_humanos_id == null &&
        this.$store.state.user.roleDB == 'recursos_humanos'"
       :propostaSelecionada="propostaSelecionada"
+      v-on:mostrarRh="voltarRecursosHumanos"
     ></proposta-recursos>
   </div>
 </template>
@@ -270,7 +276,7 @@ export default {
   },
   methods: {
     voltarProponentes() {
-      this.$emit("mostrar-proponentes");
+      this.$emit("mostrarProponentes", this.propostaSelecionada);
     },
     voltarDiretor() {
       this.$emit("mostrar-diretor");

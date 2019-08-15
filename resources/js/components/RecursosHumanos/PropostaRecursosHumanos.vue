@@ -272,6 +272,8 @@ export default {
             let idPropostaRecursosHumanos = response.data.id_proposta_recursos_humanos;
             axios.patch('/api/propostaRecursosHumanos/' + idPropostaRecursosHumanos + "/" 
             + this.propostaSelecionada.id).then(response => {
+              this.$swal("Proposta finalizada!!")
+              this.$emit("mostrarRh");
               this.$socket.emit("email-recursos-humanos", {
                 msg: "Pedido de email enviado..."
               });

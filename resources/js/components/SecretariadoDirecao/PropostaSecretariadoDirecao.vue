@@ -83,12 +83,16 @@ export default {
                   this.novoUserBD.username = this.propostaSelecionada.nome_completo;
                   this.novoUserBD.unidade_organica = this.propostaSelecionada.unidade_organica;
                   this.novoUserBD.email = this.propostaSelecionada.email;
+                  this.$swal("Convite enviado com sucesso!!")
+
+
                   axios.post('/api/users/criarUserTemporario', this.novoUserBD).then(response => {
                     this.$socket.emit("email-docente", {
                       nome: this.propostaSelecionada.nome_completo,
                       email:this.propostaSelecionada.email
                     }); // raise an event on the server
-                  })                  
+                  })
+                  this.$emit("mostrarSecretariado");                  
                 });
             });
         }

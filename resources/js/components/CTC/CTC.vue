@@ -140,7 +140,10 @@ export default {
                     "/" +
                     this.propostaSelecionada.id+"/"+aprovacao
                 )
-                .then(response => {});
+                .then(response => {
+                    this.$swal("Parecer dado com sucesso!!");
+                    this.$emit("mostrarCTC");
+                });
             })
             .catch(error => {
               console.log(error);

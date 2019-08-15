@@ -62,7 +62,8 @@ export default {
         if (!this.$v.propostaProponente.$invalid) {
           axios.put('/api/propostaProponente/fundamentacaoCoordenadorDepartamento/'+
           this.propostaSelecionada.id_proposta_proponente, this.propostaProponente).then(response => {
-
+            this.$swal("Fundamentação inserida com sucesso");
+            this.$emit('voltarProponentes');
           });
         }
       }

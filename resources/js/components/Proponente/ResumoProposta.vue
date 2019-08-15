@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="mostrarResumoProposta">
     <h2>
       <strong>Resumo da Proposta de contratação</strong>
     </h2>
@@ -214,10 +214,16 @@
     >
       <i class="fas fa-save"></i> Submeter
     </button>
+
   </div>
 </template>
-<script src="/socket.io/socket.io.js"></script>
+
+<script src="/socket.io/socket.io.js">
+  
+</script>
+
 <script>
+
 module.exports = {
   props: [
     "proposta",
@@ -231,15 +237,24 @@ module.exports = {
     return {
       idParaUcsPropostaProponente: "",
       fundamentacaoCheck: false,
-      user: this.$store.state.user
+      user: this.$store.state.user,
+      mostrarResumoProposta:true,
+      isLoading:false,
+      successMessage:"",
     };
   },
+
   methods: {
+    voltar(){
+      this.$emit("mostrarComponente", this.proposta);
+      this.mostrarResumoProposta = false;
+    },
     submeterPropostaProfessor(propostaProponenteProfessor) {
       let confirmacao = confirm(
         "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
       );
       if (confirmacao) {
+        this.isLoading=true;
         if (this.unidadesCurriculares.length > 0) {
           axios
             .post("/api/propostaProponente", this.proposta)
@@ -295,7 +310,11 @@ module.exports = {
                   if (this.proposta.tipo_contrato == "contratacao_inicial") {
                     axios
                       .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-                      .then(response => {});
+                      .then(response => {
+                        this.$swal("Proposta criada com sucesso!!")
+                        this.isLoading=false;
+                        this.voltar();
+                      });
                   }
                 });
             });
@@ -308,6 +327,8 @@ module.exports = {
           "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
         );
         if (confirmacao) {
+                  this.isLoading=true;
+
           axios
             .post("/api/propostaProponente", this.proposta)
             .then(response => {
@@ -359,7 +380,11 @@ module.exports = {
                   if (this.proposta.tipo_contrato == "contratacao_inicial") {
                     axios
                       .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-                      .then(response => {});
+                      .then(response => {
+                          this.$swal("Proposta criada com sucesso!!")
+                          this.isLoading=false;
+                          this.voltar();
+                      });
                   }
                 });
             });
@@ -372,6 +397,7 @@ module.exports = {
           "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
         );
         if (confirmacao) {
+                  this.isLoading=true;
           axios
             .post("/api/propostaProponente", this.proposta)
             .then(response => {
@@ -424,7 +450,11 @@ module.exports = {
                   if (this.proposta.tipo_contrato == "contratacao_inicial") {
                     axios
                       .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
-                      .then(response => {});
+                      .then(response => {
+                           this.$swal("Proposta criada com sucesso!!")
+                           this.isLoading=false;
+                           this.voltar();
+                      });
                   }
                 });
             });

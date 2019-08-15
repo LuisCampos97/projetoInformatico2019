@@ -38,17 +38,14 @@
           </button>
 
           <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
-          <proponente v-if="isNovaPropostaVisible"
-          v-on:voltar="mostrarProponentes"></proponente>
+          <proponente v-if="isNovaPropostaVisible"v-on:voltar="mostrarProponentes"></proponente>
           <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
           <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
           <ficheiros-docente v-if="user.roleDB == 'docente_temp'"></ficheiros-docente>
           <tabela-recursos v-if="user.roleDB == 'recursos_humanos'"></tabela-recursos>
-          <resumo-geral
-            v-if="isResumoPropostaVisible"
-            :propostaSelecionada="propostaSelecionada"
-            v-on:mostrar-proponentes="mostrarProponentes"
-          ></resumo-geral>
+          <resumo-geral v-if="isResumoPropostaVisible" :propostaSelecionada="propostaSelecionada"
+            v-on:mostrarProponentes="mostrarProponentes"></resumo-geral>
+
           <div v-if="mostrarTabela">
             <div v-if="user.roleDB == 'proponente_departamento' && !isNovaPropostaVisible">
               COORDENADOR DEPARTAMENTO
@@ -205,7 +202,7 @@ module.exports = {
       historicoPropostasCoordenadorCurso: "",
       isResumoPropostaVisible: false,
       propostaSelecionada: "",
-      mostrarTabela: true
+      mostrarTabela: true,
     };
   },
   methods: {
@@ -250,6 +247,27 @@ module.exports = {
       this.mostrarTabela = true;
       this.isResumoPropostaVisible = false;
       this.isDashboardVisible = true;
+      if(this.$store.state.user.roleDB == 'proponente_departamento'){
+      axios
+        .get("/api/coordenadorDepartamento/propostasPendentes")
+        .then(response => {
+          console.log("OLA1");
+          this.propostasPendentesCoordenadorDepartamento = response.data;
+        });
+      axios
+        .get("/api/coordenadorDepartamento/historicoPropostas")
+        .then(response => {
+          this.historicoPropostasCoordenadorDepartamento = response.data;
+        });
+      }
+       if(this.$store.state.user.roleDB == 'proponente_curso'){
+        axios.get("/api/coordenadorCurso/propostasPendentes").then(response => {
+        this.propostasPendentesCoordenadorCurso = response.data;
+      });
+      axios.get("/api/coordenadorCurso/historicoPropostas").then(response => {
+        this.historicoPropostasCoordenadorCurso = response.data;
+      });
+       }
     },
   },
   computed: {

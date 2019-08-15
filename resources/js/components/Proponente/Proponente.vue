@@ -484,6 +484,9 @@ export default {
   methods: {
     voltar(){
       this.$emit('voltar');
+      if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
+        this.$emit("voltar", this.proposta);
+      }
     },
     validateState(ref) {
       return this.veeErrors.has(ref) ? false : null;
@@ -551,6 +554,7 @@ export default {
           }
         }
       });
+     
     },
 
     getUcsDeCurso(codigo_curso) {
@@ -585,6 +589,9 @@ export default {
       this.isFinalized = false;
       this.progresso.valor--;
       this.voltarVar = true;
+      if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
+        this.voltar();
+      }
     },
     associarProposta() {
       //* Limpar Objectos

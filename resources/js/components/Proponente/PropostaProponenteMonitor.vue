@@ -77,7 +77,7 @@
       :unidadesCurriculares="unidadesCurriculares"
       :propostaProponenteMonitor="propostaProponenteMonitor"
       :ficheiro="ficheiro"
-      v-on:mostrarPropostaProponente_monitor="mostrarComponente"
+      v-on:mostrarComponente="mostrarComponente"
     ></resumo-proposta>
   </div>
 </template>
@@ -143,11 +143,17 @@ export default {
     anterior() {
       //* Mudar para o componente Proponente
       this.$emit("mostrarProponente");
+      if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
+        this.$emit("mostrarProponente", this.proposta);
+      }
     },
     mostrarComponente() {
       this.isShowMonitor = true;
       this.avancar = false;
       this.$emit("decrementarBarraProgresso");
+      if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
+        this.anterior();
+      }
     }
   },
   mounted() {

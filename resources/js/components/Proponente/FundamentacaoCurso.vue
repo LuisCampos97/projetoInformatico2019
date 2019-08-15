@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="mostrarFundamentacaoCurso">
     <div class="jumbotron">
       <h2>Fundamentação Coordenador Curso</h2>
 
@@ -41,7 +41,8 @@ export default {
       propostaProponente: {
         fundamentacao_coordenador_curso: "",
         data_de_assinatura_coordenador_de_curso:"",
-      }
+      },
+      mostrarFundamentacaoCurso:true,
     };
   },
   validations: {
@@ -60,7 +61,9 @@ export default {
         if (!this.$v.propostaProponente.$invalid) {
           axios.put('/api/propostaProponente/fundamentacaoCoordenadorCurso/'+
           this.propostaSelecionada.id_proposta_proponente, this.propostaProponente).then(response => {
-
+            this.mostrarFundamentacaoCurso=false;
+            this.$swal("Fundamentação inserida com sucesso");
+            this.$emit("voltarProponentes", this.propostaProponente);
           });
         }
       }

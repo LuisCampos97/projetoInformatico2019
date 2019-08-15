@@ -92,7 +92,15 @@ export default {
       mostrarSecretariado(){
           this.isResumoChecked=false;
           this.mostrarSecretariadoComponent = true;
-      }
+          axios
+      .get("/api/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao")
+      .then(response => {
+        this.propostasPendentesSecretariadoDirecao = response.data;
+      });
+      axios.get('/api/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao').then(response => {
+          this.historicoPropostasSecretariadoDirecao = response.data;
+      })
+    }
   },
   mounted() {
     axios

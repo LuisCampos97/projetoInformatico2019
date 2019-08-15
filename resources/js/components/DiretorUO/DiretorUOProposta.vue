@@ -99,6 +99,9 @@ export default {
                       msg: "Pedido de email enviado..."
                     });
                   }
+                    this.$swal("Parecer submetido!!")
+                    this.$emit("mostrarDiretor");
+
                 });
             })
             .catch(error => {

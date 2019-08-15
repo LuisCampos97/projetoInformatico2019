@@ -6,6 +6,10 @@ import BootstrapVue from 'bootstrap-vue';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import VeeValidate from 'vee-validate';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+ 
+Vue.use(VueSweetalert2);
 
 Vue.use(VeeValidate, {
     // This is the default

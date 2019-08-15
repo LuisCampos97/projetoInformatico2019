@@ -319,198 +319,211 @@ export default {
       this.ficheiros[event.target.name] = event.target.files[0];
     },
     submeter(ficheirosAInserir){
-      this.ficheirosAInserir.fileNIF = new FormData();
-      this.ficheirosAInserir.fileNIF.append(
-        "file",
-        this.ficheiros["ficheiroNIF"]
-      );
-      this.ficheirosAInserir.fileNIF.append(
-        "descricao",
-        "Ficheiro NIF"
-      );
-      this.ficheirosAInserir.fileNIF.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
 
-      this.ficheirosAInserir.fileNumeroCGA = new FormData();
-      this.ficheirosAInserir.fileNumeroCGA.append(
-        "file",
-        this.ficheiros["ficheiroNumeroCGA"]
-      );
-      this.ficheirosAInserir.fileNumeroCGA.append(
-        "descricao",
-        "Ficheiro Nº CGA/SS"
-      );
-      this.ficheirosAInserir.fileNumeroCGA.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
+      let confirmacao = confirm(
+          "Tem a certeza que pretende submeter esta proposta? Não poderá realizar mais alterações"
+        );
+        if (confirmacao) {
 
-      this.ficheirosAInserir.fileCopiaCC = new FormData();
-      this.ficheirosAInserir.fileCopiaCC.append(
-        "file",
-        this.ficheiros["ficheiroCopiaCC"]
-      );
-      this.ficheirosAInserir.fileCopiaCC.append(
-        "descricao",
-        "Ficheiro Cópia CC"
-      );
-      this.ficheirosAInserir.fileCopiaCC.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
 
-      this.ficheirosAInserir.fileCopiaIBAN = new FormData();
-      this.ficheirosAInserir.fileCopiaIBAN.append(
-        "file",
-        this.ficheiros["ficheiroCopiaIBAN"]
-      );
-      this.ficheirosAInserir.fileCopiaIBAN.append(
-        "descricao",
-        "Ficheiro Cópia IBAN"
-      );
-      this.ficheirosAInserir.fileCopiaIBAN.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
+        this.ficheirosAInserir.fileNIF = new FormData();
+        this.ficheirosAInserir.fileNIF.append(
+          "file",
+          this.ficheiros["ficheiroNIF"]
+        );
+        this.ficheirosAInserir.fileNIF.append(
+          "descricao",
+          "Ficheiro NIF"
+        );
+        this.ficheirosAInserir.fileNIF.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      this.ficheirosAInserir.fileRegistoCriminal = new FormData();
-      this.ficheirosAInserir.fileRegistoCriminal.append(
-        "file",
-        this.ficheiros["ficheiroRegistoCriminal"]
-      );
-      this.ficheirosAInserir.fileRegistoCriminal.append(
-        "descricao",
-        "Ficheiro Registo Criminal"
-      );
-      this.ficheirosAInserir.fileRegistoCriminal.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
+        this.ficheirosAInserir.fileNumeroCGA = new FormData();
+        this.ficheirosAInserir.fileNumeroCGA.append(
+          "file",
+          this.ficheiros["ficheiroNumeroCGA"]
+        );
+        this.ficheirosAInserir.fileNumeroCGA.append(
+          "descricao",
+          "Ficheiro Nº CGA/SS"
+        );
+        this.ficheirosAInserir.fileNumeroCGA.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      this.ficheirosAInserir.fileRobustezFisica = new FormData();
-      this.ficheirosAInserir.fileRobustezFisica.append(
-        "file",
-        this.ficheiros["ficheiroRobustezFisica"]
-      );
-      this.ficheirosAInserir.fileRobustezFisica.append(
-        "descricao",
-        "Ficheiro Robustez Física"
-      );
-      this.ficheirosAInserir.fileRobustezFisica.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
+        this.ficheirosAInserir.fileCopiaCC = new FormData();
+        this.ficheirosAInserir.fileCopiaCC.append(
+          "file",
+          this.ficheiros["ficheiroCopiaCC"]
+        );
+        this.ficheirosAInserir.fileCopiaCC.append(
+          "descricao",
+          "Ficheiro Cópia CC"
+        );
+        this.ficheirosAInserir.fileCopiaCC.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      this.ficheirosAInserir.fileCopiaBoletimVacinas = new FormData();
-      this.ficheirosAInserir.fileCopiaBoletimVacinas.append(
-        "file",
-        this.ficheiros["ficheiroCopiaBoletimVacinas"]
-      );
-      this.ficheirosAInserir.fileCopiaBoletimVacinas.append(
-        "descricao",
-        "Ficheiro Boletim Vacinas"
-      );
-      this.ficheirosAInserir.fileCopiaBoletimVacinas.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
+        this.ficheirosAInserir.fileCopiaIBAN = new FormData();
+        this.ficheirosAInserir.fileCopiaIBAN.append(
+          "file",
+          this.ficheiros["ficheiroCopiaIBAN"]
+        );
+        this.ficheirosAInserir.fileCopiaIBAN.append(
+          "descricao",
+          "Ficheiro Cópia IBAN"
+        );
+        this.ficheirosAInserir.fileCopiaIBAN.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      this.ficheirosAInserir.fichaIdentificacao = new FormData();
-      this.ficheirosAInserir.fichaIdentificacao.append(
-        "file",
-        this.ficheiros["ficheiroFichaIdentificacao"]
-      );
-      this.ficheirosAInserir.fichaIdentificacao.append(
-        "descricao",
-        "Ficheiro Ficha Identificacao"
-      ); 
-      this.ficheirosAInserir.fichaIdentificacao.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
+        this.ficheirosAInserir.fileRegistoCriminal = new FormData();
+        this.ficheirosAInserir.fileRegistoCriminal.append(
+          "file",
+          this.ficheiros["ficheiroRegistoCriminal"]
+        );
+        this.ficheirosAInserir.fileRegistoCriminal.append(
+          "descricao",
+          "Ficheiro Registo Criminal"
+        );
+        this.ficheirosAInserir.fileRegistoCriminal.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      this.ficheirosAInserir.fileDeclaracaoIRS = new FormData();
-      this.ficheirosAInserir.fileDeclaracaoIRS.append(
-        "file",
-        this.ficheiros["ficheiroDeclaracaoIRS"]
-      );
-      this.ficheirosAInserir.fileDeclaracaoIRS.append(
-        "descricao",
-        "Ficheiro Declaracao IRS"
-      );    
-      this.ficheirosAInserir.fileDeclaracaoIRS.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );
+        this.ficheirosAInserir.fileRobustezFisica = new FormData();
+        this.ficheirosAInserir.fileRobustezFisica.append(
+          "file",
+          this.ficheiros["ficheiroRobustezFisica"]
+        );
+        this.ficheirosAInserir.fileRobustezFisica.append(
+          "descricao",
+          "Ficheiro Robustez Física"
+        );
+        this.ficheirosAInserir.fileRobustezFisica.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      this.ficheirosAInserir.fileDeclaracaoRenunciaADSE = new FormData();
-      this.ficheirosAInserir.fileDeclaracaoRenunciaADSE.append(
-        "file",
-        this.ficheiros["ficheiroDeclaracaoRenunciaADSE"]
-      );
-      this.ficheirosAInserir.fileDeclaracaoRenunciaADSE.append(
-        "descricao",
-        "Ficheiro Renuncia ADSE"
-      );     
-      this.ficheirosAInserir.fileDeclaracaoRenunciaADSE.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );       
+        this.ficheirosAInserir.fileCopiaBoletimVacinas = new FormData();
+        this.ficheirosAInserir.fileCopiaBoletimVacinas.append(
+          "file",
+          this.ficheiros["ficheiroCopiaBoletimVacinas"]
+        );
+        this.ficheirosAInserir.fileCopiaBoletimVacinas.append(
+          "descricao",
+          "Ficheiro Boletim Vacinas"
+        );
+        this.ficheirosAInserir.fileCopiaBoletimVacinas.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      this.ficheirosAInserir.fileRespostaOutrasEscolas = new FormData();
-      this.ficheirosAInserir.fileRespostaOutrasEscolas.append(
-        "file",
-        this.ficheiros["ficheiroRespostaOutrasEscolas"]
-      );
-      this.ficheirosAInserir.fileRespostaOutrasEscolas.append(
-        "descricao",
-        "Ficheiro Resposta Consulta Outras Escolas"
-      );    
-      this.ficheirosAInserir.fileRespostaOutrasEscolas.append(
-        "proposta_id",
-        this.propostaDesteProponente.id_proposta_proponente
-      );             
-      console.log(this.ficheirosAInserir);
+        this.ficheirosAInserir.fichaIdentificacao = new FormData();
+        this.ficheirosAInserir.fichaIdentificacao.append(
+          "file",
+          this.ficheiros["ficheiroFichaIdentificacao"]
+        );
+        this.ficheirosAInserir.fichaIdentificacao.append(
+          "descricao",
+          "Ficheiro Ficha Identificacao"
+        ); 
+        this.ficheirosAInserir.fichaIdentificacao.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileNIF).then(response => {
+        this.ficheirosAInserir.fileDeclaracaoIRS = new FormData();
+        this.ficheirosAInserir.fileDeclaracaoIRS.append(
+          "file",
+          this.ficheiros["ficheiroDeclaracaoIRS"]
+        );
+        this.ficheirosAInserir.fileDeclaracaoIRS.append(
+          "descricao",
+          "Ficheiro Declaracao IRS"
+        );    
+        this.ficheirosAInserir.fileDeclaracaoIRS.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );
 
+        this.ficheirosAInserir.fileDeclaracaoRenunciaADSE = new FormData();
+        this.ficheirosAInserir.fileDeclaracaoRenunciaADSE.append(
+          "file",
+          this.ficheiros["ficheiroDeclaracaoRenunciaADSE"]
+        );
+        this.ficheirosAInserir.fileDeclaracaoRenunciaADSE.append(
+          "descricao",
+          "Ficheiro Renuncia ADSE"
+        );     
+        this.ficheirosAInserir.fileDeclaracaoRenunciaADSE.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );       
+
+        this.ficheirosAInserir.fileRespostaOutrasEscolas = new FormData();
+        this.ficheirosAInserir.fileRespostaOutrasEscolas.append(
+          "file",
+          this.ficheiros["ficheiroRespostaOutrasEscolas"]
+        );
+        this.ficheirosAInserir.fileRespostaOutrasEscolas.append(
+          "descricao",
+          "Ficheiro Resposta Consulta Outras Escolas"
+        );    
+        this.ficheirosAInserir.fileRespostaOutrasEscolas.append(
+          "proposta_id",
+          this.propostaDesteProponente.id_proposta_proponente
+        );             
+        console.log(this.ficheirosAInserir);
+
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileNIF).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileNumeroCGA).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileCopiaCC).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileCopiaIBAN).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileRegistoCriminal).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileRobustezFisica).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileCopiaBoletimVacinas).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fichaIdentificacao).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileDeclaracaoIRS).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileDeclaracaoRenunciaADSE).then(response => {
+
+        });
+        axios.post('/api/ficheiro', this.ficheirosAInserir.fileRespostaOutrasEscolas).then(response => {
+          axios.put('/api/updateFicheirosDocente/'+this.proposta.id).then(response => {
+          this.$swal("Ficheiros submetidos com sucesso!!")
+          axios.post("api/logout").then(response => {
+        this.$store.commit("clearUserAndToken");
+        this.$router.push({
+          name: "login"
+        });
       });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileNumeroCGA).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileCopiaCC).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileCopiaIBAN).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileRegistoCriminal).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileRobustezFisica).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileCopiaBoletimVacinas).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fichaIdentificacao).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileDeclaracaoIRS).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileDeclaracaoRenunciaADSE).then(response => {
-
-      });
-      axios.post('/api/ficheiro', this.ficheirosAInserir.fileRespostaOutrasEscolas).then(response => {
-        axios.put('/api/updateFicheirosDocente/'+this.proposta.id).then(response => {
-
-        })
-      });
+          })
+        });
+      }
     }
-   
   },
   mounted() {
     axios.get('/api/getPropostaParaNovoDocente/'+this.$store.state.user.email).then(response => {
@@ -519,9 +532,9 @@ export default {
       axios.get('/api/propostaDePropostaProponente/'+this.propostaDesteProponente.id_proposta_proponente)
       .then(response => {
         this.proposta = response.data[0];
+        
       })
     });
-    
   }
 };
 
