@@ -69,6 +69,7 @@ Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}/{aprovacao}', 'PropostaC
 Route::patch('/propostaSecretariadoDirecao/{propostaSecretariadoDirecaoID}/{propostaID}', 'PropostaController@atualizarPropostaSecretariadoDirecao');
 Route::patch('/propostaRecursosHumanos/{propostaRecursoHumanosID}/{propostaID}', 'PropostaController@atualizarPropostaRecursosHumanos');
 Route::get('/propostaDePropostaProponente/{propostaID}', 'PropostaController@getPropostaDePropostaProponente');
+Route::put('updateFicheirosDocente/{propostaID}', 'PropostaController@updateFicheirosDocente');
 
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis', 'CursoController@getCursos');
@@ -101,7 +102,7 @@ Route::get('/recursosHumanos/getHistoricoPropostasRecursosHumanos', 'RecursosHum
 Route::post('/recursosHumanos/propostaRecursosHumanos', 'RecursosHumanosController@store');
 
 //_--------------------------Users--------------------------------------------------------------
-Route::post('/users/criarUserTemporario', 'UserController@store');
+Route::post('/users/criarUserTemporario', 'UserController@registarNaBD');
 
 //-------------------------------------------Novos Docentes--------------------------------------------
 Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');

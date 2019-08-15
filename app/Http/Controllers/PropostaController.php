@@ -61,4 +61,11 @@ class PropostaController extends Controller
         $proposta = Proposta::where('proposta_proponente_id','=', $propostaID)->get();
         return $proposta;
     }
+
+    public function updateFicheirosDocente($propostaID){
+        $proposta = Proposta::findOrFail($propostaID);
+        $proposta->docente_inseriu_ficheiros = true;
+        $proposta->save();
+        return response()->json($proposta, 200);
+    }
 }

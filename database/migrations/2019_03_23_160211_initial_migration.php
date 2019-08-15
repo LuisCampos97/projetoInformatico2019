@@ -200,6 +200,7 @@ class InitialMigration extends Migration
             $table->foreign('proposta_ctc_id')->references('id_proposta_ctc')->on('proposta_ctc');
             $table->integer('proposta_secretariado_direcao_id')->unsigned()->nullable();
             $table->foreign('proposta_secretariado_direcao_id')->references('id_proposta_secretariado_direcao')->on('proposta_secretariado_direcao');
+            $table->boolean('docente_inseriu_ficheiros')->default(false);
             $table->integer('proposta_recursos_humanos_id')->unsigned()->nullable();
             $table->foreign('proposta_recursos_humanos_id')->references('id_proposta_recursos_humanos')->on('proposta_recursos_humanos');
             $table->enum('status', ['pendente', 'recusada', 'finalizada']);

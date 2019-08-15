@@ -51,38 +51,60 @@ class LoginController extends Controller
             ], 401);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $token = Str::random(60);
-            $response = compact('token');
-            $response['user'] = Auth::user();
-            $role = \Adldap\Laravel\Facades\Adldap::search()->find($request->email)->title[0];
-            $user = User::where('email', $request->email)->first();
-            if(strpos($role, 'Departamento') !== false || strpos($role, 'Estudante') !== false) {
-                $user->roleDB = 'proponente_departamento';
-                $user->save();
+        if( strpos($request->email, '@my.ipleiria.pt') !== false){
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                $token = Str::random(60);
+                $response = compact('token');
+                $response['user'] = Auth::user();
+                $role = \Adldap\Laravel\Facades\Adldap::search()->find($request->email)->title[0];
+                $user = User::where('email', $request->email)->first();
+                if(strpos($role, 'Departamento') !== false ) {
+                    $user->roleDB = 'proponente_departamento';
+                    $user->save();
+                }
+                elseif(strpos($role, 'Curso') !== false ) {
+                    $user->roleDB = 'proponente_curso';
+                    $user->save();
+                }
+                elseif(strpos($role, 'Diretor') !== false ) {
+                    $user->roleDB = 'diretor_uo';
+                    $user->save();
+                }
+                elseif(strpos($role, 'Conselho') !== false ) {
+                    $user->roleDB = 'ctc';
+                    $user->save();
+                }
+                elseif(strpos($role, 'Secretariado') !== false ) {
+                    $user->roleDB = 'secretariado_direcao';
+                    $user->save();
+                }
+                elseif(strpos($role, 'Recursos') !== false || strpos($role, 'Estudante') !== false) {
+                    $user->roleDB = 'recursos_humanos';
+                    $user->save();
+                }
+                return $response;
             }
-            elseif(strpos($role, 'Curso') !== false) {
-                $user->roleDB = 'proponente_curso';
-                $user->save();
-            }
-            elseif(strpos($role, 'Diretor') !== false ) {
-                $user->roleDB = 'diretor_uo';
-                $user->save();
-            }
-            elseif(strpos($role, 'Conselho') !== false) {
-                $user->roleDB = 'ctc';
-                $user->save();
-            }
-            elseif(strpos($role, 'Secretariado') !== false ) {
-                $user->roleDB = 'secretariado_direcao';
-                $user->save();
-            }
-            elseif(strpos($role, 'Recursos') !== false ) {
-                $user->roleDB = 'recursos_humanos';
-                $user->save();
-            }
-            return $response;
         }
+
+        else{
+            $credentials = [
+                'email' => $request->email,
+                'password' => $request->password,
+            ];
+
+            if(auth()->attempt($credentials)){
+                $token = auth()->user()->createToken('TutsForWeb')->accessToken;
+                $user = User::where('email', $request->email)->first();
+                $arrayADevolver=[];
+                $arrayADevolver["token"] = $token;
+                $arrayADevolver["user"] = $user;
+                //dd($user);
+                return response()->json( $arrayADevolver, 200);
+            }
+            return response()->json(['error' => 'UnAuthorised'], 401);
+        }
+
+        
 
         return response()->json([
             'errorMessage' => 'As credenciais estão inválidas. Por

@@ -42,7 +42,7 @@
           v-on:voltar="mostrarProponentes"></proponente>
           <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
           <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
-          <div v-if="user.roleDB == 'docente_temp'">TESTE DOCENTE</div>
+          <ficheiros-docente v-if="user.roleDB == 'docente_temp'"></ficheiros-docente>
           <tabela-recursos v-if="user.roleDB == 'recursos_humanos'"></tabela-recursos>
           <resumo-geral
             v-if="isResumoPropostaVisible"
