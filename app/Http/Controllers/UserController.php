@@ -30,4 +30,8 @@ class UserController extends Controller
         $user->save();
         return response()->json($user, 200);
     }
+
+    public function all() {
+        return User::all();
+    }
 }

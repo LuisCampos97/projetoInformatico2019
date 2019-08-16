@@ -2,7 +2,7 @@
   <div>
     <b-navbar toggleable="lg" type="light" variant="light">
       <b-navbar-brand>
-        <img src="../../assets/logo.svg" class="pr-5">Plataforma de Gestão de Contratações
+        <img src="../../assets/logo.svg" class="pr-5" @click="home">Plataforma de Gestão de Contratações
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -35,8 +35,14 @@
           >
             <i class="fas fa-plus"></i> Nova Proposta
           </button>
+          <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
+          <proponente v-if="isNovaPropostaVisible"></proponente>
+          <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
+          <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
+          <div v-if="user.roleDB == 'docente_temp'">TESTE DOCENTE</div>
+          <tabela-recursos v-if="user.roleDB == 'recursos_humanos'"></tabela-recursos>
 
-          <div v-if="user.roleDB == 'proponente'">
+          <div v-if="user.roleDB == 'proponente' && !isNovaPropostaVisible">
             <div class="separator">
               <b-tabs content-class="mt-3" align="left">
                 <b-tab title="Propostas Pendentes" active>
@@ -103,13 +109,6 @@
             </div>
           </div>
         </div>
-
-        <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
-        <proponente v-if="isNovaPropostaVisible"></proponente>
-        <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
-        <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
-        <div v-if="user.roleDB == 'docente_temp'">TESTE DOCENTE</div>
-        <tabela-recursos v-if="user.roleDB == 'recursos_humanos'"></tabela-recursos>
       </div>
     </div>
   </div>
@@ -127,8 +126,7 @@ module.exports = {
       isActiveSD: false,
       isActiveRH: false,
       propostasPendentesDiretorDepartamento: "",
-      historicoPropostasDiretorDepartamento: "",
-
+      historicoPropostasDiretorDepartamento: ""
     };
   },
   methods: {
@@ -144,6 +142,10 @@ module.exports = {
       //* Componente Proponente fica visivel
       this.isNovaPropostaVisible = true;
       this.isDashboardVisible = false;
+    },
+    home() {
+      this.isDashboardVisible = true;
+      this.isNovaPropostaVisible = false;
     }
   },
   computed: {
@@ -154,19 +156,23 @@ module.exports = {
   mounted() {
     if (this.$store.state.user.roleDB == "proponente") {
       this.isActiveProponente = true;
-      axios.get('/api/coordenadorDepartamento/propostasPendentes').then(response => {
-        this.propostasPendentesDiretorDepartamento = response.data;
-      });
-      axios.get('/api/coordenadorDepartamento/historicoPropostas').then(response => {
-        historicoPropostasDiretorDepartamento = response.data;
-      })
+      axios
+        .get("/api/coordenadorDepartamento/propostasPendentes")
+        .then(response => {
+          this.propostasPendentesDiretorDepartamento = response.data;
+        });
+      axios
+        .get("/api/coordenadorDepartamento/historicoPropostas")
+        .then(response => {
+          historicoPropostasDiretorDepartamento = response.data;
+        });
     } else if (this.$store.state.user.roleDB == "diretor_uo") {
       this.isActiveDiretorUO = true;
     } else if (this.$store.state.user.roleDB == "ctc") {
       this.isActiveCTC = true;
-    } else if(this.$store.state.user.roleDB =='secretariado_direcao') {
+    } else if (this.$store.state.user.roleDB == "secretariado_direcao") {
       this.isActiveSD = true;
-    } else if(this.$store.state.user.roleDB =='recursos_humanos') {
+    } else if (this.$store.state.user.roleDB == "recursos_humanos") {
       this.isActiveRH = true;
     }
   }
@@ -178,6 +184,10 @@ module.exports = {
 .navbar-brand {
   font-size: 30px;
   font-weight: 300;
+}
+
+.navbar-brand img {
+  cursor: pointer;
 }
 
 .navbar {

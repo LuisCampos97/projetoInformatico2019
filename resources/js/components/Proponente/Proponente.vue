@@ -12,7 +12,7 @@
     </b-form-group>
 
     <div v-if="isShow">
-      <b-form-group label="Propostas existentes">
+      <b-form-group label="Propostas existentes" description="Campo opcional">
         <b-form-select
           :options="propostasExistentes"
           v-model="propostaExistente"
@@ -48,7 +48,7 @@
           v-if="ficheiroCurriculo"
           @click="downloadFicheiro(ficheiroCurriculo.proposta_id, 'Curriculo do docente a ser contratado')"
         >
-          <i class="far fa-file-pdf"></i> Atual Curriculo do Docente
+        <i class="far fa-file-pdf"></i> Atual Curriculo do Docente
         </b-button>
       </b-form-group>
       <br>
@@ -378,7 +378,6 @@
         <strong>{{ progresso.valor }} / {{ progresso.max }}</strong>
       </b-progress-bar>
     </b-progress>
-    <!-----------------------------FIM CONTRATAÇÃO INICIAL-------------------------------------->
   </div>
 </template>
 <script>
@@ -505,14 +504,6 @@ export default {
     onFileSelected(event) {
       this.ficheiros[event.target.name] = event.target.files[0];
     },
-    makeToast(variant = null) {
-      this.$bvToast.toast("", {
-        title: 'O formulário possui erros',
-        variant: variant,
-        solid: true,
-        toaster: "b-toaster-top-right"
-      });
-    },
     avancar: function(proposta, unidadesCurriculares) {
       //? Necessário o FormData para passar a informção do ficheiro para o backend "Laravel"
       this.ficheiro.fileCurriculo = new FormData();
@@ -558,11 +549,12 @@ export default {
             this.progresso.valor++;
           }
         } else {
-          this.$bvToast.toast('Toast body content', {
-          title: 'ERROS',
-          variant: 'danger',
-          solid: true
-        })
+        //   this.$bvToast.toast('O formulário possui erros, por favor verifique!', {
+        //   title: 'Mensagem de Erro',
+        //   variant: 'danger',
+        //   appendToast: true,
+        //   solid: true
+        // })
         }
       });
     },
@@ -604,24 +596,18 @@ export default {
       this.unidadesCurriculares = [];
       Object.assign(this.propostaExistente, {});
 
-      //* Associar proposta atual à proposta existente selecionada à
+      //* Associar proposta atual à proposta existente selecionada
       Object.assign(this.proposta, this.propostaExistente);
-
-      axios
-        .get("/api/getUcsPropostaProponente/" + this.propostaExistente.id)
-        .then(response => {
-          response.data.forEach(uc => {
-            this.unidadesCurriculares.push(uc);
-          });
-        });
 
       axios
         .get("/api/ficheiros/" + this.propostaExistente.id)
         .then(response => {
           response.data.forEach(ficheiro => {
-            if (ficheiro.descricao == "Curriculo do docente a ser contratado")
+            if (ficheiro.descricao == "Curriculo do docente a ser contratado"){
               this.ficheiroCurriculo = ficheiro;
-
+            }
+              
+            
             if (ficheiro.descricao == "Relatorio dos 2 proponentes")
               this.ficheiroRelatorio = ficheiro;
 
@@ -634,7 +620,17 @@ export default {
           });
         });
 
-      this.$store.commit("setPropostaExistente");
+      axios
+        .get("/api/getUcsPropostaProponente/" + this.propostaExistente.id)
+        .then(response => {
+          response.data.forEach(uc => {
+            this.unidadesCurriculares.push(uc);
+          });
+        });
+
+      //this.$store.commit("setPropostaExistente");
+
+      console.log(this.ficheiroCurriculo);
     }
   },
 

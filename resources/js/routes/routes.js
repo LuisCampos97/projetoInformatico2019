@@ -24,6 +24,9 @@ Vue.component('propostaSecretariado', require('../components/SecretariadoDirecao
 Vue.component('tabelaRecursos', require('../components/RecursosHumanos/TabelaRecursosHumanos.vue').default);
 const ficheirosDocente = Vue.component('ficheirosDocente', require('../components/NovosDocentes/FicheirosDocente.vue').default);
 Vue.component('propostaRecursos', require('../components/RecursosHumanos/PropostaRecursosHumanos.vue').default);
+const adminDashboard = Vue.component('adminDashboard', require('../components/Backoffice/AdminDashboard.vue').default);
+const adminLogin =  Vue.component('adminLogin', require('../components/Backoffice/AdminLogin.vue').default);
+
 const routes = [
   //---------------Auth----------------------
   {
@@ -45,7 +48,16 @@ const routes = [
     component: ficheirosDocente,
     name: 'ficheirosDocente'
   },
-
+  {
+    path: '/adminDashboard',
+    component: adminDashboard,
+    name: 'adminDashboard'
+  },
+  {
+    path: '/admin',
+    component: adminLogin,
+    name: 'adminLogin'
+  }
 ];
 
 export default new VueRouter({

@@ -55,4 +55,8 @@ class PropostaController extends Controller
         $proposta->status = 'finalizada';
         $proposta->save();
     }
+
+    public function all() {
+        return Proposta::all();
+    }
 }
