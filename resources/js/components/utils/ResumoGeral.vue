@@ -183,6 +183,124 @@
         v-if="propostaSelecionada.proposta_recursos_humanos_id != null &&
       this.$store.state.user.roleDB == 'recursos_humanos'"
       >
+
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroNIF"
+          @click="downloadFicheiro(ficheiroNIF.proposta_id, 'Ficheiro NIF')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro NIF
+        </b-button>
+        <br />
+        <br />
+
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroCGA"
+          @click="downloadFicheiro(ficheiroCGA.proposta_id, 'Ficheiro Nº CGA/SS')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro CGA
+        </b-button>
+        <br />
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroCC"
+          @click="downloadFicheiro(ficheiroCC.proposta_id, 'Ficheiro Cópia CC')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Cartão Cidadão
+        </b-button>
+        <br />
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroIBAN"
+          @click="downloadFicheiro(ficheiroIBAN.proposta_id, 'Ficheiro Cópia IBAN')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Cópia IBAN
+        </b-button>
+        <br />
+        <br />
+
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroCertificadoRegistoCriminal"
+          @click="downloadFicheiro(ficheiroCertificadoRegistoCriminal.proposta_id, 'Ficheiro Registo Criminal')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Registo Criminal
+        </b-button>
+
+        <br />
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroDeclaracaoRobustezFisica"
+          @click="downloadFicheiro(ficheiroDeclaracaoRobustezFisica.proposta_id, 'Ficheiro Robustez Física')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Robustez Física
+        </b-button>
+
+        <br />
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroBoletimVacinas"
+          @click="downloadFicheiro(ficheiroBoletimVacinas.proposta_id, 'Ficheiro Boletim Vacinas')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Boletim Vacinas
+        </b-button>
+
+         <br />
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroFichaIdentificacao"
+          @click="downloadFicheiro(ficheiroFichaIdentificacao.proposta_id, 'Ficheiro Ficha Identificacao')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Ficha Identificacao
+        </b-button>
+        <br />
+        <br />
+
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroDeclaracaoRenuncia"
+          @click="downloadFicheiro(ficheiroDeclaracaoRenuncia.proposta_id, 'Ficheiro Renuncia ADSE')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Renuncia ADSE
+        </b-button>
+        <br />
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroDeclaracaoArtigo99"
+          @click="downloadFicheiro(ficheiroDeclaracaoArtigo99.proposta_id, 'Ficheiro Declaracao IRS')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Declaracao IRS
+        </b-button>
+        <br />
+        <br />
+        <b-button
+          size="md"
+          variant="dark"
+          v-if="ficheiroConsultaOutrasEscolas"
+          @click="downloadFicheiro(ficheiroConsultaOutrasEscolas.proposta_id, 'Ficheiro Resposta Consulta Outras Escolas')"
+        >
+          <i class="far fa-file-pdf"></i> Ficheiro Resposta Consulta Outras Escolas
+        </b-button>
+        <br />
+
         <label><strong>Remuneração: </strong>{{ propostaSelecionada.remuneracao }} €</label>
         <br />
         <label><strong>Índice: </strong>{{ propostaSelecionada.indice }}</label>
@@ -271,6 +389,17 @@ export default {
       ficheiroRelatorioProponentes: "",
       ficheiroCertificadoHabilitacoes: "",
       ataCTC: "",
+      ficheiroNIF:"",
+      ficheiroCGA:"",
+      ficheiroCC:"",
+      ficheiroIBAN:"",
+      ficheiroCertificadoRegistoCriminal:"",
+      ficheiroDeclaracaoRobustezFisica:"",
+      ficheiroBoletimVacinas:"",
+      ficheiroFichaIdentificacao:"",
+      ficheiroDeclaracaoArtigo99:"",
+      ficheiroDeclaracaoRenuncia:"",
+      ficheiroConsultaOutrasEscolas:"",
       propostaID: ""
     };
   },
@@ -323,6 +452,18 @@ export default {
           this.ficheiroCurriculo = this.ficheiros[1];
           this.ficheiroCertificadoHabilitacoes = this.ficheiros[2];
           this.ataCTC = this.ficheiros[3];
+          this.ficheiroNIF = this.ficheiros[4];
+          this.ficheiroCGA = this.ficheiros[5];
+          this.ficheiroCC = this.ficheiros[6];
+          this.ficheiroIBAN = this.ficheiros[7];
+          this.ficheiroCertificadoRegistoCriminal = this.ficheiros[8];
+          this.ficheiroDeclaracaoRobustezFisica = this.ficheiros[9];
+          this.ficheiroBoletimVacinas = this.ficheiros[10];
+          this.ficheiroFichaIdentificacao = this.ficheiros[11];
+          this.ficheiroDeclaracaoArtigo99 = this.ficheiros[12];
+          this.ficheiroDeclaracaoRenuncia = this.ficheiros[13];
+          this.ficheiroConsultaOutrasEscolas = this.ficheiros[14];
+
         });
       });
     axios
@@ -333,7 +474,6 @@ export default {
           this.propostaSelecionada.id_proposta_proponente
       )
       .then(response => {
-        console.log(response.data);
         this.tipoPropostaRole = response.data[0];
       });
 
