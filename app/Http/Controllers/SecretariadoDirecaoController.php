@@ -11,9 +11,9 @@ class SecretariadoDirecaoController extends Controller
     public function getPropostasPendentes(){
       $propostasADevolver=[];
       $propostas = DB::table('proposta')
-        ->join('proposta_proponente', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
-        ->join('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', '=', 'proposta_diretor_uo.id')
-        ->join('proposta_ctc', 'proposta.proposta_ctc_id', 'proposta_ctc.id')
+        ->join('proposta_proponente', 'proposta_proponente.id_proposta_proponente', 'proposta.proposta_proponente_id')
+        ->join('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id_proposta_diretor_uo')
+        ->join('proposta_ctc', 'proposta.proposta_ctc_id', 'proposta_ctc.id_proposta_ctc')
         ->whereNotNull('proposta.proposta_ctc_id')
         ->whereNull('proposta.proposta_secretariado_direcao_id')
         ->where('status', '!=', 'rejeitado')
@@ -28,10 +28,10 @@ class SecretariadoDirecaoController extends Controller
       $propostasADevolver=[];
 
       $historicoPropostas=DB::table('proposta_proponente')
-      ->leftJoin('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
-      ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id')
-      ->leftJoin('proposta_ctc', 'proposta_ctc.id', 'proposta.proposta_ctc_id')
-      ->leftJoin('proposta_secretariado_direcao', 'proposta.proposta_secretariado_direcao_id', 'proposta_secretariado_direcao.id')
+      ->leftJoin('proposta', 'proposta_proponente.id_proposta_proponente', 'proposta.proposta_proponente_id')
+      ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id_proposta_diretor_uo')
+      ->leftJoin('proposta_ctc', 'proposta_ctc.id_proposta_ctc', 'proposta.proposta_ctc_id')
+      ->leftJoin('proposta_secretariado_direcao', 'proposta.proposta_secretariado_direcao_id', 'proposta_secretariado_direcao.id_proposta_secretariado_direcao')
       ->whereNotNull('proposta.proposta_secretariado_direcao_id')
       ->whereNull('proposta.proposta_recursos_humanos_id')
       ->get();

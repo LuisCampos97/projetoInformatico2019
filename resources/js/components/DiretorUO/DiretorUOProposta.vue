@@ -14,25 +14,31 @@
         <b-form-invalid-feedback id="input-1-live-feedback">Tem de reconhecer a proposta</b-form-invalid-feedback>
       </b-form-group>
 
-      <b-form-group label="Parecer">
-        <b-form-radio-group v-model="propostaDiretor.parecer"
+      <div v-if="propostaDiretor.reconhecimento == 1">
+        <b-form-group label="Parecer">
+          <b-form-radio-group
+            v-model="propostaDiretor.parecer"
             :state="$v.propostaDiretor.parecer.$dirty ? !$v.propostaDiretor.parecer.$error : null"
-            :options="parecerArray"></b-form-radio-group>
-        <b-form-invalid-feedback id="input-1-live-feedback">Selecione a opção do parecer</b-form-invalid-feedback>
-      </b-form-group>
+            :options="parecerArray"
+          ></b-form-radio-group>
+          <b-form-invalid-feedback id="input-1-live-feedback">Selecione a opção do parecer</b-form-invalid-feedback>
+        </b-form-group>
 
-      <b-form-group label="Data assinatura">
-        <b-form-input type="date"
+        <b-form-group label="Data assinatura">
+          <b-form-input
+            type="date"
             :state="$v.propostaDiretor.data_assinatura.$dirty ? !$v.propostaDiretor.data_assinatura.$error : null"
-            v-model="propostaDiretor.data_assinatura"></b-form-input>
-        <b-form-invalid-feedback id="input-1-live-feedback">Selecione a data de assinatura</b-form-invalid-feedback>
-      </b-form-group>
-  
+            v-model="propostaDiretor.data_assinatura"
+          ></b-form-input>
+          <b-form-invalid-feedback id="input-1-live-feedback">Selecione a data de assinatura</b-form-invalid-feedback>
+        </b-form-group>
+      </div>
+
       <button
         class="btn btn-success mt-3 font-weight-bold"
         v-on:click.prevent="finalizarParecer(propostaDiretor)"
       >
-        Finalizar
+        Submeter
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
@@ -76,21 +82,26 @@ export default {
             .post("/api/diretorUO/propostaDiretor", this.propostaDiretor)
             .then(response => {
               console.log(response);
+              console.log(this.propostaSelecionada)
               let parecer = response.data.parecer;
               axios
                 .patch(
                   "/api/proposta/" +
-                    parseInt(response.data.id) +
+                    parseInt(response.data.id_proposta_diretor_uo) +
                     "/" +
-                    this.propostaSelecionada.id+ "/"
-                    + parecer
+                    this.propostaSelecionada.id +
+                    "/" +
+                    parecer
                 )
                 .then(response => {
-                  if(parecer == 'Favoravel'){
+                  if (parecer == "Favoravel") {
                     this.$socket.emit("email-ctc", {
                       msg: "Pedido de email enviado..."
-                    }); 
+                    });
                   }
+                    this.$swal("Parecer submetido!!")
+                    this.$emit("mostrarDiretor");
+
                 });
             })
             .catch(error => {

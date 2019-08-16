@@ -40,6 +40,11 @@ Route::post('/propostaProponente', 'PropostaProponenteController@store');
 Route::get('/allPropostasProponente', 'PropostaProponenteController@getPropostasProponente');
 Route::get('/coordenadorDepartamento/propostasPendentes', 'PropostaProponenteController@getPropostasPendentesCoordenadorDepartamento');
 Route::get('/coordenadorDepartamento/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorDepartamento');
+Route::get('/coordenadorCurso/propostasPendentes', 'PropostaProponenteController@getPropostasPendentesCoordenadorCurso');
+Route::get('/coordenadorCurso/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorCurso');
+Route::put('/propostaProponente/fundamentacaoCoordenadorDepartamento/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorDepartamento');
+Route::put('/propostaProponente/fundamentacaoCoordenadorCurso/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorCurso');
+
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
@@ -64,6 +69,9 @@ Route::patch('/propostaCTC/{idPropostaCTC}/{propostaID}/{aprovacao}', 'PropostaC
 Route::patch('/propostaSecretariadoDirecao/{propostaSecretariadoDirecaoID}/{propostaID}', 'PropostaController@atualizarPropostaSecretariadoDirecao');
 Route::patch('/propostaRecursosHumanos/{propostaRecursoHumanosID}/{propostaID}', 'PropostaController@atualizarPropostaRecursosHumanos');
 Route::get('/propostas', 'PropostaController@all');
+Route::get('/propostaDePropostaProponente/{propostaID}', 'PropostaController@getPropostaDePropostaProponente');
+Route::put('updateFicheirosDocente/{propostaID}', 'PropostaController@updateFicheirosDocente');
+
 //-----------------------Cursos---------------------------------------------------------------
 Route::get('/cursosDisponiveis', 'CursoController@getCursos');
 
@@ -97,3 +105,7 @@ Route::post('/recursosHumanos/propostaRecursosHumanos', 'RecursosHumanosControll
 //_--------------------------Users--------------------------------------------------------------
 Route::post('/users/criarUserTemporario', 'UserController@store');
 Route::get('/users', 'UserController@all');
+Route::post('/users/criarUserTemporario', 'UserController@registarNaBD');
+
+//-------------------------------------------Novos Docentes--------------------------------------------
+Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');

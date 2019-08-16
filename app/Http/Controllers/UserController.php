@@ -34,4 +34,17 @@ class UserController extends Controller
     public function all() {
         return User::all();
     }
+    
+    public function registarNaBD(Request $request){
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'unidade_organica' => $request->unidade_organica,
+            'role' => $request->role,
+            'roleDB' => $request->roleDB
+        ]);
+        $token = $user->createToken('TutsForWeb')->accessToken;
+        return response()->json(['token' => $token]);
+    }
 }

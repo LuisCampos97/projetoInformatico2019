@@ -88,6 +88,16 @@ export default {
     mostrarRecursos() {
       this.isResumoChecked = false;
       this.mostrarRHComponent = true;
+      axios
+      .get("/api/recursosHumanos/getPropostasPendentesRecursosHumanos")
+      .then(response => {
+        this.propostasPendentesRecursosHumanos = response.data;
+      });
+    axios
+      .get("/api/recursosHumanos/getHistoricoPropostasRecursosHumanos")
+      .then(response => {
+        this.historicoPropostasRecursosHumanos = response.data;
+      });
     },
     verDetalhes(propostaPendenteRecursosHumanos, index) {
       this.propostaSelecionada = Object.assign(

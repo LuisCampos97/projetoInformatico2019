@@ -46,8 +46,40 @@
         ></b-form-radio-group>
       </b-form-group>
 
+      <b-form-group label="O docente proposto já se encontra/ja foi convidado a exercer funções numa outra UO do IPL?">
+        <b-form-radio-group
+          v-model="propostaRecursosHumanos.verificacao_outras_uo"
+          :options="verificacao_outras_uo_array"
+          stacked
+        ></b-form-radio-group>
+      </b-form-group>
+
+      <b-form-group v-if="propostaRecursosHumanos.verificacao_outras_uo == 'sim'">
+        <b-form-group label="Indique o nome da Unidade Orgânica" label-for="inputNomeUO">
+          <b-form-input
+            id="inputNomeUO"
+            v-model="propostaRecursosHumanos.nome_uo"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Indique o tempo parcial" label-for="inputTempoParcial">
+          <b-form-input
+            id="inputTempoParcial"
+            v-model="propostaRecursosHumanos.tempo_parcial_uo"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Indique o período" label-for="inputPeriodo">
+          <b-form-input
+            id="inputPeriodo"
+            v-model="propostaRecursosHumanos.periodo_uo"
+          ></b-form-input>
+        </b-form-group>
+      </b-form-group>
+
       <b-form-group label="Despacho do Sr.Presidente do IPL" label-for="inputDespacho">
         <b-form-input
+          type="date"
           id="inputDespacho"
           :state="$v.propostaRecursosHumanos.despacho_presidente_ipl.$dirty ? !$v.propostaRecursosHumanos.despacho_presidente_ipl.$error : null"
           v-model="propostaRecursosHumanos.despacho_presidente_ipl"
@@ -114,6 +146,7 @@
 
       <b-form-group label="Data de nascimento" label-for="inputDataNascimento">
         <b-form-input
+          type="date"
           id="inputDataNascimento"
           :state="$v.propostaRecursosHumanos.data_nascimento.$dirty ? !$v.propostaRecursosHumanos.data_nascimento.$error : null"
           v-model="propostaRecursosHumanos.data_nascimento"
@@ -133,8 +166,8 @@
       <b-form-group label="E-mail pessoal" label-for="inputEmailPessoal">
         <b-form-input
           id="inputEmailPessoal"
-          :state="$v.propostaRecursosHumanos.email.$dirty ? !$v.propostaRecursosHumanos.email.$error : null"
-          v-model="propostaRecursosHumanos.email"
+          :state="$v.propostaRecursosHumanos.email_recursos_humanos.$dirty ? !$v.propostaRecursosHumanos.email_recursos_humanos.$error : null"
+          v-model="propostaRecursosHumanos.email_recursos_humanos"
         ></b-form-input>
         <b-form-invalid-feedback id="input-1-live-feedback">Tem de preencher este campo</b-form-invalid-feedback>
       </b-form-group>
@@ -150,6 +183,7 @@
 
       <b-form-group label="Data" label-for="inputDataGIAF">
         <b-form-input
+          type="date"
           id="inputDataGIAF"
           :state="$v.propostaRecursosHumanos.data_carregamento_dados_GIAF.$dirty ? !$v.propostaRecursosHumanos.data_carregamento_dados_GIAF.$error : null"
           v-model="propostaRecursosHumanos.data_carregamento_dados_GIAF"
@@ -175,10 +209,18 @@ export default {
         { text: "Segurança Social", value: "seguranca_social" },
         { text: "Caixa Geral de Aposentações", value: "CGA" }
       ],
+      verificacao_outras_uo_array: [
+        { text: "Sim", value: "sim" },
+        { text: "Não", value: "nao" }
+      ],
       propostaRecursosHumanos: {
         remuneracao: "",
         escalao: "",
         indice: "",
+        verificacao_outras_uo:"",
+        nome_uo:"",
+        tempo_parcial_uo:"",
+        periodo_uo:"",
         numero_funcionario: "",
         contratacao_comunicada: "",
         inscricao: "",
@@ -189,7 +231,7 @@ export default {
         NISS_ou_numero_CGA: "",
         data_nascimento: "",
         numero_CC: "",
-        email: "",
+        email_recursos_humanos: "",
         dados_GIAF_carregados_por: "",
         data_carregamento_dados_GIAF: ""
       }
@@ -200,10 +242,10 @@ export default {
       remuneracao: { required },
       escalao: { required },
       indice: { required },
+      verificacao_outras_uo: { required },
       numero_funcionario: { required },
       contratacao_comunicada: { required },
-      inscricao_seguranca_social: { required },
-      inscricao_caixa_geral_aposentacoes: { required },
+      inscricao: { required },
       despacho_presidente_ipl: { required },
       contrato_redigido: { required },
       contrato_anexo: { required },
@@ -211,24 +253,27 @@ export default {
       NISS_ou_numero_CGA: { required },
       data_nascimento: { required },
       numero_CC: { required },
-      email: { required },
+      email_recursos_humanos: { required },
       dados_GIAF_carregados_por: { required },
       data_carregamento_dados_GIAF: { required }
     }
   },
   methods: {
     finalizarPropostaRecursosHumanos(propostaRecursosHumanos){
-      this.$v.propostaSecretariadoDirecao.convite.$touch();
-      if (!this.$v.propostaSecretariadoDirecao.convite.$invalid) {
+      this.$v.propostaRecursosHumanos.$touch();
+      if (!this.$v.propostaRecursosHumanos.$invalid) {
         let confirmacao = confirm(
           "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
         );
         if (confirmacao) {
           axios.post('/api/recursosHumanos/propostaRecursosHumanos', propostaRecursosHumanos)
           .then(response => {
-            let idPropostaRecursosHumanos = response.data.id;
+            console.log(response)
+            let idPropostaRecursosHumanos = response.data.id_proposta_recursos_humanos;
             axios.patch('/api/propostaRecursosHumanos/' + idPropostaRecursosHumanos + "/" 
-            + propostaSelecionada.id).then(response => {
+            + this.propostaSelecionada.id).then(response => {
+              this.$swal("Proposta finalizada!!")
+              this.$emit("mostrarRh");
               this.$socket.emit("email-recursos-humanos", {
                 msg: "Pedido de email enviado..."
               });

@@ -16,9 +16,11 @@ class DiretorUOController extends Controller
       $propostasADevolver=[];
 
       $propostaProponente=DB::table('proposta_proponente')
-      ->join('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
+      ->join('proposta', 'proposta_proponente.id_proposta_proponente', 'proposta.proposta_proponente_id')
       ->whereNotNull('proposta.proposta_proponente_id')
       ->whereNull('proposta.proposta_diretor_uo_id')
+      ->whereNotNull('proposta_proponente.fundamentacao_coordenador_departamento')
+      ->whereNotNull('proposta_proponente.fundamentacao_coordenador_curso')
       ->get();
 
       array_push($propostasADevolver, $propostaProponente);
@@ -47,15 +49,19 @@ class DiretorUOController extends Controller
    }
 
    public function getTipoPropostaRole($role, $proposta_proponente_id){
+      
       $proposta_proponente_role = null;
       if($role == "professor"){
-         $proposta_proponente_role = PropostaProponenteProfessor::findOrFail($proposta_proponente_id);
+         $proposta_proponente_role = DB::table('proposta_proponente_professor')
+         ->where('proposta_proponente_id', $proposta_proponente_id)->get();
       }
       if($role == "assistente"){
-         $proposta_proponente_role = PropostaProponenteAssistente::findOrFail($proposta_proponente_id);
+         $proposta_proponente_role = DB::table('proposta_proponente_assistente')
+         ->where('proposta_proponente_id', $proposta_proponente_id)->get();
       }
       if($role == "monitor"){
-         $proposta_proponente_role = PropostaProponenteMonitor::findOrFail($proposta_proponente_id);
+         $proposta_proponente_role = DB::table('proposta_proponente_monitor')
+         ->where('proposta_proponente_id', $proposta_proponente_id)->get();
       }
 
       return $proposta_proponente_role;
@@ -70,8 +76,8 @@ class DiretorUOController extends Controller
       $propostasADevolver=[];
 
       $historicoPropostas=DB::table('proposta_proponente')
-      ->leftJoin('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
-      ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id')
+      ->leftJoin('proposta', 'proposta_proponente.id_proposta_proponente', 'proposta.proposta_proponente_id')
+      ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id_proposta_diretor_uo')
       ->whereNotNull('proposta.proposta_diretor_uo_id')
       ->get();
 

@@ -100,6 +100,12 @@ export default {
     mostrarDiretor(){
       this.isResumoChecked = false;
       this.mostrarDiretorComponent = true;
+      axios.get("/api/diretorUO/propostasPendentes").then(response => {
+        this.propostasPendentesDiretorUO = response.data;
+      });
+      axios.get("/api/diretorUO/historicoPropostas").then(response => {
+        this.historicoPropostasDiretorUO = response.data;
+      });
     }
   },
   mounted() {

@@ -13,11 +13,11 @@ class CTCController extends Controller
 
       $propostasADevolver = [];
       $propostas = DB::table('proposta')
-         ->join('proposta_proponente', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
-         ->join('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', '=', 'proposta_diretor_uo.id')
+         ->join('proposta_proponente', 'proposta_proponente.id_proposta_proponente', 'proposta.proposta_proponente_id')
+         ->join('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', '=', 'proposta_diretor_uo.id_proposta_diretor_uo')
          ->whereNotNull('proposta.proposta_diretor_uo_id')
          ->whereNull('proposta.proposta_ctc_id')
-         ->where('status', '!=', 'rejeitado')
+         ->where('proposta_diretor_uo.parecer', 'Favoravel')
          ->get();
 
       array_push($propostasADevolver, $propostas);
@@ -61,9 +61,9 @@ class CTCController extends Controller
       $propostasADevolver = [];
 
       $historicoPropostas = DB::table('proposta_proponente')
-         ->leftJoin('proposta', 'proposta_proponente.id', 'proposta.proposta_proponente_id')
-         ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id')
-         ->leftJoin('proposta_ctc', 'proposta_ctc.id', 'proposta.proposta_ctc_id')
+         ->leftJoin('proposta', 'proposta_proponente.id_proposta_proponente', 'proposta.proposta_proponente_id')
+         ->leftJoin('proposta_diretor_uo', 'proposta.proposta_diretor_uo_id', 'proposta_diretor_uo.id_proposta_diretor_uo')
+         ->leftJoin('proposta_ctc', 'proposta_ctc.id_proposta_ctc', 'proposta.proposta_ctc_id')
          ->whereNotNull('proposta.proposta_ctc_id')
          ->get();
 
