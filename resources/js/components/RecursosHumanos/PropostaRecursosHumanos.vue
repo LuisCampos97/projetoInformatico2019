@@ -260,28 +260,34 @@ export default {
   },
   methods: {
     finalizarPropostaRecursosHumanos(propostaRecursosHumanos){
+      
       this.$v.propostaRecursosHumanos.$touch();
       if (!this.$v.propostaRecursosHumanos.$invalid) {
-        let confirmacao = confirm(
-          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-        );
-        if (confirmacao) {
-          axios.post('/api/recursosHumanos/propostaRecursosHumanos', propostaRecursosHumanos)
-          .then(response => {
-            console.log(response)
-            let idPropostaRecursosHumanos = response.data.id_proposta_recursos_humanos;
-            axios.patch('/api/propostaRecursosHumanos/' + idPropostaRecursosHumanos + "/" 
-            + this.propostaSelecionada.id).then(response => {
-              this.$swal("Proposta finalizada!!")
-              this.$emit("mostrarRh");
-              this.$socket.emit("email-recursos-humanos", {
-                msg: "Pedido de email enviado..."
-              });
-            });
-          });
-        }
+        this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
+                axios.post('/api/recursosHumanos/propostaRecursosHumanos', propostaRecursosHumanos)
+                    .then(response => {
+                      let idPropostaRecursosHumanos = response.data.id_proposta_recursos_humanos;
+                      axios.patch('/api/propostaRecursosHumanos/' + idPropostaRecursosHumanos + "/" 
+                      + this.propostaSelecionada.id).then(response => {
+                        this.$swal('Sucesso', 'Proposta Finalizada', 'success')
+                        this.$emit("mostrarRh");
+                        this.$socket.emit("email-recursos-humanos", {
+                          msg: "Pedido de email enviado..."
+                        });
+                      });
+                    })
+          }
+        })
       }
     }
-  },
+  }
 };
 </script>

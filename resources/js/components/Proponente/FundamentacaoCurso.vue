@@ -53,20 +53,29 @@ export default {
   },
   methods: {
     inserirFundamentacao(propostaProponente){
-       let confirmacao = confirm(
-        "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-      );
-      if (confirmacao) {
+       
         this.$v.propostaProponente.$touch();
         if (!this.$v.propostaProponente.$invalid) {
+          this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
           axios.put('/api/propostaProponente/fundamentacaoCoordenadorCurso/'+
           this.propostaSelecionada.id_proposta_proponente, this.propostaProponente).then(response => {
             this.mostrarFundamentacaoCurso=false;
-            this.$swal("Fundamentação inserida com sucesso");
+            this.$swal('Sucesso', 'Fundamentação inserida com sucesso', 'success');
             this.$emit("voltarProponentes", this.propostaProponente);
           });
+          }
+        });
+          
         }
-      }
+      
     }
   }
 };

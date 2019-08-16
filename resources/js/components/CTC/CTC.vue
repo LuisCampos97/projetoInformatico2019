@@ -118,22 +118,27 @@ export default {
       this.ficheiro.ata.append("file", this.ficheiros["ataCTC"]);
       this.ficheiro.ata.append("descricao", "Ata do CTC");
     
-      let confirmacao = confirm(
-        "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-      );
-      if (confirmacao) {
+     
         this.$v.propostaCTC.$touch();
         if (!this.$v.propostaCTC.$invalid) {
+          this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
           axios
             .post("/api/ctc/propostaCTC", this.propostaCTC)
             .then(response => {
               let proposta_ctc_id = response.data.id_proposta_ctc;
+              let proposta_proponente_id = this.propostaSelecionada.id_proposta_proponente;
               let aprovacao = response.data.aprovacao.replace(' ', '');
-              this.ficheiro.ata.append("proposta_id", proposta_ctc_id);
+              this.ficheiro.ata.append("proposta_id", proposta_proponente_id);
               axios.post('/api/ficheiro', this.ficheiro.ata).then(response => {
-                
-              });
-              axios
+                axios
                 .patch(
                   "/api/propostaCTC/" +
                     proposta_ctc_id +
@@ -141,9 +146,11 @@ export default {
                     this.propostaSelecionada.id+"/"+aprovacao
                 )
                 .then(response => {
-                    this.$swal("Parecer dado com sucesso!!");
+                    this.$swal('Sucesso', 'Parecer enviado com sucesso', 'success')
                     this.$emit("mostrarCTC");
                 });
+              });
+              
             })
             .catch(error => {
               console.log(error);
@@ -151,7 +158,8 @@ export default {
           this.$socket.emit("email-secretariado", {
             msg: "Pedido de email enviado..."
           }); // raise an event on the server
-        }
+          }
+        });
       }
     }
   }

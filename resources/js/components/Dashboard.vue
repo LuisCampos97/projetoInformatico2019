@@ -36,12 +36,6 @@
           >
             <i class="fas fa-plus"></i> Nova Proposta
           </button>
-          <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
-          <proponente v-if="isNovaPropostaVisible"></proponente>
-          <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
-          <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
-          <div v-if="user.roleDB == 'docente_temp'">TESTE DOCENTE</div>
-          <tabela-recursos v-if="user.roleDB == 'recursos_humanos'"></tabela-recursos>
 
           <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
           <proponente v-if="isNovaPropostaVisible"v-on:voltar="mostrarProponentes"></proponente>
@@ -261,7 +255,6 @@ module.exports = {
       axios
         .get("/api/coordenadorDepartamento/propostasPendentes")
         .then(response => {
-          console.log("OLA1");
           this.propostasPendentesCoordenadorDepartamento = response.data;
         });
       axios

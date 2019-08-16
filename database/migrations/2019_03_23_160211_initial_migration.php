@@ -24,7 +24,7 @@ class InitialMigration extends Migration
             $table->string('role');
             $table->string('unidade_organica');
             $table->string('password');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->boolean('blocked')->default(false);
             $table->softDeletes();
             $table->rememberToken();

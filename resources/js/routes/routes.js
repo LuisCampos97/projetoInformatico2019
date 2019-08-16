@@ -46,11 +46,6 @@ const routes = [
     name: 'dashboard'
   },
   {
-    path: '/ficheirosDocente',
-    component: ficheirosDocente,
-    name: 'ficheirosDocente'
-  },
-  {
     path: '/adminDashboard',
     component: adminDashboard,
     name: 'adminDashboard'

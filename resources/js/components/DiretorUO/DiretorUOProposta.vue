@@ -74,10 +74,15 @@ export default {
     finalizarParecer(propostaDiretor) {
       this.$v.propostaDiretor.$touch();
       if (!this.$v.propostaDiretor.$invalid) {
-        let confirmacao = confirm(
-          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-        );
-        if (confirmacao) {
+        this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
           axios
             .post("/api/diretorUO/propostaDiretor", this.propostaDiretor)
             .then(response => {
@@ -99,7 +104,7 @@ export default {
                       msg: "Pedido de email enviado..."
                     });
                   }
-                    this.$swal("Parecer submetido!!")
+                    this.$swal('Sucesso', 'Parecer Submetido', 'success')
                     this.$emit("mostrarDiretor");
 
                 });
@@ -107,7 +112,8 @@ export default {
             .catch(error => {
               console.log(error);
             });
-        }
+          }
+        });
       }
     }
   }

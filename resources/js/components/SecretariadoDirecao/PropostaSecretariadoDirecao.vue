@@ -55,22 +55,23 @@ export default {
     finalizarConvite(propostaSecretariadoDirecao) {
       this.$v.propostaSecretariadoDirecao.convite.$touch();
       if (!this.$v.propostaSecretariadoDirecao.convite.$invalid) {
-        let confirmacao = confirm(
-          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-        );
-        if (confirmacao) {
-          axios
+        this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
+            axios
             .post(
               "/api/secretariadoDirecao/propostaSecretariadoDirecao",
               propostaSecretariadoDirecao
             )
             .then(response => {
-              /*
-              this.$socket.emit("email-rh", {
-                msg: "Pedido de email enviado..."
-              }); // raise an event on the server
-              */
-              console.log(response);
+
+              
               let idPropostaSecretariadoDirecao = response.data.id_proposta_secretariado_direcao;
               axios
                 .patch(
@@ -83,7 +84,6 @@ export default {
                   this.novoUserBD.username = this.propostaSelecionada.nome_completo;
                   this.novoUserBD.unidade_organica = this.propostaSelecionada.unidade_organica;
                   this.novoUserBD.email = this.propostaSelecionada.email;
-                  this.$swal("Convite enviado com sucesso!!")
 
 
                   axios.post('/api/users/criarUserTemporario', this.novoUserBD).then(response => {
@@ -92,10 +92,13 @@ export default {
                       email:this.propostaSelecionada.email
                     }); // raise an event on the server
                   })
-                  this.$emit("mostrarSecretariado");                  
+                  this.$swal('Sucesso', 'Dados submetidos', 'success')  
+                  this.$emit("mostrarSecretariado");     
                 });
             });
-        }
+          }
+        });
+                        
       }
     }
   },

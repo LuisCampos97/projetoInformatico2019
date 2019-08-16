@@ -250,10 +250,15 @@ module.exports = {
       this.mostrarResumoProposta = false;
     },
     submeterPropostaProfessor(propostaProponenteProfessor) {
-      let confirmacao = confirm(
-        "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-      );
-      if (confirmacao) {
+      this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
         this.isLoading=true;
         if (this.unidadesCurriculares.length > 0) {
           axios
@@ -311,7 +316,7 @@ module.exports = {
                     axios
                       .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
                       .then(response => {
-                        this.$swal("Proposta criada com sucesso!!")
+                        this.$swal('Sucesso', 'Proposta criada com sucesso!!', 'success')
                         this.isLoading=false;
                         this.voltar();
                       });
@@ -320,14 +325,20 @@ module.exports = {
             });
         }
       }
+    });
     },
     submeterPropostaAssistente(propostaProponenteAssistente) {
       if (this.unidadesCurriculares.length > 0) {
-        let confirmacao = confirm(
-          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-        );
-        if (confirmacao) {
-                  this.isLoading=true;
+        this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
+          this.isLoading=true;
 
           axios
             .post("/api/propostaProponente", this.proposta)
@@ -381,7 +392,7 @@ module.exports = {
                     axios
                       .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
                       .then(response => {
-                          this.$swal("Proposta criada com sucesso!!")
+                        this.$swal('Sucesso', 'Proposta criada com sucesso!!', 'success')
                           this.isLoading=false;
                           this.voltar();
                       });
@@ -389,15 +400,21 @@ module.exports = {
                 });
             });
         }
+      });
       }
     },
     submeterPropostaMonitor(propostaProponenteMonitor) {
       if (this.unidadesCurriculares.length > 0) {
-        let confirmacao = confirm(
-          "Tem a certeza que pretende submeter esta proposta? Não pode realizar mais alterações"
-        );
-        if (confirmacao) {
-                  this.isLoading=true;
+        this.$swal.fire({title:'Tem a certeza que pretende submeter estes dados?',
+                        text: 'Não poderá realizar mais nenhuma alteração',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não'}).then((result) => {
+          if(result.value){
+          this.isLoading=true;
           axios
             .post("/api/propostaProponente", this.proposta)
             .then(response => {
@@ -451,7 +468,7 @@ module.exports = {
                     axios
                       .post("/api/ficheiro", this.ficheiro.fileHabilitacoes)
                       .then(response => {
-                           this.$swal("Proposta criada com sucesso!!")
+                            this.$swal('Sucesso', 'Proposta criada com sucesso!!', 'success')
                            this.isLoading=false;
                            this.voltar();
                       });
@@ -459,6 +476,7 @@ module.exports = {
                 });
             });
         }
+      });
       }
     },
     makeToast(variant = null) {
