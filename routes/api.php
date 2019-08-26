@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', 'Auth\LoginController@login')->name('login');
+Route::post('/loginAdmin', 'Auth\LoginController@loginAdmin')->name('loginAdmin');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 //---------------Departamentos------------------------------------
@@ -106,6 +107,7 @@ Route::post('/recursosHumanos/propostaRecursosHumanos', 'RecursosHumanosControll
 Route::post('/users/criarUserTemporario', 'UserController@store');
 Route::get('/users', 'UserController@all');
 Route::post('/users/criarUserTemporario', 'UserController@registarNaBD');
+Route::put('/users/updateRole/{id}', 'UserController@updateRole');
 
 //-------------------------------------------Novos Docentes--------------------------------------------
 Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');
