@@ -120,7 +120,7 @@ export default {
   }
 };
 </script>
-
+<!--
 <style lang="scss" scoped>
 .main {
   font-size: 20px;

@@ -112,7 +112,11 @@
         <br />
       </div>
 
+      <label><strong>Primeiro Proponente (criador da proposta):</strong> {{ propostaSelecionada.primeiro_proponente }}</label>
+      <br />
       <label><strong>Fundamentação do Coordenador de Curso:</strong> {{ propostaSelecionada.fundamentacao_coordenador_curso }}</label>
+      <br />
+      <label><strong>Segundo Proponente:</strong> {{ propostaSelecionada.segundo_proponente }}</label>
       <br />
       <label><strong>Fundamentação do Coordenador de Departamento:</strong> {{ propostaSelecionada.fundamentacao_coordenador_departamento }}</label>
       <b-form-group>

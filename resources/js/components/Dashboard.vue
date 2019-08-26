@@ -38,7 +38,7 @@
           </button>
 
           <tabela-diretor v-if="isDashboardVisible"></tabela-diretor>
-          <proponente v-if="isNovaPropostaVisible"v-on:voltar="mostrarProponentes"></proponente>
+          <proponente v-if="isNovaPropostaVisible" v-on:voltar="mostrarProponentes"></proponente>
           <tabela-ctc v-if="user.roleDB == 'ctc'"></tabela-ctc>
           <tabela-secretariado v-if="user.roleDB == 'secretariado_direcao'"></tabela-secretariado>
           <ficheiros-docente v-if="user.roleDB == 'docente_temp'"></ficheiros-docente>

@@ -41,6 +41,7 @@ export default {
       propostaProponente: {
         fundamentacao_coordenador_curso: "",
         data_de_assinatura_coordenador_de_curso:"",
+        segundo_proponente: this.$store.state.user.name,
       },
       mostrarFundamentacaoCurso:true,
     };

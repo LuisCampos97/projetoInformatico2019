@@ -184,7 +184,7 @@ abrigo do art. 8.º do ECPDESP, do IPL"
                 <i class="fas fa-plus"></i> Adicionar UC
               </button>
 
-              <span v-if="unidadesCurriculares.length">
+              <div v-if="unidadesCurriculares.length">
                 <table class="table mt-3">
                   <thead>
                     <th>Código</th>
@@ -215,7 +215,8 @@ abrigo do art. 8.º do ECPDESP, do IPL"
                     </tr>
                   </tbody>
                 </table>
-              </span>
+              </div>
+              <br />
             </b-card-text>
           </b-card-body>
         </b-collapse>
@@ -429,7 +430,8 @@ export default {
         fundamentacao_coordenador_departamento: "",
         grau: "",
         area_cientifica: "",
-        curso: ""
+        curso: "",
+        primeiro_proponente: this.$store.state.user.name,
       },
       propostaExistente: {},
       unidadeCurricular: {

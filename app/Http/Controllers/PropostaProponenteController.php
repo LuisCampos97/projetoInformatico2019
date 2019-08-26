@@ -27,6 +27,7 @@ class PropostaProponenteController extends Controller
             'role' => 'required',
             'grau' => 'required',
             'curso' => 'required',
+            'primeiro_proponente' => 'required',
             'area_cientifica' => 'required',
         ]);
         
@@ -87,6 +88,7 @@ class PropostaProponenteController extends Controller
         $propostaAAtualizar = PropostaProponente::findOrFail($propostaProponenteID);
         $propostaAAtualizar->fundamentacao_coordenador_departamento = $request->fundamentacao_coordenador_departamento;
         $propostaAAtualizar->data_de_assinatura_coordenador_departamento = $request->data_de_assinatura_coordenador_departamento;
+        $propostaAAtualizar->segundo_proponente = $request->segundo_proponente;
         $propostaAAtualizar->save();
     }
 
@@ -94,6 +96,7 @@ class PropostaProponenteController extends Controller
         $propostaAAtualizar = PropostaProponente::findOrFail($propostaProponenteID);
         $propostaAAtualizar->fundamentacao_coordenador_curso = $request->fundamentacao_coordenador_curso;
         $propostaAAtualizar->data_de_assinatura_coordenador_de_curso = $request->data_de_assinatura_coordenador_de_curso;
+        $propostaAAtualizar->segundo_proponente = $request->segundo_proponente;
         $propostaAAtualizar->save();
     }
     

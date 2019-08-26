@@ -43,6 +43,7 @@ export default {
       propostaProponente: {
         fundamentacao_coordenador_departamento: "",
         data_de_assinatura_coordenador_departamento:"",
+        segundo_proponente: this.$store.state.user.name,
       }
     };
   },
