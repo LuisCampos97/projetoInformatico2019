@@ -27,17 +27,14 @@
           <!-- Sidebar Header-->
           <div class="sidebar-header d-flex align-items-center">
             <div class="title">
-              <h1 class="h4">Zé Manel</h1>
-              <p>admin</p>
+              <h1 class="h4">{{ user.name }}</h1>
+              <p>{{ user.role }}</p>
             </div>
           </div>
           <!-- Sidebar Navidation Menus-->
-          <span class="heading">MENU</span>
+          <span class="heading">Menu</span>
           <ul class="list-unstyled">
             <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
-            <li><a href="tables.html"> <i class="icon-grid"></i>Tables </a></li>
-            <li><a href="charts.html"> <i class="fa fa-bar-chart"></i>Charts </a></li>
-            <li><a href="forms.html"> <i class="icon-padnote"></i>Forms </a></li>
           </ul>
         </nav>
         <div class="content-inner">
@@ -56,9 +53,6 @@
                   <div class="item d-flex align-items-center">
                     <div class="icon bg-violet"><i class="icon-user"></i></div>
                     <div class="title"><span>Número de<br>Utilizadores</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 25%; height: 4px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-violet"></div>
-                      </div>
                     </div>
                     <div class="number"><strong>{{ numeroUtilizadores }}</strong></div>
                   </div>
@@ -68,12 +62,20 @@
                   <div class="item d-flex align-items-center">
                     <div class="icon bg-red"><i class="icon-padnote"></i></div>
                     <div class="title"><span>Número de<br>Propostas</span>
-                      <div class="progress">
-                        <div role="progressbar" style="width: 70%; height: 4px;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" class="progress-bar bg-red"></div>
-                      </div>
                     </div>
                     <div class="number"><strong>{{ numeroPropostas }}</strong></div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+                  <div class="card">
+                <button class="btn btn-primary" v-on:click.prevent="carregar">Carregar Cursos e UCs</button>
+              </div>
                 </div>
               </div>
             </div>
@@ -83,12 +85,6 @@
               <div class="row">
                 <div class="col-lg">
                   <div class="card">
-                    <div class="card-close">
-                      <div class="dropdown">
-                        <button type="button" id="closeCard1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                        <div aria-labelledby="closeCard1" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
-                      </div>
-                    </div>
                     <div class="card-header d-flex align-items-center">
                       <h3 class="h4">Lista de Utilizadores</h3>
                     </div>
@@ -103,6 +99,7 @@
                               <th>Role</th>
                               <th>Role secundária</th>
                               <th>Unidade Orgânica</th>
+                              <th>Ações</th>
                             </tr>
                           </thead>
                           <tbody v-for="user in utilizadores" :key="user.id">
@@ -113,6 +110,9 @@
                               <td>{{user.role}}</td>
                               <td>{{user.roleDB}}</td>
                               <td>{{user.unidade_organica}}</td>
+                              <td>
+                                <button class="btn btn-primary btn-sm" v-on:click.prevent="editar(user.id)">Editar</button>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -129,34 +129,91 @@
 </template>
 
 <script>
-//require('./../../front.js');
 export default {
   data() {
     return {
       numeroUtilizadores: 0,
       numeroPropostas: 0,
-      utilizadores: []
+      utilizadores: [],
+      role: ''
     }
   },
   methods: {
     logout() {
-      console.log("LOGOUT");
+      axios.post("api/logout").then(response => {
+        this.$store.commit("clearUserAndToken");
+        this.$router.push({
+          name: "adminLogin"
+        });
+      });
+    },
+    carregarUtilizadores() {
+      axios.get("api/users").then(response => {
+        this.utilizadores = response.data;
+        this.numeroUtilizadores = response.data.length;
+      });
+    },
+    carregar() {
+      axios.get("api/lerCursosEUcs").then(response => {
+        console.log(response);
+      });
+    },
+    editar(id) {
+      const { value: role } = this.$swal({
+          title: 'Escolha a role para que pretende alterar?',
+          input: 'select',
+          inputPlaceholder: 'Escolha uma role',
+          showCancelButton: true,
+          inputOptions: {
+            proponente_departamento: 'Proponente (Departamento)',
+            proponente_curso: 'Proponente (Curso)',
+            diretor_uo: 'Diretor da UO',
+            ctc: 'CTC',
+            secretariado_direcao: 'Secretariado da Direção',
+            recursos_humanos: 'Recursos Humanos',
+            docente_temp: 'Docente Temporário',
+            admin: 'Admin'
+          },
+          inputValidator: (value) => {
+            return new Promise((resolve) => {
+              if(value) {
+                this.updateRole(id, value);
+                this.carregarUtilizadores();
+                resolve();
+              } else {
+                resolve('É necessário selecionar uma role');
+              }
+              
+            })
+          }
+        });
+
+    },
+    updateRole(id, role) {
+      axios.put("api/users/updateRole/"+id, role).then(response => {
+        
+    });
     }
   },
   mounted() {
     axios.get("api/users").then(response => {
-      this.utilizadores = response.data;
-      this.numeroUtilizadores = response.data.length;
+        this.utilizadores = response.data;
+        this.numeroUtilizadores = response.data.length;
     });
 
     axios.get("api/propostas").then(response => {
       this.numeroPropostas = response.data.length;
     });
   },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../../../styles/fontastic.css";
   @import "../../../styles/style.default.css";
   @import "../../../styles/style.blue.css";

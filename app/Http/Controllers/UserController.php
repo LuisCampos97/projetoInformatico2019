@@ -47,4 +47,13 @@ class UserController extends Controller
         $token = $user->createToken('TutsForWeb')->accessToken;
         return response()->json(['token' => $token]);
     }
+
+    public function updateRole(Request $request, $id)
+    {
+        $user = User::where('id', $id)->first();
+        $user->roleDB = $request->getContent();
+        $user->save();
+
+        return response()->json($user, 200);
+    }
 }

@@ -1,5 +1,10 @@
 <template>
+<div>
+
+<loading :active.sync="isLoading"
+        :width="150" :height="150"></loading>
     <div class="page login-page">
+      
       <div class="container d-flex align-items-center">
         <div class="form-holder has-shadow">
           <div class="row">
@@ -10,7 +15,6 @@
                   <div class="logo">
                     <h1>Admin Dashboard</h1>
                   </div>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                 </div>
               </div>
             </div>
@@ -20,14 +24,13 @@
                 <div class="content">
                   <div id="login-form" method="post">
                     <div class="form-group">
-                      <input id="login-username" type="text" name="loginUsername" required="" class="input-material">
-                      <label for="login-username" class="label-material">User Name</label>
+                      <input id="login-username" type="text" name="loginUsername" v-model="user.email" class="input-material">
+                      <label for="login-username" class="label-material">Nome de utilizador</label>
                     </div>
                     <div class="form-group">
-                      <input id="login-password" type="password" name="loginPassword" required="" class="input-material">
-                      <label for="login-password" class="label-material">Password</label>
-                    </div><a id="login" href="index.html" class="btn btn-primary">Login</a>
-                    <!-- This should be submit button but I replaced it with <a> for demo purposes-->
+                      <input id="login-password" type="password" name="loginPassword" v-model="user.password" class="input-material">
+                      <label for="login-password" class="label-material">Senha</label>
+                    </div><button id="login" class="btn btn-primary" v-on:click.prevent="login">Entrar</button>
                   </div>
                 </div>
               </div>
@@ -36,21 +39,47 @@
         </div>
       </div>
     </div>
+    </div>
 </template>
 
 <script>
-module.exports = {
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import $ from 'jquery'
+import * as frontjs from '../../front.js';
+
+export default {
   data: function() {
     return {
+      isLoading: false,
+      error: false,
+      errorMessage: '',
       user: {
         email: '',
         password: ''
       }
     }
   },
+  components: {
+    Loading
+  },
   methods: {
     login() {
-
+      this.isLoading = true;
+      this.error = false;
+      axios
+        .post("api/loginAdmin", this.user)
+        .then(response => {
+          this.$store.commit("setToken", response.data.token);
+          this.$store.commit("setUser", response.data.user);
+          this.isLoading = false;
+          this.$router.push({ name: "adminDashboard" });
+        })
+        .catch(error => {
+          this.error = true;
+          this.isLoading = false;
+          this.errorMessage = Object.values(error.response.data)[0];
+        });
     }
   }
 }
