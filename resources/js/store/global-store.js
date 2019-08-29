@@ -21,7 +21,42 @@ export default new Vuex.Store({
     getters: {
         loggedIn(state) {
             return state.token !== '';
-        }
+        },
+        isProponenteDepartamento(state) {
+            if(state.user)
+                return state.user.roleDB == "proponente_departamento" ? true : false;
+            return false    
+        },
+        isProponenteCurso(state) {
+            if(state.user)
+                return state.user.roleDB == "proponente_curso" ? true : false;
+            return false    
+        },
+        isDiretorUO(state) {
+            if(state.user)
+                return state.user.roleDB == "diretor_uo" ? true : false;
+            return false    
+        },
+        isCTC(state) {
+            if(state.user)
+                return state.user.roleDB == "ctc" ? true : false;
+            return false    
+        },
+        isSecretariadoDirecao(state) {
+            if(state.user)
+                return state.user.roleDB == "secretariado_direcao" ? true : false;
+            return false    
+        },
+        isRecursosHumanos(state) {
+            if(state.user)
+                return state.user.roleDB == "recursos_humanos" ? true : false;
+            return false    
+        },
+        isAdmin(state) {
+            if(state.user)
+                return state.user.roleDB == "admin" ? true : false;
+            return false    
+        },
     },
     mutations: {
         //* Informação sobre o USER

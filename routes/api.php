@@ -45,7 +45,10 @@ Route::get('/coordenadorCurso/propostasPendentes', 'PropostaProponenteController
 Route::get('/coordenadorCurso/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorCurso');
 Route::put('/propostaProponente/fundamentacaoCoordenadorDepartamento/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorDepartamento');
 Route::put('/propostaProponente/fundamentacaoCoordenadorCurso/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorCurso');
-
+Route::get('/getProponentesQueIniciamPropostas', 'PropostaProponenteController@getProponentesQueIniciamPropostas');
+Route::get('/getPropostaPorTipoDeDocente', 'PropostaProponenteController@getPropostaPorTipoDeDocente');
+Route::get('/getPropostasNoUltimoMes', 'PropostaProponenteController@getPropostasNoUltimoMes');
+Route::get('/getTipoDeContrato', 'PropostaProponenteController@getTipoDeContrato');
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');

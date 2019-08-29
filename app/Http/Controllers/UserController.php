@@ -20,7 +20,6 @@ class UserController extends Controller
             'unidade_organica' => 'required',
             'blocked' => 'required',
         ]);
-
         
         $user = new User();
         

@@ -53,7 +53,7 @@ class LoginController extends Controller
             ], 401);
         }
 
-        if (strpos($request->email, '@ipleiria.pt') !== false) {
+        if (strpos($request->email, '@my.ipleiria.pt') !== false || strpos($request->email, '@ipleiria.pt') !== false) {
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $token = Str::random(60);
                 $response = compact('token');

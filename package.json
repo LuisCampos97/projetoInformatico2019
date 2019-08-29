@@ -26,12 +26,18 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "apexcharts": "^3.8.5",
         "bootstrap-vue": "^2.0.0-rc.19",
+        "chart.js": "^2.8.0",
         "dotenv": "^8.0.0",
+        "echarts": "^4.2.1",
         "nodemailer": "^6.1.1",
         "pdfjs": "^2.3.0",
         "socket.io": "^2.2.0",
+        "v-charts": "^1.19.0",
         "vee-validate": "^2.2.10",
+        "vue-apexcharts": "^1.4.0",
+        "vue-chartjs": "^3.4.2",
         "vue-loading-overlay": "^3.2.0",
         "vue-router": "^3.0.2",
         "vue-socket.io": "^3.0.7",

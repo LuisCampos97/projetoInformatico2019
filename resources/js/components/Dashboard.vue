@@ -2,7 +2,7 @@
   <div>
     <b-navbar toggleable="lg" type="light" variant="light">
       <b-navbar-brand>
-        <img src="../../assets/logo.svg" class="pr-5" @click="home">Plataforma de Gestão de Contratações
+        <img src="../../assets/logo.svg" alt="Instituto Politécnico de Leiria" class="pr-5" @click="home">Plataforma de Gestão de Contratações
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -56,7 +56,6 @@
                       <thead>
                         <th>Nome docente a ser contratado</th>
                         <th>Tipo contrato</th>
-                        <th>Unidade Organica</th>
                         <th>Role</th>
                         <th>Ações</th>
                       </thead>
@@ -68,7 +67,6 @@
                           <td>{{ propostaPendenteDiretorDepartamento.nome_completo }}</td>
                           <td>{{ propostaPendenteDiretorDepartamento.tipo_contrato }}</td>
                           <td>{{ propostaPendenteDiretorDepartamento.role }}</td>
-                          <td>{{ propostaPendenteDiretorDepartamento.unidade_organica }}</td>
                           <td>
                             <button
                               type="button"

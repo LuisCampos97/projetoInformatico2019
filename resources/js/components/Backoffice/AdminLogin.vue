@@ -13,7 +13,8 @@
               <div class="info d-flex align-items-center">
                 <div class="content">
                   <div class="logo">
-                    <h1>Admin Dashboard</h1>
+                    <h1>Back-Office</h1>
+                    <h2>Plataforma de Gestão de Contratações - IPLeiria</h2>
                   </div>
                 </div>
               </div>
@@ -24,13 +25,13 @@
                 <div class="content">
                   <div id="login-form" method="post">
                     <div class="form-group">
-                      <input id="login-username" type="text" name="loginUsername" v-model="user.email" class="input-material">
-                      <label for="login-username" class="label-material">Nome de utilizador</label>
+                      <label for="login-username" class="bmd-label-floating">Nome de utilizador</label>
+                      <input id="login-username" type="text" name="loginUsername" v-model="user.email" class="form-control">
                     </div>
                     <div class="form-group">
-                      <input id="login-password" type="password" name="loginPassword" v-model="user.password" class="input-material">
-                      <label for="login-password" class="label-material">Senha</label>
-                    </div><button id="login" class="btn btn-primary" v-on:click.prevent="login">Entrar</button>
+                      <label for="login-password" class="bmd-label-floating">Senha</label>
+                      <input id="login-password" type="password" name="loginPassword" v-model="user.password" class="form-control">
+                    </div><button id="login" class="btn btn-dark" v-on:click.prevent="login">Entrar</button>
                   </div>
                 </div>
               </div>

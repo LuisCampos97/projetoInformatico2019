@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\PropostaProponente;
 use App\Http\Resources\PropostaProponente as PropostaProponenteResource;
 use Illuminate\Support\Facades\DB;
+use App\PropostaProponenteProfessor;
+use App\PropostaProponenteAssistente;
+use App\PropostaProponenteMonitor;
 
 class PropostaProponenteController extends Controller
 {
@@ -100,4 +103,68 @@ class PropostaProponenteController extends Controller
         $propostaAAtualizar->save();
     }
     
+    public function getProponentesQueIniciamPropostas(){
+        $arrayADevolver = array();
+        $utilizadores = DB::table('proposta_proponente')->select('primeiro_proponente')->distinct()->get();
+        foreach($utilizadores as $utilizador){
+            $numeroDePropostas = DB::table('proposta_proponente')->where('primeiro_proponente', $utilizador->primeiro_proponente)->count();
+            array_push($arrayADevolver, ['Utilizador' => $utilizador->primeiro_proponente, 'Número de Propostas' => $numeroDePropostas]);
+        }
+
+        return $arrayADevolver;
+    }
+
+    public function getPropostaPorTipoDeDocente(){
+        $propostasProfessor = PropostaProponenteProfessor::all()->count();
+        $propostasAssistente = PropostaProponenteAssistente::all()->count();
+        $propostasMonitor = PropostaProponenteMonitor::all()->count();
+
+        $arrayADevolver = [];
+        array_push($arrayADevolver, $propostasProfessor);
+        array_push($arrayADevolver, $propostasAssistente);
+        array_push($arrayADevolver, $propostasMonitor);
+
+        return $arrayADevolver;
+
+    }
+
+    public function getPropostasNoUltimoMes(){
+        
+        $arrayADevolver = array();
+        $datasDaBD = array();
+        $m= date("m");
+        $de= date("d");
+        $y= date("Y");
+        $timestamps  = DB::table('proposta_proponente')->select('created_at')->get();
+        foreach($timestamps as $timestamp){
+            $t = explode(" ", $timestamp->created_at);
+            array_push($datasDaBD, $t[0]);
+        }
+        //dd($datasDaBD);
+        
+        for($i=0; $i<=30; $i+=10){ 
+            $contador = 0;
+            foreach($datasDaBD as $data){
+                $d = str_replace("-", "/", $data);
+                if(date("Y/m/d", mktime(0,0,0,$m,($de-$i),$y)) == $d){
+                    $contador++;
+                }
+              }
+              array_push($arrayADevolver, ['Data' =>(string) date("Y/m/d", mktime(0,0,0,$m,($de-$i),$y)), 'Quantidade' => $contador]);
+            }
+        return $arrayADevolver;
+    }
+    
+    public function getTipoDeContrato(){
+        $propostasContratacaoInicial = PropostaProponente::where('tipo_contrato', 'contratacao_inicial')->count();
+        $propostasRenovacao = PropostaProponente::where('tipo_contrato', 'renovacao')->count();
+        $propostasAlteracao = PropostaProponente::where('tipo_contrato', 'alteracao')->count();
+
+        $arrayADevolver = [];
+        array_push($arrayADevolver, $propostasContratacaoInicial);
+        array_push($arrayADevolver, $propostasRenovacao);
+        array_push($arrayADevolver, $propostasAlteracao);
+
+        return $arrayADevolver;
+    }
 }

@@ -43,17 +43,24 @@ const routes = [
   {
     path: '/dashboard',
     component: dashboard,
-    name: 'dashboard'
+    name: 'dashboard',
+    meta: {
+      forAuth: true
+    }
   },
   {
     path: '/adminDashboard',
     component: adminDashboard,
-    name: 'adminDashboard'
+    name: 'adminDashboard',
+    meta:{
+      forAuth: true,
+      forAdmin: true,
+    }
   },
   {
     path: '/admin',
     component: adminLogin,
-    name: 'adminLogin'
+    name: 'adminLogin',
   }
 ];
 
