@@ -72,6 +72,7 @@ export default {
           this.$router.push({ name: "dashboard" });
         })
         .catch(error => {
+          console.log(error)
           this.error = true;
           this.isLoading = false;
           this.errorMessage = Object.values(error.response.data)[0];

@@ -514,12 +514,14 @@ export default {
               });
               axios.post('/api/ficheiro', this.ficheirosAInserir.fileRespostaOutrasEscolas).then(response => {
                 axios.put('/api/updateFicheirosDocente/'+this.proposta.id).then(response => {
-                this.$swal("Ficheiros submetidos com sucesso!!")
-                axios.post("api/logout").then(response => {
-              this.$store.commit("clearUserAndToken");
-              this.$router.push({
-                name: "login"
-              });
+                  axios.put('/api/block/' + this.$store.state.user.id).then(response => {
+                    axios.post('/api/logout').then(response => {
+                    this.$swal('Sucesso', 'Ficheiros submetidos com sucesso!!', 'success')
+                    this.$store.commit("clearUserAndToken");
+                    this.$router.push({
+                      name: "login"
+                    });
+                })
             });
           })
         });
@@ -529,6 +531,7 @@ export default {
     }
   },
   mounted() {
+    this.$swal('Atenção', 'Tem apenas uma oportunidade de submeter corretamente todos os ficheiros necessários', 'info')
     axios.get('/api/getPropostaParaNovoDocente/'+this.$store.state.user.email).then(response => {
       this.propostaDesteProponente = response.data[0];
       //console.log(this.propostaDesteProponente.id_proposta_proponente);

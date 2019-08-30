@@ -179,4 +179,26 @@ class PropostaProponenteController extends Controller
         }
         return $arrayADevolver;
     }
+
+    public function verificarSeJaExistemPropostasAtivasParaDocenteASerContratado($email){
+        //dd($email);
+        $propostasProponente = DB::table('proposta_proponente')->where('email', $email)->get();
+        //dd($propostaProponente);
+        if(!$propostasProponente->isEmpty()){
+            foreach($propostasProponente as $proposta){
+                //dd($proposta->id_proposta_proponente);
+                $proposta = DB::table('proposta')->join('proposta_proponente', 'proposta.proposta_proponente_id', 
+                'proposta_proponente.id_proposta_proponente')->where('proposta.proposta_proponente_id', $proposta->id_proposta_proponente)->
+                where('proposta.docente_inseriu_ficheiros', '==', 0)->get();
+                if($proposta->isEmpty()){
+                    return response()->json(false);
+                }
+                else{
+                    return response()->json(true);
+                }
+            }
+           
+        }
+        return response()->json(false);
+    }
 }

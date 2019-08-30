@@ -148,14 +148,16 @@
 export default {
   data() {
     return {
+      loaded:false,
+      chartdata: null,
       numeroUtilizadores: 0,
       numeroPropostas: 0,
       utilizadores: [],
-      mostrarPropUltimoMes:false,
       role: '',
     }
   },
   methods: {
+
     logout() {
       axios.post("api/logout").then(response => {
         this.$store.commit("clearUserAndToken");

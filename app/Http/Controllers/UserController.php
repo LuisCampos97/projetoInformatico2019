@@ -55,4 +55,13 @@ class UserController extends Controller
 
         return response()->json($user, 200);
     }
+
+    public function getBlocked($id){
+        //dd($id);
+        $user = User::findOrFail($id);
+        $user->blocked = 1;
+        $user->delete();
+        $user->save();
+        return response()->json([$user, 200]);
+    }
 }

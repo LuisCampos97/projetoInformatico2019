@@ -45,12 +45,14 @@ Route::get('/coordenadorCurso/propostasPendentes', 'PropostaProponenteController
 Route::get('/coordenadorCurso/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorCurso');
 Route::put('/propostaProponente/fundamentacaoCoordenadorDepartamento/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorDepartamento');
 Route::put('/propostaProponente/fundamentacaoCoordenadorCurso/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorCurso');
+Route::get('/verificarSeJaExistemPropostasAtivasParaDocenteASerContratado/{email}', 'PropostaProponenteController@verificarSeJaExistemPropostasAtivasParaDocenteASerContratado');
 
 //? Estatisticas
 Route::get('/getPropostasProponente/{idProponente}', 'PropostaProponenteController@getPropostasDoProponente');
 Route::get('/getPropostasPorTipoDeDocente/{idProponente}', 'PropostaProponenteController@getPropostasPorTipoDeDocente');
 Route::get('/getPropostasPorTipoDeContrato/{idProponente}', 'PropostaProponenteController@getPropostasPorTipoDeContrato');
 Route::get('/getPropostasNoUltimoMes/{idProponente}', 'PropostaProponenteController@getPropostasNoUltimoMes');
+
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
@@ -127,6 +129,7 @@ Route::post('/users/criarUserTemporario', 'UserController@store');
 Route::get('/users', 'UserController@all');
 Route::post('/users/criarUserTemporario', 'UserController@registarNaBD');
 Route::put('/users/updateRole/{id}', 'UserController@updateRole');
+Route::put('/block/{id}', 'UserController@getBlocked');
 
 //-------------------------------------------Novos Docentes--------------------------------------------
 Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');
