@@ -123,22 +123,6 @@
                 </div>
               </div>
             </div>
-          <button @click="mostrarDadosGraph">MOSTRAR</button>
-          </section>
-          <section class="dashboard-header" v-if="!mostrarPropUltimoMes">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg">
-                  <div class="card">
-                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Proponentes que iniciaram propostas e as suas quantidades</h3>
-                    </div>
-                    <ve-line :data="chartData"></ve-line>
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
           </section>
           <section class="dashboard-header" v-if="mostrarPropUltimoMes">
             <div class="container-fluid">
@@ -154,39 +138,6 @@
               </div>
             </div>
           </section>
-          <section class="dashboard-header">
-
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg">
-                  <div class="card">
-                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Propostas divididas por papel de docente atribuido</h3>
-                    </div>
-                    <div id="chart">
-                      <apexchart type=donut width=380 :options="chartOptions" :series="series" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section class="dashboard-header">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg">
-                  <div class="card">
-                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Propostas por tipo de contrato</h3>
-                    </div>
-                    <div >
-                      <apexchart type=donut width=380 :options="chartOptionsTipoContrato" :series="seriesTipoContrato" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
         </div>
       </div>
     </div>
@@ -194,10 +145,7 @@
 </template>
 
 <script>
-import VeLine from 'v-charts/lib/line.common'
-import { constants } from 'crypto';
 export default {
-  components: { VeLine },
   data() {
     return {
       numeroUtilizadores: 0,
@@ -205,69 +153,6 @@ export default {
       utilizadores: [],
       mostrarPropUltimoMes:false,
       role: '',
-      data: {
-        id: null,
-        dates: ""
-      },
-      
-      chartData: {
-        columns: [],
-        rows: [],
-      },   
-      series: [],
-      chartOptions: {
-        series: [],
-        labels: ["Professor", "Assistente", "Monitor"],
-       dataLabels: {
-          enabled: false
-        },
-        fill: {
-          type: 'gradient',
-        },
-        legend: {
-          formatter: function (val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex]
-          }
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }]
-    
-      },
-      seriesTipoContrato: [],
-      chartOptionsTipoContrato: {
-        labels: ["Contratação Inicial", "Renovação", "Alteração"],
-        dataLabels: {
-          enabled: false
-        },
-        fill: {
-          type: 'gradient',
-        },
-        legend: {
-          formatter: function (val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex]
-          }
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }]
-    },
     }
   },
   methods: {
@@ -324,15 +209,6 @@ export default {
     updateRole(id, role) {
       axios.put("api/users/updateRole/"+id, role).then(response => {   
       });
-    },
-    mostrarDadosGraph(){
-      this.mostrarPropUltimoMes = true;
-      axios.get('/api/getPropostasNoUltimoMes').then(response => {
-        this.chartData.columns = ['Data', 'Quantidade'];
-        this.chartData.row=response.data;
-        console.log(this.chartData.row)
-                console.log(this.chartData.columns)
-      })
     }
   },
   mounted() {
@@ -344,19 +220,6 @@ export default {
     axios.get("api/propostas").then(response => {
       this.numeroPropostas = response.data.length;
     });
-    axios.get('/api/getProponentesQueIniciamPropostas').then(response => {
-     // console.log(response.data);
-      this.chartData.columns = ['Utilizador', 'Número de Propostas'];
-      this.chartData.rows = response.data;
-      })
-    axios.get('/api/getPropostaPorTipoDeDocente').then(response => {
-      this.series = response.data;
-    })
-    
-    axios.get('/api/getTipoDeContrato').then(response => {
-      this.seriesTipoContrato = response.data;
-    })
-    
   },
   computed: {
     user() {

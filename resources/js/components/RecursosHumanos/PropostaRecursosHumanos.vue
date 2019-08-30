@@ -233,7 +233,8 @@ export default {
         numero_CC: "",
         email_recursos_humanos: "",
         dados_GIAF_carregados_por: "",
-        data_carregamento_dados_GIAF: ""
+        data_carregamento_dados_GIAF: "",
+        recursos_humanos_id: this.$store.state.user.id
       }
     };
   },

@@ -26,6 +26,11 @@ Vue.component('propostaSecretariado', require('../components/SecretariadoDirecao
 Vue.component('tabelaRecursos', require('../components/RecursosHumanos/TabelaRecursosHumanos.vue').default);
 Vue.component('ficheirosDocente', require('../components/NovosDocentes/FicheirosDocente.vue').default);
 Vue.component('propostaRecursos', require('../components/RecursosHumanos/PropostaRecursosHumanos.vue').default);
+Vue.component('estatisticaProponente', require('../components/Estatistica/EstatisticaProponente.vue').default);
+Vue.component('estatisticaDiretorUO', require('../components/Estatistica/EstatisticaDiretorUO.vue').default);
+Vue.component('estatisticaCTC', require('../components/Estatistica/EstatisticaCTC.vue').default);
+Vue.component('estatisticaSecretariadoDirecao', require('../components/Estatistica/EstatisticaSecretariadoDirecao.vue').default);
+Vue.component('estatisticaRecursosHumanos', require('../components/Estatistica/EstatisticaRecursosHumanos.vue').default);
 const adminDashboard = Vue.component('adminDashboard', require('../components/Backoffice/AdminDashboard.vue').default);
 const adminLogin =  Vue.component('adminLogin', require('../components/Backoffice/AdminLogin.vue').default);
 

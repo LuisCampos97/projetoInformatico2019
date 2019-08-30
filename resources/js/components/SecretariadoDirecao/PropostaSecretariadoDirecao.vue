@@ -32,7 +32,8 @@ export default {
   data() {
     return {
       propostaSecretariadoDirecao: {
-        convite: ""
+        convite: "",
+        secretariado_direcao_id: this.$store.state.user.id
       },
       novoUserBD: {
         name: "",

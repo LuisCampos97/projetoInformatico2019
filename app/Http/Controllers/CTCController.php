@@ -33,6 +33,7 @@ class CTCController extends Controller
          'votos_nulos' => 'required',
          'aprovacao' => 'required',
          'data_assinatura' => 'required',
+         'ctc_id' => 'required'
       ]);
       $propostaCTC = new PropostaCTC();
       $propostaCTC->fill($request->all());
@@ -71,4 +72,24 @@ class CTCController extends Controller
 
       return $propostasADevolver[0];
    }
+
+   //? FUNÇÕES ESTATISTICA
+   public function getPropostas($ctc_id)
+    {
+        $arrayPropostas = DB::table('proposta_ctc')->where('ctc_id', $ctc_id)->get();
+
+        return $arrayPropostas;
+    }
+
+    public function getPropostasPorTipoParecer($ctc_id)
+    {
+        $propostasAprovadas = DB::table('proposta_ctc')->where('ctc_id', $ctc_id)->where('aprovacao', 'Aprovado')->count();
+        $propostasNaoAprovadas = DB::table('proposta_ctc')->where('ctc_id', $ctc_id)->where('aprovacao', 'Nao Aprovado')->count();
+
+        $arrayADevolver = [];
+        array_push($arrayADevolver, $propostasAprovadas);
+        array_push($arrayADevolver, $propostasNaoAprovadas);
+
+        return $arrayADevolver;
+    }
 }

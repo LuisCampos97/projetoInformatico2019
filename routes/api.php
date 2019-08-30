@@ -45,10 +45,12 @@ Route::get('/coordenadorCurso/propostasPendentes', 'PropostaProponenteController
 Route::get('/coordenadorCurso/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorCurso');
 Route::put('/propostaProponente/fundamentacaoCoordenadorDepartamento/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorDepartamento');
 Route::put('/propostaProponente/fundamentacaoCoordenadorCurso/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorCurso');
-Route::get('/getProponentesQueIniciamPropostas', 'PropostaProponenteController@getProponentesQueIniciamPropostas');
-Route::get('/getPropostaPorTipoDeDocente', 'PropostaProponenteController@getPropostaPorTipoDeDocente');
-Route::get('/getPropostasNoUltimoMes', 'PropostaProponenteController@getPropostasNoUltimoMes');
-Route::get('/getTipoDeContrato', 'PropostaProponenteController@getTipoDeContrato');
+
+//? Estatisticas
+Route::get('/getPropostasProponente/{idProponente}', 'PropostaProponenteController@getPropostasDoProponente');
+Route::get('/getPropostasPorTipoDeDocente/{idProponente}', 'PropostaProponenteController@getPropostasPorTipoDeDocente');
+Route::get('/getPropostasPorTipoDeContrato/{idProponente}', 'PropostaProponenteController@getPropostasPorTipoDeContrato');
+Route::get('/getPropostasNoUltimoMes/{idProponente}', 'PropostaProponenteController@getPropostasNoUltimoMes');
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
@@ -86,10 +88,18 @@ Route::get('/diretorUO/getUCSPropostaSelecionada/{proposta_proponente_id}', 'Dir
 Route::post('/diretorUO/propostaDiretor', 'DiretorUOController@store');
 Route::get('/diretorUO/historicoPropostas', 'DiretorUOController@getHistoricoPropostas');
 
+//? Estatisticas
+Route::get('/diretorUO/getPropostas/{idDiretorUO}', 'DiretorUOController@getPropostas');
+Route::get('/diretorUO/getPropostasPorTipoParecer/{idDiretorUO}', 'DiretorUOController@getPropostasPorTipoParecer');
+
 //--------------------------CTC-----------------------------------------------------------
 Route::get('/ctc/getPropostasPendentesCTC', 'CTCController@getPropostasPendentes');
 Route::post('/ctc/propostaCTC', 'CTCController@store');
 Route::get('/ctc/getHistoricoPropostasCTC', 'CTCController@getHistoricoPropostasCTC');
+
+//? Estatisticas
+Route::get('/ctc/getPropostas/{idCTC}', 'CTCController@getPropostas');
+Route::get('/ctc/getPropostasPorTipoParecer/{idCTC}', 'CTCController@getPropostasPorTipoParecer');
 
 //-------------------------Ficheiros-----------------------------------------------
 Route::post('/ficheiro', 'FicheiroController@store');
@@ -101,10 +111,16 @@ Route::get('/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao', 'Sec
 Route::get('/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao', 'SecretariadoDirecaoController@getHistoricoPropostas');
 Route::post('/secretariadoDirecao/propostaSecretariadoDirecao', 'SecretariadoDirecaoController@store');
 
+//? Estatisticas
+Route::get('/secretariadoDirecao/getPropostas/{idSecretariadoDirecao}', 'SecretariadoDirecaoController@getPropostas');
+
 //-------------------------Recursos Humanos ----------------------------------------------------------
 Route::get('/recursosHumanos/getPropostasPendentesRecursosHumanos', 'RecursosHumanosController@getPropostasPendentes');
 Route::get('/recursosHumanos/getHistoricoPropostasRecursosHumanos', 'RecursosHumanosController@getHistoricoPropostas');
 Route::post('/recursosHumanos/propostaRecursosHumanos', 'RecursosHumanosController@store');
+
+//? Estatisticas
+Route::get('/recursosHumanos/getPropostas/{idRecursosHumanos}', 'RecursosHumanosController@getPropostas');
 
 //_--------------------------Users--------------------------------------------------------------
 Route::post('/users/criarUserTemporario', 'UserController@store');

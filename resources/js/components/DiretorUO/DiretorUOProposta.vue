@@ -54,7 +54,8 @@ export default {
       propostaDiretor: {
         reconhecimento: "",
         parecer: "",
-        data_assinatura: ""
+        data_assinatura: "",
+        diretor_uo_id: this.$store.state.user.id
       },
       parecerArray: [
         { text: "Favoravel", value: "Favoravel" },

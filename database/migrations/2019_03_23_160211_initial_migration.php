@@ -139,7 +139,8 @@ class InitialMigration extends Migration
             $table->increments('id_proposta_diretor_uo');
             $table->boolean('reconhecimento')->default(false);
             $table->enum('parecer', ['Favoravel', 'Desfavoravel']);
-            //Signature??
+            $table->integer('diretor_uo_id')->unsigned();
+            $table->foreign('diretor_uo_id')->references('id')->on('users');
             $table->dateTime('data_assinatura');
             $table->softDeletes();
             $table->timestamps();
@@ -152,7 +153,8 @@ class InitialMigration extends Migration
             $table->integer('votos_brancos')->default(0);
             $table->integer('votos_nulos')->default(0);
             $table->enum('aprovacao', ['Aprovado', 'Nao Aprovado']);
-            //Signature??
+            $table->integer('ctc_id')->unsigned();
+            $table->foreign('ctc_id')->references('id')->on('users');
             $table->dateTime('data_assinatura');
             $table->softDeletes();
             $table->timestamps();
@@ -161,9 +163,10 @@ class InitialMigration extends Migration
         Schema::create('proposta_secretariado_direcao', function(Blueprint $table){
             $table->increments('id_proposta_secretariado_direcao');
             $table->string('convite');
+            $table->integer('secretariado_direcao_id')->unsigned();
+            $table->foreign('secretariado_direcao_id')->references('id')->on('users');
             $table->softDeletes();
             $table->timestamps();
-            ///WHAT ELSE???
         });
 
         Schema::create('proposta_recursos_humanos', function (Blueprint $table){
@@ -188,6 +191,8 @@ class InitialMigration extends Migration
             $table->string('email_recursos_humanos')->unique();
             $table->string('dados_GIAF_carregados_por');
             $table->datetime('data_carregamento_dados_GIAF');
+            $table->integer('recursos_humanos_id')->unsigned();
+            $table->foreign('recursos_humanos_id')->references('id')->on('users');
             $table->softDeletes();
             $table->timestamps();
         });

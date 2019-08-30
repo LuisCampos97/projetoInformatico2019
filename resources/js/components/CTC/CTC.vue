@@ -79,7 +79,8 @@ export default {
         votos_brancos: "",
         votos_nulos: "",
         aprovacao: "",
-        data_assinatura: ""
+        data_assinatura: "",
+        ctc_id: this.$store.state.user.id
       },
       
       ficheiro: {

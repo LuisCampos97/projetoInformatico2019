@@ -62,11 +62,20 @@ class RecursosHumanosController extends Controller
         'numero_CC' => 'required',
         'email_recursos_humanos' => 'required',
         'dados_GIAF_carregados_por' => 'required',
-        'data_carregamento_dados_GIAF' => 'required'
+        'data_carregamento_dados_GIAF' => 'required',
+        'recursos_humanos_id' => 'required'
       ]);
       $propostaRecursosHumanos = new PropostaRecursosHumanos();
       $propostaRecursosHumanos->fill($request->all());
       $propostaRecursosHumanos->save();
       return response()->json($propostaRecursosHumanos, 200);
+    }
+
+    //? FUNÇÕES ESTATISTICA
+    public function getPropostas($recursos_humanos_id)
+    {
+        $arrayPropostas = DB::table('proposta_recursos_humanos')->where('recursos_humanos_id', $recursos_humanos_id)->get();
+
+        return $arrayPropostas;
     }
 }

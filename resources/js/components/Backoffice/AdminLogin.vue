@@ -46,8 +46,6 @@
 <script>
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
-import $ from 'jquery'
-import * as frontjs from '../../front.js';
 
 export default {
   data: function() {

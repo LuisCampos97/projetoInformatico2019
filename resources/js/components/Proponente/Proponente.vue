@@ -237,13 +237,6 @@ abrigo do art. 8.º do ECPDESP, do IPL"
                   :state="!$v.proposta.grau.$error && null"
                   stacked
                 ></b-form-radio-group>
-                <b-form-radio-group
-                  v-model="opcaoOutro"
-                  :options="[{ text: 'Outro', value: 'outro' }]"
-                  stacked
-                ></b-form-radio-group>
-
-                <b-form-input v-if="opcaoOutro == 'outro'" v-model="proposta.grau"></b-form-input>
                 <b-form-invalid-feedback id="input-1-live-feedback">O Grau é obrigatório!</b-form-invalid-feedback>
               </b-form-group>
 
@@ -454,7 +447,6 @@ export default {
         valor: 1,
         max: 3
       },
-      opcaoOutro: "",
       ficheiro: {
         fileCurriculo: {},
         fileRelatorio: {},
@@ -608,9 +600,9 @@ export default {
       this.isFinalized = false;
       this.progresso.valor--;
       this.voltarVar = true;
-      if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
-        this.voltar();
-      }
+      // if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
+      //   this.voltar();
+      // }
     },
     associarProposta() {
       //* Limpar Objectos
@@ -619,15 +611,18 @@ export default {
 
       //* Associar proposta atual à proposta existente selecionada
       Object.assign(this.proposta, this.propostaExistente);
+      this.proposta.data_de_assinatura_coordenador_de_curso = null;
+      this.proposta.data_de_assinatura_coordenador_departamento = null;
+      this.proposta.fundamentacao_coordenador_curso = null;
+      this.proposta.fundamentacao_coordenador_departamento = null;
 
       axios
-        .get("/api/ficheiros/" + this.propostaExistente.id)
+        .get("/api/ficheiros/" + this.propostaExistente.id_proposta_proponente)
         .then(response => {
           response.data.forEach(ficheiro => {
             if (ficheiro.descricao == "Curriculo do docente a ser contratado"){
               this.ficheiroCurriculo = ficheiro;
-            }
-              
+            }   
             
             if (ficheiro.descricao == "Relatorio dos 2 proponentes")
               this.ficheiroRelatorio = ficheiro;
@@ -642,19 +637,14 @@ export default {
         });
 
       axios
-        .get("/api/getUcsPropostaProponente/" + this.propostaExistente.id)
+        .get("/api/getUcsPropostaProponente/" + this.propostaExistente.id_proposta_proponente)
         .then(response => {
           response.data.forEach(uc => {
             this.unidadesCurriculares.push(uc);
           });
         });
-
-      //this.$store.commit("setPropostaExistente");
-
-      console.log(this.ficheiroCurriculo);
     }
   },
-
   mounted() {
     axios.get("/api/cursosDisponiveis").then(response => {
       response.data.forEach(curso => {

@@ -38,13 +38,14 @@ class DiretorUOController extends Controller
       $request->validate([
          'reconhecimento' => 'required',
          'parecer' => 'required',
-         'data_assinatura' => 'required'
+         'data_assinatura' => 'required',
+         'diretor_uo_id' => 'required'
       ]);
-      
-      //dd($request->reconhecimento);
+
       $propostaDiretorUO = new PropostaDiretorUO();
       $propostaDiretorUO->fill($request->all());
       $propostaDiretorUO->save();
+
       return response()->json($propostaDiretorUO, 200);
    }
 
@@ -85,5 +86,24 @@ class DiretorUOController extends Controller
       
       return $propostasADevolver[0];
    }
-    
+
+   //? FUNÇÕES ESTATISTICA
+   public function getPropostas($diretor_id)
+    {
+        $arrayPropostas = DB::table('proposta_diretor_uo')->where('diretor_uo_id', $diretor_id)->get();
+
+        return $arrayPropostas;
+    }
+
+    public function getPropostasPorTipoParecer($diretor_id)
+    {
+        $propostasFavoraveis = DB::table('proposta_diretor_uo')->where('diretor_uo_id', $diretor_id)->where('parecer', 'Favoravel')->count();
+        $propostasDesfavoraveis = DB::table('proposta_diretor_uo')->where('diretor_uo_id', $diretor_id)->where('parecer', 'Desfavoravel')->count();
+
+        $arrayADevolver = [];
+        array_push($arrayADevolver, $propostasFavoraveis);
+        array_push($arrayADevolver, $propostasDesfavoraveis);
+
+        return $arrayADevolver;
+    } 
 }
