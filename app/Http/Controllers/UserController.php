@@ -31,7 +31,7 @@ class UserController extends Controller
     }
 
     public function all() {
-        return User::all();
+        return User::withTrashed()->get();
     }
     
     public function registarNaBD(Request $request){
@@ -61,6 +61,15 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->blocked = 1;
         $user->delete();
+        $user->save();
+        return response()->json([$user, 200]);
+    }
+
+    public function getUnblocked($id){
+        //dd($id);
+        $user = User::withTrashed()->findOrFail($id);
+        $user->blocked = 0;
+        $user->deleted_at = NULL;
         $user->save();
         return response()->json([$user, 200]);
     }

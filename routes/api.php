@@ -130,6 +130,8 @@ Route::get('/users', 'UserController@all');
 Route::post('/users/criarUserTemporario', 'UserController@registarNaBD');
 Route::put('/users/updateRole/{id}', 'UserController@updateRole');
 Route::put('/block/{id}', 'UserController@getBlocked');
+Route::put('/unblock/{id}', 'UserController@getUnblocked');
+
 
 //-------------------------------------------Novos Docentes--------------------------------------------
 Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');

@@ -113,6 +113,11 @@
                               <td>
                                 <button v-if="user.id != $store.state.user.id"
                                  class="btn btn-primary btn-sm" v-on:click.prevent="editar(user.id)">Editar</button>
+                                 <button v-if="user.id != $store.state.user.id && user.blocked == 0"
+                                 class="btn btn-danger btn-sm" v-on:click.prevent="bloquearUtilizador(user.id)">Bloquear</button>
+                                 <button v-if="user.id != $store.state.user.id && user.blocked == 1"
+                                 class="btn btn-success btn-sm" v-on:click.prevent="desbloquearUtilizador(user.id)">Desbloquear</button>
+
                               </td>
                             </tr>
                           </tbody>
@@ -211,6 +216,23 @@ export default {
     updateRole(id, role) {
       axios.put("api/users/updateRole/"+id, role).then(response => {   
       });
+    },
+    bloquearUtilizador(userID){
+      axios.put('/api/block/' + userID).then(response => {
+        axios.get("api/users").then(response => {
+        this.utilizadores = response.data;
+        this.numeroUtilizadores = response.data.length;
+    });
+      });
+    },
+    desbloquearUtilizador(userID){
+      axios.put('/api/unblock/' + userID).then(response => {
+        axios.get("api/users").then(response => {
+        this.utilizadores = response.data;
+        this.numeroUtilizadores = response.data.length;
+    });
+      });
+      
     }
   },
   mounted() {
