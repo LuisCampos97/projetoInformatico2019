@@ -128,13 +128,14 @@ class PropostaProponenteController extends Controller
 
     }
 
-    public function getPropostasNoUltimoMes(){
+    public function getPropostasUltimoMes(){
         
         $arrayADevolver = array();
         $datasDaBD = array();
         $m= date("m");
         $de= date("d");
         $y= date("Y");
+        
         $timestamps  = DB::table('proposta_proponente')->select('created_at')->get();
         foreach($timestamps as $timestamp){
             $t = explode(" ", $timestamp->created_at);
@@ -142,7 +143,7 @@ class PropostaProponenteController extends Controller
         }
         //dd($datasDaBD);
         
-        for($i=0; $i<=30; $i+=10){ 
+        for($i=0; $i<=30; $i++){ 
             $contador = 0;
             foreach($datasDaBD as $data){
                 $d = str_replace("-", "/", $data);
@@ -150,7 +151,8 @@ class PropostaProponenteController extends Controller
                     $contador++;
                 }
               }
-              array_push($arrayADevolver, ['Data' =>(string) date("Y/m/d", mktime(0,0,0,$m,($de-$i),$y)), 'Quantidade' => $contador]);
+              
+              array_push($arrayADevolver, ['Dia' =>date("Y/m/d", mktime(0,0,0,$m,($de-$i),$y)), 'Quantidade' => $contador]);
             }
         return $arrayADevolver;
     }
@@ -166,5 +168,27 @@ class PropostaProponenteController extends Controller
         array_push($arrayADevolver, $propostasAlteracao);
 
         return $arrayADevolver;
+    }
+
+    public function verificarSeJaExistemPropostasAtivasParaDocenteASerContratado($email){
+        //dd($email);
+        $propostasProponente = DB::table('proposta_proponente')->where('email', $email)->get();
+        //dd($propostaProponente);
+        if(!$propostasProponente->isEmpty()){
+            foreach($propostasProponente as $proposta){
+                //dd($proposta->id_proposta_proponente);
+                $proposta = DB::table('proposta')->join('proposta_proponente', 'proposta.proposta_proponente_id', 
+                'proposta_proponente.id_proposta_proponente')->where('proposta.proposta_proponente_id', $proposta->id_proposta_proponente)->
+                where('proposta.docente_inseriu_ficheiros', '==', 0)->get();
+                if($proposta->isEmpty()){
+                    return response()->json(false);
+                }
+                else{
+                    return response()->json(true);
+                }
+            }
+           
+        }
+        return response()->json(false);
     }
 }

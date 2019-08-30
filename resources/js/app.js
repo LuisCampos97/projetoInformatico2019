@@ -43,6 +43,7 @@ store.state.getExpiration = store.getters.getExpiration
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.getters.getToken
 
 // interceptors - pre and post request
+/*
 axios.interceptors.response.use(
     (response) => {
         //console.log(response)
@@ -54,6 +55,7 @@ axios.interceptors.response.use(
         // error status code
         // error.response.status
         //console.log(error.response.data.error)
+
         if (error.response.status == 400) {
             swal(error.response.status.toString(), error.response.data.error, 'error')
         }
@@ -87,6 +89,7 @@ axios.interceptors.response.use(
         }
     }
 );
+*/
 /*
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.forAuth)) {

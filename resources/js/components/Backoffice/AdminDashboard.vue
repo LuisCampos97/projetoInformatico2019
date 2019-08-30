@@ -123,9 +123,8 @@
                 </div>
               </div>
             </div>
-          <button @click="mostrarDadosGraph">MOSTRAR</button>
           </section>
-          <section class="dashboard-header" v-if="!mostrarPropUltimoMes">
+          <section class="dashboard-header">
             <div class="container-fluid">
               <div class="row">
                 <div class="col-lg">
@@ -140,22 +139,7 @@
               </div>
             </div>
           </section>
-          <section class="dashboard-header" v-if="mostrarPropUltimoMes">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg">
-                  <div class="card">
-                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Propostas no último mês</h3>
-                    </div>
-                    <ve-line :data="chartData"></ve-line>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
           <section class="dashboard-header">
-
             <div class="container-fluid">
               <div class="row">
                 <div class="col-lg">
@@ -187,6 +171,7 @@
               </div>
             </div>
           </section>
+          
         </div>
       </div>
     </div>
@@ -200,10 +185,11 @@ export default {
   components: { VeLine },
   data() {
     return {
+      loaded:false,
+      chartdata: null,
       numeroUtilizadores: 0,
       numeroPropostas: 0,
       utilizadores: [],
-      mostrarPropUltimoMes:false,
       role: '',
       data: {
         id: null,
@@ -213,7 +199,8 @@ export default {
       chartData: {
         columns: [],
         rows: [],
-      },   
+      },  
+
       series: [],
       chartOptions: {
         series: [],
@@ -267,10 +254,11 @@ export default {
             }
           }
         }]
-    },
+      }, 
     }
   },
   methods: {
+
     logout() {
       axios.post("api/logout").then(response => {
         this.$store.commit("clearUserAndToken");
@@ -325,15 +313,6 @@ export default {
       axios.put("api/users/updateRole/"+id, role).then(response => {   
       });
     },
-    mostrarDadosGraph(){
-      this.mostrarPropUltimoMes = true;
-      axios.get('/api/getPropostasNoUltimoMes').then(response => {
-        this.chartData.columns = ['Data', 'Quantidade'];
-        this.chartData.row=response.data;
-        console.log(this.chartData.row)
-                console.log(this.chartData.columns)
-      })
-    }
   },
   mounted() {
     axios.get("api/users").then(response => {
@@ -352,7 +331,13 @@ export default {
     axios.get('/api/getPropostaPorTipoDeDocente').then(response => {
       this.series = response.data;
     })
-    
+    /*
+    axios.get('/api/getPropostasUltimoMes').then(response => {
+      this.chartdata = response.data
+      this.loaded = true
+    });
+    this.renderChart(this.graficosData, this.options)
+    */
     axios.get('/api/getTipoDeContrato').then(response => {
       this.seriesTipoContrato = response.data;
     })

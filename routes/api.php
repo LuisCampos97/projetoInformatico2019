@@ -47,8 +47,9 @@ Route::put('/propostaProponente/fundamentacaoCoordenadorDepartamento/{propostaID
 Route::put('/propostaProponente/fundamentacaoCoordenadorCurso/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorCurso');
 Route::get('/getProponentesQueIniciamPropostas', 'PropostaProponenteController@getProponentesQueIniciamPropostas');
 Route::get('/getPropostaPorTipoDeDocente', 'PropostaProponenteController@getPropostaPorTipoDeDocente');
-Route::get('/getPropostasNoUltimoMes', 'PropostaProponenteController@getPropostasNoUltimoMes');
+Route::get('/getPropostasUltimoMes', 'PropostaProponenteController@getPropostasUltimoMes');
 Route::get('/getTipoDeContrato', 'PropostaProponenteController@getTipoDeContrato');
+Route::get('/verificarSeJaExistemPropostasAtivasParaDocenteASerContratado/{email}', 'PropostaProponenteController@verificarSeJaExistemPropostasAtivasParaDocenteASerContratado');
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
@@ -111,6 +112,7 @@ Route::post('/users/criarUserTemporario', 'UserController@store');
 Route::get('/users', 'UserController@all');
 Route::post('/users/criarUserTemporario', 'UserController@registarNaBD');
 Route::put('/users/updateRole/{id}', 'UserController@updateRole');
+Route::put('/block/{id}', 'UserController@getBlocked');
 
 //-------------------------------------------Novos Docentes--------------------------------------------
 Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');
