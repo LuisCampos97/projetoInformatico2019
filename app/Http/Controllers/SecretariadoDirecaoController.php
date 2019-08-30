@@ -57,7 +57,7 @@ class SecretariadoDirecaoController extends Controller
     //? FUNÇÕES ESTATISTICA
     public function getPropostas($secretariado_direcao_id)
     {
-        $arrayPropostas = DB::table('proposta_secretariado_direcao')->where('secretariado_direcao_id', $secretariado_direcao_id)->get();
+        $arrayPropostas = DB::table('proposta_secretariado_direcao')->where('id_proposta_secretariado_direcao', $secretariado_direcao_id)->get();
 
         return $arrayPropostas;
     }

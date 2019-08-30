@@ -10,7 +10,7 @@ class PropostaSecretariadoDirecao extends Model
     protected $primaryKey = 'id_proposta_secretariado_direcao';
 
     protected $fillable = [
-        'convite'
+        'convite', 'secretariado_direcao_id'
     ];
 
     protected $hidden = [];
