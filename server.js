@@ -5,7 +5,7 @@ var io = require('socket.io')(app);
  var app = require('http').createServer(function(req,res){
      console.log(req);
 // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.setHeader('Access-Control-Allow-Origin', 'http://159.65.55.11:8080');
   res.setHeader('Access-Control-Request-Method', '*');
   res.setHeader('Access-Control-Allow-Methods', 'UPGRADE, OPTIONS, GET');
   res.setHeader('Access-Control-Allow-Credentials', true);
