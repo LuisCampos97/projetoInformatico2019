@@ -9,7 +9,7 @@ var io = require('socket.io')(app);
   res.setHeader('Access-Control-Request-Method', '*');
   res.setHeader('Access-Control-Allow-Methods', 'UPGRADE, OPTIONS, GET');
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Headers', req.header.origin);
+  res.setHeader('Access-Control-Allow-Headers', req.headers.origin);
   if ( req.method === 'OPTIONS' || req.method === 'UPGRADE' ) {
       res.writeHead(200);
       res.end();
