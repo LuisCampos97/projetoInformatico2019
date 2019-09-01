@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
             'role' => 'Administrador',
             'unidade_organica' => 'ESTG',
             'password' => bcrypt('root'),
+            'email' => 'admin@mail.pt',
             'blocked' => 0,
             'deleted_at' => NULL,
             'remember_token' => NULL,
