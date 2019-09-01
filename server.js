@@ -2,7 +2,10 @@ require('dotenv').config();
 var app = require('http').createServer();
 var io = require('socket.io')(app);
 
-res.setHeader('Access-Control-Allow-Origin', 'http://159.65.55.11');
+app.use(function (req, res, next) {
+
+
+    res.setHeader('Access-Control-Allow-Origin', 'http://159.65.55.11');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -16,6 +19,8 @@ res.setHeader('Access-Control-Allow-Origin', 'http://159.65.55.11');
 
     // Pass to next layer of middleware
     next();
+
+}
 
 const nodemailer = require('nodemailer');
 
