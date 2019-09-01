@@ -4,8 +4,7 @@ var io = require('socket.io')(app);
 
 app.use(function (req, res, next) {
 
-
-    res.setHeader('Access-Control-Allow-Origin', 'http://159.65.55.11');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -20,7 +19,7 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 
-}
+})
 
 const nodemailer = require('nodemailer');
 
