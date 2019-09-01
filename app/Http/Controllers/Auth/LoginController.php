@@ -42,7 +42,7 @@ class LoginController extends Controller
             return response()->json($arrayADevolver, 200);
         }
 
-        return response()->json(['error' => 'UnAuthorised'], 401);
+        return response()->json(['error' => 'Acesso não autorizado!'], 401);
 
     }
 
@@ -105,7 +105,7 @@ class LoginController extends Controller
                     return response()->json($arrayADevolver, 200);
                 }
     
-                return response()->json(['error' => 'UnAuthorised'], 401);
+                return response()->json(['error' => 'Acesso não autorizado'], 401);
             }
             
             return response()->json([

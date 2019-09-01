@@ -78,6 +78,7 @@
       :propostaProponenteMonitor="propostaProponenteMonitor"
       :ficheiro="ficheiro"
       v-on:mostrarComponente="mostrarComponente"
+      v-on:mostrarPropostaProponente_monitor="mostrarComponenteMonitor"
     ></resumo-proposta>
   </div>
 </template>
@@ -154,6 +155,11 @@ export default {
       if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
         this.anterior();
       }
+    },
+    mostrarComponenteMonitor() {
+      this.isShowMonitor = true;
+      this.avancar = false;
+      this.$emit("decrementarBarraProgresso");
     }
   },
   mounted() {
@@ -161,7 +167,7 @@ export default {
 
     if (this.proposta.role == "monitor" && this.$store.state.propostaExistente) {
       axios
-        .get("/api/propostaProponenteMonitor/" + this.proposta.id)
+        .get("/api/propostaProponenteMonitor/" + this.proposta.id_proposta_proponente)
         .then(response => {
           Object.assign(this.propostaProponenteMonitor, response.data);
         });

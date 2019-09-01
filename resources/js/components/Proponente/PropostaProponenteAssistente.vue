@@ -102,6 +102,7 @@
       :propostaProponenteAssistente="propostaProponenteAssistente"
       :ficheiro="ficheiro"
       v-on:mostrarComponente="mostrarComponente"
+      v-on:mostrarPropostaProponente_assistente="mostrarComponenteAssistente"
     ></resumo-proposta>
   </div>
 </template>
@@ -153,15 +154,13 @@ export default {
   },
   //? Validations Vuelidate
   validations() {
-    /*
-    if(this.proposta.tipo_contrato == 'renovacao' || this.proposta.tipo_contrato == 'alteracao'){
-      return{
-        propostaProponenteAssistente: {
-          avaliacao_periodo_anterior: { required },
-        }
-      };
-    }
-    */
+    // if(this.proposta.tipo_contrato == 'renovacao' || this.proposta.tipo_contrato == 'alteracao'){
+    //   return{
+    //     propostaProponenteAssistente: {
+    //       avaliacao_periodo_anterior: { required },
+    //     }
+    //   };
+    // }
     if (
       this.propostaProponenteAssistente.regime_prestacao_servicos ==
         "tempo_integral" ||
@@ -236,6 +235,11 @@ export default {
       if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
         this.anterior();
       }
+    },
+    mostrarComponenteAssistente() {
+      this.isShowAssistente = true;
+      this.avancar = false;
+      this.$emit("decrementarBarraProgresso");
     }
   },
   mounted() {
@@ -244,7 +248,7 @@ export default {
     //? Se selecionou uma proposta existente
     if (this.proposta.role == "assistente" && this.$store.state.propostaExistente) {
       axios
-        .get("/api/propostaProponenteAssistente/" + this.proposta.id)
+        .get("/api/propostaProponenteAssistente/" + this.proposta.id_proposta_proponente)
         .then(response => {
           Object.assign(this.propostaProponenteAssistente, response.data);
         });

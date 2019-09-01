@@ -23,6 +23,7 @@
             <div class="col-lg-6 bg-white">
               <div class="form d-flex align-items-center">
                 <div class="content">
+                  <b-alert show variant="primary" v-show="error">{{ errorMessage }}</b-alert>
                   <div id="login-form" method="post">
                     <div class="form-group">
                       <label for="login-username" class="bmd-label-floating">Nome de utilizador</label>
@@ -76,6 +77,7 @@ export default {
         })
         .catch(error => {
           this.error = true;
+          console.log(this.error);
           this.isLoading = false;
           this.errorMessage = Object.values(error.response.data)[0];
         });

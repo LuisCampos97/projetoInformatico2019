@@ -512,10 +512,8 @@ export default {
       this.ficheiros[event.target.name] = event.target.files[0];
     },
     avancar: function(proposta, unidadesCurriculares) {
-      console.log(proposta)
       axios.get('/api/verificarSeJaExistemPropostasAtivasParaDocenteASerContratado/' + proposta.email)
         .then(response => {
-          console.log(response);
         if(!response.data){
       //? Necessário o FormData para passar a informção do ficheiro para o backend "Laravel"
       this.ficheiro.fileCurriculo = new FormData();
@@ -654,6 +652,8 @@ export default {
             this.unidadesCurriculares.push(uc);
           });
         });
+
+        this.$store.commit('setPropostaExistente');
     }
   },
   mounted() {

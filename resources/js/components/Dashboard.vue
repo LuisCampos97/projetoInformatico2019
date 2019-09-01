@@ -28,12 +28,6 @@
       </div>
       <div class="col-lg-9">
         <div class="main">
-          <estatisticaProponente v-if="(user.roleDB == 'proponente_departamento' || user.roleDB == 'proponente_curso') && isDashboardVisible"></estatisticaProponente>
-          <estatisticaDiretorUO v-if="user.roleDB == 'diretor_uo' && isDashboardVisible"></estatisticaDiretorUO>
-          <estatisticaCTC v-if="user.roleDB == 'ctc' && isDashboardVisible"></estatisticaCTC>
-          <estatisticaSecretariadoDirecao v-if="user.roleDB == 'secretariado_direcao' && isDashboardVisible"></estatisticaSecretariadoDirecao>
-          <estatisticaRecursosHumanos v-if="user.roleDB == 'recursos_humanos' && isDashboardVisible"></estatisticaRecursosHumanos>
-
           <button
             class="btn btn-success mb-4 font-weight-bold"
             v-on:click.prevent="novaProposta"
@@ -183,6 +177,13 @@
               </div>
             </div>
           </div>
+
+          <estatisticaProponente v-if="(user.roleDB == 'proponente_departamento' || user.roleDB == 'proponente_curso') && isDashboardVisible"></estatisticaProponente>
+          <estatisticaDiretorUO v-if="user.roleDB == 'diretor_uo' && isDashboardVisible"></estatisticaDiretorUO>
+          <estatisticaCTC v-if="user.roleDB == 'ctc' && isDashboardVisible"></estatisticaCTC>
+          <estatisticaSecretariadoDirecao v-if="user.roleDB == 'secretariado_direcao' && isDashboardVisible"></estatisticaSecretariadoDirecao>
+          <estatisticaRecursosHumanos v-if="user.roleDB == 'recursos_humanos' && isDashboardVisible"></estatisticaRecursosHumanos>
+          
         </div>
       </div>
     </div>

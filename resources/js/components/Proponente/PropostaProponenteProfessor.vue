@@ -98,6 +98,7 @@
       :propostaProponenteProfessor="propostaProponenteProfessor"
       :ficheiro="ficheiro"
       v-on:mostrarComponente="mostrarComponente"
+      v-on:mostrarPropostaProponente_professor="mostrarComponenteProfessor"
     ></resumo-proposta>
   </div>
 </template>
@@ -219,6 +220,11 @@ export default {
        if(this.proposta.fundamentacao_coordenador_departamento != null || this.proposta.fundamentacao_coordenador_curso != null){
          this.anterior();
        }
+    },
+    mostrarComponenteProfessor() {
+      this.isShowProfessor = true;
+      this.avancar = false;
+      this.$emit("decrementarBarraProgresso");
     }
   },
   mounted() {
@@ -226,7 +232,7 @@ export default {
 
     if (this.proposta.role == "professor" && this.$store.state.propostaExistente) {
       axios
-        .get("/api/propostaProponenteProfessor/" + this.proposta.id)
+        .get("/api/propostaProponenteProfessor/" + this.proposta.id_proposta_proponente)
         .then(response => {
           Object.assign(this.propostaProponenteProfessor, response.data);
         });
