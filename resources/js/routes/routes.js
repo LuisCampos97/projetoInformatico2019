@@ -31,6 +31,7 @@ Vue.component('estatisticaDiretorUO', require('../components/Estatistica/Estatis
 Vue.component('estatisticaCTC', require('../components/Estatistica/EstatisticaCTC.vue').default);
 Vue.component('estatisticaSecretariadoDirecao', require('../components/Estatistica/EstatisticaSecretariadoDirecao.vue').default);
 Vue.component('estatisticaRecursosHumanos', require('../components/Estatistica/EstatisticaRecursosHumanos.vue').default);
+Vue.component('editarProposta', require('../components/Proponente/EditarProposta.vue').default);
 const adminDashboard = Vue.component('adminDashboard', require('../components/Backoffice/AdminDashboard.vue').default);
 const adminLogin =  Vue.component('adminLogin', require('../components/Backoffice/AdminLogin.vue').default);
 
@@ -50,7 +51,7 @@ const routes = [
     component: dashboard,
     name: 'dashboard',
     meta: {
-      forAuth: true
+      forAuth: true,
     }
   },
   {

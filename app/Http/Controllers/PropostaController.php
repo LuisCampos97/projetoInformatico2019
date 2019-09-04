@@ -60,9 +60,7 @@ class PropostaController extends Controller
         return Proposta::all();
     }
     public function getPropostaDePropostaProponente($propostaID){
-        //dd($propostaID);
-        $proposta = Proposta::where('proposta_proponente_id','=', $propostaID)->get();
-        return $proposta;
+        return Proposta::findOrFail($propostaID);
     }
 
     public function updateFicheirosDocente($propostaID){

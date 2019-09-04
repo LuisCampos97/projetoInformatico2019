@@ -16,7 +16,8 @@ export default new Vuex.Store({
         propostaProponenteProfessor: null,
         propostaProponenteAssistente: null,
         propostaProponenteMonitor: null,
-        propostaExistente: false
+        propostaExistente: false,
+        editarProposta: false
     },
     getters: {
         loggedIn(state) {
@@ -104,6 +105,12 @@ export default new Vuex.Store({
         },
         resetPropostaExistente(state) {
             state.propostaExistente = false;
+        },
+        setEditarProposta(state) {
+            state.editarProposta = true;
+        },
+        resetEditarProposta(state) {
+            state.editarProposta = false;
         },
         setProposta: (state, proposta) => {
             state.proposta = proposta;

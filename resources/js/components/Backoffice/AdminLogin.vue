@@ -27,11 +27,11 @@
                   <div id="login-form" method="post">
                     <div class="form-group">
                       <label for="login-username" class="bmd-label-floating">Nome de utilizador</label>
-                      <input id="login-username" type="text" name="loginUsername" v-model="user.email" class="form-control">
+                      <input id="login-username" type="text" name="loginUsername" v-model="user.email" class="form-control" v-on:keyup.enter="login">
                     </div>
                     <div class="form-group">
                       <label for="login-password" class="bmd-label-floating">Senha</label>
-                      <input id="login-password" type="password" name="loginPassword" v-model="user.password" class="form-control">
+                      <input id="login-password" type="password" name="loginPassword" v-model="user.password" class="form-control" v-on:keyup.enter="login">
                     </div><button id="login" class="btn btn-dark" v-on:click.prevent="login">Entrar</button>
                   </div>
                 </div>
@@ -77,7 +77,6 @@ export default {
         })
         .catch(error => {
           this.error = true;
-          console.log(this.error);
           this.isLoading = false;
           this.errorMessage = Object.values(error.response.data)[0];
         });

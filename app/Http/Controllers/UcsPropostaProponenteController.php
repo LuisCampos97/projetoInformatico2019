@@ -29,4 +29,9 @@ class UcsPropostaProponenteController extends Controller
         return (new UcsPropostaProponenteResource($ucsPropostaProponente))->response()->setStatusCode(201);
     }
 
+    public function delete($id)
+    {
+        return UcsPropostaProponente::where('id_ucs_proposta_proponente', $id)->delete();
+    }
+
 }

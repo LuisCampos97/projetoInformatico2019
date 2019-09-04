@@ -35,6 +35,16 @@ class FicheiroController extends Controller
         return response()->json($ficheiro, 200);
     }
 
+    public function deleteFicheiros($id)
+    {
+        //? Apagar todos os ficheiros
+        Ficheiro::where('proposta_id', $id)->delete();
+
+        Storage::disk('local')->deleteDirectory('ficheiros/' . $id);
+
+        return response()->json('Ficheiros apagados com sucesso!', 200); 
+    }
+
     public function downloadFicheiro($proposta_id, $descricao)
     {
         $ficheiro = Ficheiro::where('proposta_id', $proposta_id)->where('descricao', $descricao)->first();

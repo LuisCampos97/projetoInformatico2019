@@ -38,6 +38,7 @@ Route::get('/lerCursosEUcs', 'CursoController@lerCursosEUcs');
 
 //-----------------------Proposta Proponente----------------------------------------
 Route::post('/propostaProponente', 'PropostaProponenteController@store');
+Route::put('/updatePropostaProponente/{idProposta}', 'PropostaProponenteController@update');
 Route::get('/allPropostasProponente', 'PropostaProponenteController@getPropostasProponente');
 Route::get('/coordenadorDepartamento/propostasPendentes', 'PropostaProponenteController@getPropostasPendentesCoordenadorDepartamento');
 Route::get('/coordenadorDepartamento/historicoPropostas', 'PropostaProponenteController@getHistoricoPropostasCoordenadorDepartamento');
@@ -46,6 +47,7 @@ Route::get('/coordenadorCurso/historicoPropostas', 'PropostaProponenteController
 Route::put('/propostaProponente/fundamentacaoCoordenadorDepartamento/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorDepartamento');
 Route::put('/propostaProponente/fundamentacaoCoordenadorCurso/{propostaID}', 'PropostaProponenteController@inserirFundamentacaoCoordenadorCurso');
 Route::get('/verificarSeJaExistemPropostasAtivasParaDocenteASerContratado/{email}', 'PropostaProponenteController@verificarSeJaExistemPropostasAtivasParaDocenteASerContratado');
+Route::put('/apagarPropostasProponente/{idProposta}', 'PropostaProponenteController@apagarPropostasProponente');
 
 //? Estatisticas
 Route::get('/getPropostasProponente/{idProponente}', 'PropostaProponenteController@getPropostasDoProponente');
@@ -56,14 +58,17 @@ Route::get('/getPropostasNoUltimoMes/{idProponente}', 'PropostaProponenteControl
 
 //-----------------------UcsPropostaProponente-------------------------------------------
 Route::post('/ucsPropostaProponente' ,'UcsPropostaProponenteController@store');
+Route::delete('/ucsPropostaProponente/{idUcPropostaProponente}', 'UcsPropostaProponenteController@delete');
 Route::get('/getUcsPropostaProponente/{idProposta}', 'UcsPropostaProponenteController@getUcsPropostaProponente');
 
 //----------------------Proposta Proponente Professor-------------------------------------------
 Route::post('/propostaProponenteProfessor', 'PropostaProponenteProfessorController@store');
+Route::put('/updatePropostaProponenteProfessor/{idPropostaProponenteProfessor}', 'PropostaProponenteProfessorController@update');
 Route::get('/propostaProponenteProfessor/{idPropostaProponente}', 'PropostaProponenteProfessorController@getProposta');
 
 //----------------------Proposta Proponente Assistente---------------------------------------------
 Route::post('/propostaProponenteAssistente', 'PropostaProponenteAssistenteController@store');
+Route::put('/updatePropostaProponenteAssistente/{idPropostaProponenteAssistente}', 'PropostaProponenteAssistenteController@update');
 Route::get('/propostaProponenteAssistente/{idPropostaProponente}', 'PropostaProponenteAssistenteController@getProposta');
 
 //----------------------PropostaProponenteMonitor------------------------------------------------
@@ -106,6 +111,7 @@ Route::get('/ctc/getPropostasPorTipoParecer/{idCTC}', 'CTCController@getProposta
 //-------------------------Ficheiros-----------------------------------------------
 Route::post('/ficheiro', 'FicheiroController@store');
 Route::get('/ficheiros/{proposta_id}', 'FicheiroController@getFicheiros');
+Route::delete('/deleteFicheiros/{proposta_id}', 'FicheiroController@deleteFicheiros');
 Route::get('/downloadFicheiro/{proposta_id}/{descricao}', 'FicheiroController@downloadFicheiro');
 
 //-------------------------Secretariado Direcao---------------------------------------------------

@@ -246,7 +246,7 @@ export default {
     Object.assign(this.propostaProponenteAssistente, this.$store.state.propostaProponenteAssistente);
 
     //? Se selecionou uma proposta existente
-    if (this.proposta.role == "assistente" && this.$store.state.propostaExistente) {
+    if (this.proposta.role == "assistente" && (this.$store.state.propostaExistente || this.$store.state.editarProposta)) {
       axios
         .get("/api/propostaProponenteAssistente/" + this.proposta.id_proposta_proponente)
         .then(response => {

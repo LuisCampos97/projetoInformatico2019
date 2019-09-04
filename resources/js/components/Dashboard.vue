@@ -45,6 +45,7 @@
           <tabela-recursos v-if="user.roleDB == 'recursos_humanos'"></tabela-recursos>
           <resumo-geral v-if="isResumoPropostaVisible" :propostaSelecionada="propostaSelecionada"
             v-on:mostrarProponentes="mostrarProponentes"></resumo-geral>
+          <editarProposta v-if="isEditarPropostaVisible" :propostaSelecionada="propostaSelecionada" v-on:voltar="mostrarProponentes"></editarProposta>
 
           <div v-if="mostrarTabela">
             <div v-if="user.roleDB == 'proponente_departamento' && !isNovaPropostaVisible">
@@ -95,6 +96,13 @@
                           <td>{{ propostaHistorico.tipo_contrato }}</td>
                           <td>{{ propostaHistorico.unidade_organica }}</td>
                           <td>
+                            <button
+                              type="button"
+                              class="btn btn-info"
+                              @click="editarProposta(propostaHistorico, index)"
+                              v-if="(user.roleDB == 'proponente_departamento' && propostaHistorico.fundamentacao_coordenador_curso == null) ||
+                              (user.roleDB == 'proponente_curso' && propostaHistorico.fundamentacao_coordenador_departamento == null)"
+                            >Editar</button>
                             <button
                               type="button"
                               class="btn btn-info"
@@ -205,6 +213,7 @@ export default {
       isActiveCTC: false,
       isActiveSD: false,
       isActiveRH: false,
+      isEditarPropostaVisible: false,
       propostasPendentesCoordenadorDepartamento: "",
       historicoPropostasCoordenadorDepartamento: "",
       propostasPendentesCoordenadorCurso: "",
@@ -255,11 +264,22 @@ export default {
       this.mostrarTabela = false;
       this.isDashboardVisible = false;
     },
+    editarProposta(propostaParaEditar, index) {
+      this.isEditarPropostaVisible = true;
+      this.isDashboardVisible = true;
+      this.mostrarTabela = false;
+      this.propostaSelecionada = Object.assign(
+        {},
+        propostaParaEditar
+      );
+      this.isDashboardVisible = false;
+    },
     mostrarProponentes() {
       this.isNovaPropostaVisible = false;
       this.mostrarTabela = true;
       this.isResumoPropostaVisible = false;
       this.isDashboardVisible = true;
+      this.isEditarPropostaVisible = false;
       if(this.$store.state.user.roleDB == 'proponente_departamento'){
       axios
         .get("/api/coordenadorDepartamento/propostasPendentes")

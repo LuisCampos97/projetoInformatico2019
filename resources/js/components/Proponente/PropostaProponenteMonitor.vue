@@ -165,7 +165,7 @@ export default {
   mounted() {
     Object.assign(this.propostaProponenteMonitor, this.$store.state.propostaProponenteMonitor);
 
-    if (this.proposta.role == "monitor" && this.$store.state.propostaExistente) {
+    if (this.proposta.role == "monitor" && (this.$store.state.propostaExistente || this.$store.state.editarProposta)) {
       axios
         .get("/api/propostaProponenteMonitor/" + this.proposta.id_proposta_proponente)
         .then(response => {

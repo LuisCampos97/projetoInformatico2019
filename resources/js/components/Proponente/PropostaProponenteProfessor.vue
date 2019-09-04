@@ -230,7 +230,7 @@ export default {
   mounted() {
     Object.assign(this.propostaProponenteProfessor, this.$store.state.propostaProponenteProfessor);
 
-    if (this.proposta.role == "professor" && this.$store.state.propostaExistente) {
+    if (this.proposta.role == "professor" && (this.$store.state.propostaExistente || this.$store.state.editarProposta)) {
       axios
         .get("/api/propostaProponenteProfessor/" + this.proposta.id_proposta_proponente)
         .then(response => {

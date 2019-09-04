@@ -42,6 +42,33 @@ class PropostaProponenteController extends Controller
         return $propostaProponente;
     }
 
+    public function update(Request $request, $id)
+    {
+        $proposta = PropostaProponente::findOrFail($id);
+
+        $request->validate([
+            'unidade_organica' => 'required',
+            'nome_completo' => 'required',
+            'email' => 'required',
+            'numero_telefone' => 'required',
+            'tipo_contrato' => 'required',
+            'data_de_assinatura_coordenador_de_curso' => 'nullable',
+            'data_de_assinatura_coordenador_departamento' => 'nullable',
+            'fundamentacao_coordenador_curso' => 'nullable',
+            'fundamentacao_coordenador_departamento' => 'nullable',
+            'role' => 'required',
+            'grau' => 'required',
+            'curso' => 'required',
+            'primeiro_proponente' => 'required',
+            'area_cientifica' => 'required',
+        ]);
+
+        $proposta->update($request->all());
+        $proposta->save();
+
+        return response()->json($proposta, 200);
+    }
+
     public function getPropostasPendentesCoordenadorDepartamento()
     {
         $propostasPendentesCoordenadorDepartamento =
@@ -109,6 +136,23 @@ class PropostaProponenteController extends Controller
         $propostaAAtualizar->data_de_assinatura_coordenador_de_curso = $request->data_de_assinatura_coordenador_de_curso;
         $propostaAAtualizar->segundo_proponente = $request->segundo_proponente;
         $propostaAAtualizar->save();
+    }
+
+    public function apagarPropostasProponente($id, Request $request)
+    {
+        $role = $request->role;
+        if($role == 'professor') {
+            PropostaProponenteAssistente::where('proposta_proponente_id', $id)->delete();
+            PropostaProponenteMonitor::where('proposta_proponente_id', $id)->delete();
+        } else if($role == 'assistente') {
+            PropostaProponenteProfessor::where('proposta_proponente_id', $id)->delete();
+            PropostaProponenteMonitor::where('proposta_proponente_id', $id)->delete();
+        } else if($role == 'monitor') {
+            PropostaProponenteProfessor::where('proposta_proponente_id', $id)->delete();
+            PropostaProponenteAssistente::where('proposta_proponente_id', $id)->delete();
+        }
+
+        return response()->json("PropostasProponente apagadas com sucesso!", 200);
     }
 
     //? FUNÇÕES ESTATISTICA

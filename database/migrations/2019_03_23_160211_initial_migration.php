@@ -65,7 +65,7 @@ class InitialMigration extends Migration
             $table->string('numero_telefone');
             $table->dateTime('data_de_assinatura_coordenador_departamento')->nullable();
             $table->dateTime('data_de_assinatura_coordenador_de_curso')->nullable();
-            $table->enum('tipo_contrato', ['contratacao_inicial', 'renovacao', 'visitante']);
+            $table->enum('tipo_contrato', ['contratacao_inicial', 'renovacao', 'alteracao']);
             $table->string('grau');
             $table->string('curso');
             $table->string('area_cientifica');

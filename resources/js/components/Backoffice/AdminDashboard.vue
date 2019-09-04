@@ -129,20 +129,6 @@
               </div>
             </div>
           </section>
-          <section class="dashboard-header" v-if="mostrarPropUltimoMes">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg">
-                  <div class="card">
-                     <div class="card-header d-flex align-items-center">
-                      <h3 class="h4">Propostas no último mês</h3>
-                    </div>
-                    <ve-line :data="chartData"></ve-line>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
         </div>
       </div>
     </div>

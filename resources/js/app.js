@@ -107,6 +107,7 @@ router.beforeEach((to, from, next) => {
 const app = new Vue({
     el: '#app',
     router: router,
+    mode: 'production',
     store,
     created() {
         this.$store.commit('loadTokenAndUserFromSession');
