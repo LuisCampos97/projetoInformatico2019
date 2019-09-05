@@ -518,6 +518,9 @@ export default {
                     axios.post('/api/logout').then(response => {
                     this.$swal('Sucesso', 'Ficheiros submetidos com sucesso!!', 'success')
                     this.$store.commit("clearUserAndToken");
+                    this.$socket.emit("email-recursos", {
+                      msg: "Pedido de email enviado..."
+                    });
                     this.$router.push({
                       name: "login"
                     });
@@ -538,7 +541,6 @@ export default {
       axios.get('/api/propostaDePropostaProponente/'+this.propostaDesteProponente.id_proposta_proponente)
       .then(response => {
         this.proposta = response.data;
-        
       })
     });
   }

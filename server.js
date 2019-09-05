@@ -48,6 +48,13 @@ let mailOptionsSecretariadoDirecao = {
     subject: "Nova Proposta na plataforma de contratações",
     text: "Caro membro do Secretariado da Direção, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
 }
+
+let mailOptionsRecursosHumanos = {
+    from: "estg@gmail.com",
+    to: "2151571@my.ipleiria.pt",
+    subject: "Nova Proposta na plataforma de contratações",
+    text: "Caro membro dos Recursos Humanos, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
+}
 /*
 console.log(transporter);
 transporter.sendMail(mailOptionsDiretorUO, function (error) {
@@ -114,6 +121,17 @@ io.on('connection', function (socket) {
             }
             else {
                 console.log('Email enviado o docente a ser contratado!');
+            }
+        });
+    });
+
+    socket.on('email-recursos', function (data) {
+        transporter.sendMail(mailOptionsRecursosHumanos, function (error) {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log('Email enviado para os Recursos Humanos!');
             }
         });
     });
