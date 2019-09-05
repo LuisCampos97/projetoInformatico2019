@@ -240,6 +240,7 @@ export default {
     home() {
       this.isDashboardVisible = true;
       this.isNovaPropostaVisible = false;
+      this.isEditarPropostaVisible = false;
     },
     verDetalhesCoordenadorCurso(propostaPendenteCoordenadorCurso, index) {
       this.isResumoPropostaVisible = true;

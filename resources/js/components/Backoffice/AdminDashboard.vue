@@ -1,5 +1,7 @@
 <template>
       <div class="page">
+        <loading :active.sync="isLoading"
+        :width="150" :height="150"></loading>
       <!-- Main Navbar-->
       <header class="header">
         <nav class="navbar">
@@ -7,10 +9,9 @@
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <!-- Navbar Header-->
               <div class="navbar-header">
-                <!-- Navbar Brand --><a href="index.html" class="navbar-brand">
+                <!-- Navbar Brand --><a class="navbar-brand">
                   <div class="brand-text brand-big"><span>Admin </span><strong>Dashboard</strong></div>
-                  <div class="brand-text brand-small"><strong>BD</strong></div></a>
-                <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
+                  <div class="brand-text brand-small"><strong>AD</strong></div></a>
               </div>
               <!-- Navbar Menu -->
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
@@ -143,19 +144,23 @@
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+
 export default {
   data() {
     return {
-      loaded:false,
-      chartdata: null,
+      isLoading: false,
       numeroUtilizadores: 0,
       numeroPropostas: 0,
       utilizadores: [],
       role: '',
       mostrarCompAddCurso:false,
-      mostrarCompAddUC:false,
-      mensagemCarregarUCsCursos: ''
+      mostrarCompAddUC:false
     }
+  },
+  components: {
+    Loading
   },
   methods: {
     adicionarCurso(){
@@ -191,7 +196,9 @@ export default {
       });
     },
     carregar() {
+      this.isLoading = true;
       axios.get("api/lerCursosEUcs").then(response => {
+        this.isLoading = false;
         this.$swal('Sucesso', response.data, 'success');
       });
     },
@@ -270,5 +277,9 @@ export default {
   @import "../../../styles/fontastic.css";
   @import "../../../styles/style.default.css";
   @import "../../../styles/style.blue.css";
+
+  .nav-link.logout {
+    cursor: pointer;
+  }
 </style>
 

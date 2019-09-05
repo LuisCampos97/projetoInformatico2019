@@ -8,7 +8,7 @@
           :state="$v.propostaRecursosHumanos.remuneracao.$dirty ? !$v.propostaRecursosHumanos.remuneracao.$error : null"
           v-model="propostaRecursosHumanos.remuneracao"
         ></b-form-input>
-        <b-form-invalid-feedback id="input-1-live-feedback">Insira uma remuneração</b-form-invalid-feedback>
+        <b-form-invalid-feedback id="input-1-live-feedback">Insira a remuneração em formato numérico!</b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group label="Escalão" label-for="inputEscalao">
@@ -200,7 +200,7 @@
   </div>
 </template>
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required, numeric } from "vuelidate/lib/validators";
 export default {
   props:["propostaSelecionada"],
   data() {
@@ -240,7 +240,7 @@ export default {
   },
   validations: {
     propostaRecursosHumanos: {
-      remuneracao: { required },
+      remuneracao: { required, numeric },
       escalao: { required },
       indice: { required },
       verificacao_outras_uo: { required },

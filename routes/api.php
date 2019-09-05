@@ -37,6 +37,7 @@ Route::post('/criarUC', 'UnidadeCurricularController@criarUC');
 //-----------------------------Cursos----------------------------------
 Route::get('/lerCursosEUcs', 'CursoController@lerCursosEUcs');
 Route::post('/criarCurso', 'CursoController@criarCurso');
+Route::get('/getNomeCurso/{codigo_curso}', 'CursoController@getNomeCurso');
 
 //-----------------------Proposta Proponente----------------------------------------
 Route::post('/propostaProponente', 'PropostaProponenteController@store');

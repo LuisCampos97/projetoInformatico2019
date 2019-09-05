@@ -1,6 +1,7 @@
 <template>
   <div>
     <button class="btn btn-danger" @click="voltar" v-if="voltarVar">Voltar</button>
+    <br><br>
     <b-form-group
       description="Legislação: art. 8.º do ECPDESP na redacção que lhe foi dada pelo Decreto-Lei
 n.º 207/2009, de 31 de Agosto, alterado pela Lei nº 7/2010, de 13 de Maio e
@@ -187,11 +188,12 @@ abrigo do art. 8.º do ECPDESP, do IPL"
               <div v-if="unidadesCurriculares.length">
                 <table class="table mt-3">
                   <thead>
-                    <th>Código</th>
+                    <th>Código UC</th>
                     <th>Nome UC</th>
                     <th>Regime</th>
                     <th>Turno</th>
-                    <th>Curso</th>
+                    <th>Código Curso</th>
+                    <th>Nome Curso</th>
                     <th>Horas</th>
                     <th>Horas Semestrais</th>
                     <th>Tipo</th>
@@ -200,10 +202,11 @@ abrigo do art. 8.º do ECPDESP, do IPL"
                   <tbody>
                     <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
                       <td>{{ucAUX.codigo_uc.toString()}}</td>
-                      <td>{{ucAUX.nomeuc}}</td>      
+                      <td>{{ucAUX.nome_uc}}</td>      
                       <td>{{ucAUX.regime}}</td>
                       <td>{{ucAUX.turno}}</td>
                       <td>{{ucAUX.codigo_curso}}</td>
+                      <td>{{ucAUX.nome_curso}}</td>
                       <td>{{ucAUX.horas}}</td>
                       <td>{{ucAUX.horas_semestrais}}</td>
                       <td>{{ucAUX.tipo}}</td>
@@ -436,6 +439,7 @@ export default {
         horas: "",
         horas_semestrais: "",
         codigo_curso: "",
+        nome_curso: "",
         turno: "",
         tipo: ""
       },
@@ -591,25 +595,22 @@ export default {
           });
         });
     },
-    getNomeUC(id) {
-      axios.get('/api/unidadeCurricularNome/'+ id).then(response => {
-          this.unidadeCurricular.nome_uc = response.data;
-          console.log(this.unidadeCurricular.codigo_uc);
-        });
-    },
     adicionarUC() {
       this.$v.unidadeCurricular.$touch();
+
       if (!this.$v.unidadeCurricular.$invalid) {
-
-        this.getNomeUC(this.unidadeCurricular.codigo_uc);
+        axios.get('/api/unidadeCurricularNome/'+ this.unidadeCurricular.codigo_uc).then(response => {
+          this.unidadeCurricular.nome_uc = response.data;
+          axios.get('/api/getNomeCurso/' + this.unidadeCurricular.codigo_curso).then(response => {
+            this.unidadeCurricular.nome_curso = response.data;
+            this.unidadesCurriculares.push(this.unidadeCurricular);
+            this.$v.unidadeCurricular.$reset();
         
-        console.log(this.unidadeCurricular);
-        this.unidadesCurriculares.push(this.unidadeCurricular);
-        this.$v.unidadeCurricular.$reset();
-
-        //* Colocar os campos vazios
-        this.unidadeCurricular = {};
-        this.ucs = [];
+            //* Colocar os campos vazios
+            this.unidadeCurricular = {};
+            this.ucs = [];
+          });
+        });
       }
     },
     removerUC(index) {

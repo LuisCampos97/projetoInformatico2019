@@ -537,7 +537,7 @@ export default {
       //console.log(this.propostaDesteProponente.id_proposta_proponente);
       axios.get('/api/propostaDePropostaProponente/'+this.propostaDesteProponente.id_proposta_proponente)
       .then(response => {
-        this.proposta = response.data[0];
+        this.proposta = response.data;
         
       })
     });

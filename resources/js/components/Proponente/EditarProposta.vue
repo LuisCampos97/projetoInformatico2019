@@ -186,10 +186,12 @@
               <div v-if="unidadesCurriculares.length">
                 <table class="table mt-3">
                   <thead>
-                    <th>Código</th>
+                    <th>Código UC</th>
+                    <th>Nome UC</th>
                     <th>Regime</th>
                     <th>Turno</th>
-                    <th>Curso</th>
+                    <th>Código Curso</th>
+                    <th>Nome Curso</th>
                     <th>Horas</th>
                     <th>Horas Semestrais</th>
                     <th>Tipo</th>
@@ -198,9 +200,11 @@
                   <tbody>
                     <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
                       <td>{{ucAUX.codigo_uc.toString()}}</td>
+                      <td>{{ucAUX.nome_uc}}</td>      
                       <td>{{ucAUX.regime}}</td>
                       <td>{{ucAUX.turno}}</td>
                       <td>{{ucAUX.codigo_curso}}</td>
+                      <td>{{ucAUX.nome_curso}}</td>
                       <td>{{ucAUX.horas}}</td>
                       <td>{{ucAUX.horas_semestrais}}</td>
                       <td>{{ucAUX.tipo}}</td>
@@ -512,14 +516,20 @@ export default {
     },
     adicionarUC() {
       this.$v.unidadeCurricular.$touch();
+
       if (!this.$v.unidadeCurricular.$invalid) {
-        this.unidadesCurriculares.push(this.unidadeCurricular);
-
-        this.$v.unidadeCurricular.$reset();
-
-        //* Colocar os campos vazios
-        this.unidadeCurricular = {};
-        this.ucs = [];
+        axios.get('/api/unidadeCurricularNome/'+ this.unidadeCurricular.codigo_uc).then(response => {
+          this.unidadeCurricular.nome_uc = response.data;
+          axios.get('/api/getNomeCurso/' + this.unidadeCurricular.codigo_curso).then(response => {
+            this.unidadeCurricular.nome_curso = response.data;
+            this.unidadesCurriculares.push(this.unidadeCurricular);
+            this.$v.unidadeCurricular.$reset();
+        
+            //* Colocar os campos vazios
+            this.unidadeCurricular = {};
+            this.ucs = [];
+          });
+        });
       }
     },
     removerUC(index) {

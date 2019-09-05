@@ -78,4 +78,9 @@ class CursoController extends Controller
         $cursoAInserir->save();
         return response()->json($cursoAInserir, 200);
     }
+
+    public function getNomeCurso($codigo_curso)
+    {
+        return Curso::where('codigo', $codigo_curso)->first()->nome_curso;
+    }
 }
