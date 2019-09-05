@@ -54,4 +54,25 @@ class CursoController extends Controller
 
         return 'Sucesso';
     }
+
+    public function criarCurso(Request $request){
+        $curso = Curso::where('codigo', $request->codigo)->get();
+        if(!$curso->isEmpty()){
+            return response()->json("Já existe um curso com esse codigo", 401);
+        }
+
+        $nome = Curso::where('nome_curso', $request->nome_curso)->get();
+        if(!$nome->isEmpty()){
+            return response()->json("Já existe um curso com esse nome", 401);
+        }
+        $request->validate([
+            'codigo' => 'required|numeric',
+            'nome_curso' => 'required'
+        ]);
+
+        $cursoAInserir = new Curso();
+        $cursoAInserir->fill($request->all());
+        $cursoAInserir->save();
+        return response()->json($cursoAInserir, 200);
+    }
 }

@@ -188,6 +188,7 @@ abrigo do art. 8.º do ECPDESP, do IPL"
                 <table class="table mt-3">
                   <thead>
                     <th>Código</th>
+<!--                    <th>Nome UC</th>-->
                     <th>Regime</th>
                     <th>Turno</th>
                     <th>Curso</th>
@@ -199,6 +200,7 @@ abrigo do art. 8.º do ECPDESP, do IPL"
                   <tbody>
                     <tr v-for="(ucAUX, index) in unidadesCurriculares" :key="ucAUX.id">
                       <td>{{ucAUX.codigo_uc.toString()}}</td>
+        <!--              <td>{{ucAUX.nomeuc}}</td>       -->       
                       <td>{{ucAUX.regime}}</td>
                       <td>{{ucAUX.turno}}</td>
                       <td>{{ucAUX.codigo_curso}}</td>
@@ -429,6 +431,7 @@ export default {
       propostaExistente: {},
       unidadeCurricular: {
         codigo_uc: "",
+  // nome_uc:"",
         regime: "",
         horas: "",
         horas_semestrais: "",
@@ -477,6 +480,7 @@ export default {
     },
     unidadeCurricular: {
       codigo_curso: { required },
+      //nome_uc: { required },
       codigo_uc: { required },
       regime: { required },
       tipo: { required },
@@ -591,7 +595,15 @@ export default {
     adicionarUC() {
       this.$v.unidadeCurricular.$touch();
       if (!this.$v.unidadeCurricular.$invalid) {
-        this.unidadesCurriculares.push(this.unidadeCurricular);
+  /*    axios.get('/api/getNomesUC/'+ this.unidadeCurricular.codigo_uc).then(response => {
+          console.log(response.data)
+                    console.log(this.unidadeCurricular)
+
+          this.unidadeCurricular.nome_uc = response.data
+        })
+        */
+          this.unidadesCurriculares.push(this.unidadeCurricular);
+
 
         this.$v.unidadeCurricular.$reset();
 
@@ -599,6 +611,7 @@ export default {
         this.unidadeCurricular = {};
         this.ucs = [];
       }
+      console.log("invalid")
     },
     removerUC(index) {
       delete this.unidadesCurriculares[index];
@@ -648,10 +661,11 @@ export default {
       axios
         .get("/api/getUcsPropostaProponente/" + this.propostaExistente.id_proposta_proponente)
         .then(response => {
-          response.data.forEach(uc => {
+          response.data.forEach(uc => {        
             this.unidadesCurriculares.push(uc);
           });
         });
+          //console.log(this.unidadesCurriculares)
 
         this.$store.commit('setPropostaExistente');
     }

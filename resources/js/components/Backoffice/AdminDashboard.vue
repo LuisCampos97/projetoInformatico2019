@@ -75,11 +75,18 @@
                 <div class="col">
                   <div class="card">
                 <button class="btn btn-primary" v-on:click.prevent="carregar">Carregar Cursos e UCs</button>
+                <br />
+                <button class="btn btn-primary" @click="adicionarCurso">Adicionar Curso</button>
+                <adicionar-curso v-on:fecharCurso="fecharCurso" v-if="mostrarCompAddCurso"></adicionar-curso>
+                <br />
+                <button class="btn btn-primary" v-on:click.prevent="adicionarUC">Adicionar UC</button>
+                <adicionar-ucs v-on:fecharUcs="fecharUcs" v-if="mostrarCompAddUC"></adicionar-ucs>
               </div>
                 </div>
               </div>
             </div>
           </section>
+          
           <section class="dashboard-header">
             <div class="container-fluid">
               <div class="row">
@@ -145,9 +152,28 @@ export default {
       numeroPropostas: 0,
       utilizadores: [],
       role: '',
+      mostrarCompAddCurso:false,
+      mostrarCompAddUC:false,
     }
   },
   methods: {
+    adicionarCurso(){
+      this.mostrarCompAddCurso = true;
+      this.mostrarCompAddUC = false;
+    },
+
+    adicionarUC(){
+      this.mostrarCompAddUC = true;
+      this.mostrarCompAddCurso = false;
+    },
+
+    fecharCurso(){
+      this.mostrarCompAddCurso = false;
+    },
+
+    fecharUcs(){
+      this.mostrarCompAddUC = false;
+    },
 
     logout() {
       axios.post("api/logout").then(response => {

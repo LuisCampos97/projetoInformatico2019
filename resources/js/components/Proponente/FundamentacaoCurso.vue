@@ -70,6 +70,9 @@ export default {
           this.propostaSelecionada.id_proposta_proponente, this.propostaProponente).then(response => {
             this.mostrarFundamentacaoCurso=false;
             this.$swal('Sucesso', 'Fundamentação inserida com sucesso', 'success');
+            this.$socket.emit("email-diretor", {
+                          msg: "Pedido de email enviado..."
+                        });
             this.$emit("voltarProponentes", this.propostaProponente);
           });
           }

@@ -1,9 +1,9 @@
 require('dotenv').config();
-//var app = require('http').createServer();
-var io = require('socket.io')(app);
+// Se tiverem problemas com "same-origin policy" deverão activar o CORS.
+
+// Aqui, temos um exemplo de código que ativa o CORS (alterar o url base) 
 
  var app = require('http').createServer(function(req,res){
-     //console.log(req);
 // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
   res.setHeader('Access-Control-Request-Method', '*');
@@ -16,6 +16,7 @@ var io = require('socket.io')(app);
       return;
   }
  });
+var io = require('socket.io')(app);
 
 const nodemailer = require('nodemailer');
 
@@ -26,8 +27,9 @@ let transporter = nodemailer.createTransport({
         pass: process.env.MAIL_PASSWORD,
     }
 });
+
 let mailOptionsDiretorUO = {
-    from: "estg@gmail.com",
+    from: "projetoinformatico2019@gmail.com",
     to: "2151571@my.ipleiria.pt",
     subject: "Nova Proposta na plataforma de contratações",
     text: "Caro diretor da Unidade Orgânica, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
@@ -46,15 +48,17 @@ let mailOptionsSecretariadoDirecao = {
     subject: "Nova Proposta na plataforma de contratações",
     text: "Caro membro do Secretariado da Direção, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
 }
-
-let mailOptionsRecursosHumanos = {
-    from: "estg@gmail.com",
-    to: "2151571@my.ipleiria.pt",
-    subject: "Nova Proposta na plataforma de contratações",
-    text: "Caro membro dos Recursos Humanos, foi criada uma nova proposta que requer a sua decisão, por favor, dirija-se à plataforma de gestão de contratações para saber mais informações",
-}
-
-
+/*
+console.log(transporter);
+transporter.sendMail(mailOptionsDiretorUO, function (error) {
+    if (error) {
+        console.log(error);
+    }
+    else {
+        console.log('Email enviado para o diretor da unidade organica!');
+    }
+});
+*/
 app.listen(8080, function () {
     console.log('Listening on port 8080')
 })
@@ -110,18 +114,6 @@ io.on('connection', function (socket) {
             }
             else {
                 console.log('Email enviado o docente a ser contratado!');
-            }
-        });
-    });
-
-    socket.on('email-recursos-humanos', function (data) {
-        console.log(data);
-        transporter.sendMail(mailOptionsRecursosHumanos, function (error) {
-            if (error) {
-                console.log(error);
-            }
-            else {
-                console.log('Email enviado o membro dos Recursos Humanos!');
             }
         });
     });

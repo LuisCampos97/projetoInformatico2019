@@ -107,14 +107,14 @@ router.beforeEach((to, from, next) => {
 const app = new Vue({
     el: '#app',
     router: router,
-    mode: 'production',
+    //mode: 'production',
     store,
     created() {
         this.$store.commit('loadTokenAndUserFromSession');
     },
     sockets: {
         connect: function(){
-            console.log('socket connected');
+            console.log('socket connected 1');
         },
 
     }

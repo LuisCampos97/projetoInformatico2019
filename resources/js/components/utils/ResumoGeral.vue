@@ -83,7 +83,9 @@
         <br />
         <label><strong>Duração:</strong> {{ tipoPropostaRole.duracao }}</label>
         <br />
-        <label><strong>Avaliação período anterior:</strong> {{ tipoPropostaRole.avaliacao_periodo_anterior }}</label>        
+        <div v-if="tipoPropostaRole.avaliacao_periodo_anterior != null">
+          <label><strong>Avaliação período anterior:</strong> {{ tipoPropostaRole.avaliacao_periodo_anterior }}</label>        
+        </div>
         <br />
       </div>
       

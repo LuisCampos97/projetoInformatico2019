@@ -38,4 +38,31 @@ class UnidadeCurricularController extends Controller
 
         return $tipo;
     }
+
+    public function getNomesUC($codigoUC){
+        //dd($codigoUC);
+        $nome = UnidadeCurricular::where('codigo', $codigoUC)->first()->nome;
+        return $nome;
+    }
+
+    public function criarUC(Request $request){
+        $uc = UnidadeCurricular::where('codigo', $request->codigo)->get();
+        if(!$uc->isEmpty()){
+            return response()->json("Já existe uma UC com esse codigo", 401);
+        }
+
+        $nome = UnidadeCurricular::where('nome', $request->nome)->get();
+        if(!$nome->isEmpty()){
+            return response()->json("Já existe uma UC com esse nome", 401);
+        }
+        $request->validate([
+            'codigo' => 'required|numeric',
+            'nome' => 'required',
+            'codigo_curso' => 'required',
+        ]);
+        $ucAInserir = new UnidadeCurricular();
+        $ucAInserir->fill($request->all());
+        $ucAInserir->save();
+        return response()->json($ucAInserir, 200);
+    }
 }

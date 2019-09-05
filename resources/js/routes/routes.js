@@ -34,6 +34,9 @@ Vue.component('estatisticaRecursosHumanos', require('../components/Estatistica/E
 Vue.component('editarProposta', require('../components/Proponente/EditarProposta.vue').default);
 const adminDashboard = Vue.component('adminDashboard', require('../components/Backoffice/AdminDashboard.vue').default);
 const adminLogin =  Vue.component('adminLogin', require('../components/Backoffice/AdminLogin.vue').default);
+Vue.component('adicionarCurso', require('../components/Backoffice/AdicionarCurso.vue').default);
+Vue.component('adicionarUcs', require('../components/Backoffice/AdicionarUcs.vue').default);
+
 
 const routes = [
   //---------------Auth----------------------

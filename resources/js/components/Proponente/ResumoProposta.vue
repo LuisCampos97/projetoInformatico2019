@@ -404,9 +404,7 @@ export default {
                           response.data
                         );
 
-                        this.$socket.emit("email-diretor", {
-                          msg: "Pedido de email enviado..."
-                        });
+                        
 
                         axios
                           .post("/api/ficheiro", this.ficheiro.fileRelatorio)
@@ -569,9 +567,7 @@ export default {
                         response.data
                       );
 
-                      this.$socket.emit("email-diretor", {
-                        msg: "Pedido de email enviado..."
-                      }); // raise an event on the server
+                      
 
                       axios
                         .post("/api/ficheiro", this.ficheiro.fileCurriculo)
@@ -730,9 +726,7 @@ export default {
                         response.data
                       );
 
-                      this.$socket.emit("email-diretor", {
-                        msg: "Pedido de email enviado..."
-                      }); // raise an event on the server
+                      
 
                       axios
                         .post("/api/ficheiro", this.ficheiro.fileRelatorio)
