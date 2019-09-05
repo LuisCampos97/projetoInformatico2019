@@ -186,7 +186,7 @@
       </div>
 
       <div
-        v-if="propostaSelecionada.proposta_recursos_humanos_id != null &&
+        v-if="propostaSelecionada.docente_inseriu_ficheiros == 1 && propostaSelecionada.proposta_recursos_humanos_id == null &&
       this.$store.state.user.roleDB == 'recursos_humanos'"
       >
 
@@ -306,7 +306,10 @@
           <i class="far fa-file-pdf"></i> Ficheiro Resposta Consulta Outras Escolas
         </b-button>
         <br />
-
+        </div>
+        <div
+        v-if="propostaSelecionada.proposta_recursos_humanos_id != null && this.$store.state.user.roleDB == 'recursos_humanos'"
+      >
         <label><strong>Remuneração: </strong>{{ propostaSelecionada.remuneracao }} €</label>
         <br />
         <label><strong>Índice: </strong>{{ propostaSelecionada.indice }}</label>
@@ -452,8 +455,10 @@ export default {
       )
       .then(response => {
         this.propostaID = response.data.id;
+        console.log(this.propostaID)
         axios.get("/api/ficheiros/" + this.propostaID).then(response => {
           this.ficheiros = response.data;
+          console.log(this.ficheiros)
           this.ficheiroRelatorioProponentes = this.ficheiros[0];
           this.ficheiroCurriculo = this.ficheiros[1];
           this.ficheiroCertificadoHabilitacoes = this.ficheiros[2];
@@ -469,7 +474,6 @@ export default {
           this.ficheiroDeclaracaoArtigo99 = this.ficheiros[12];
           this.ficheiroDeclaracaoRenuncia = this.ficheiros[13];
           this.ficheiroConsultaOutrasEscolas = this.ficheiros[14];
-
         });
       });
     axios
