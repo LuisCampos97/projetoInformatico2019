@@ -32,7 +32,6 @@ Route::get('/unidadesCurriculares', 'UnidadeCurricularController@all');
 Route::get('/unidadeCurricularNome/{codigo_uc}', 'UnidadeCurricularController@getNomeUc');
 Route::get('/unidadesCurricularesDoCursoSelecionado/{codigo_curso}', 'UnidadeCurricularController@getUcsParaCurso');
 Route::get('/tiposUnidadesCurriculares/{codigo_uc}', 'UnidadeCurricularController@getTipoUC');
-//Route::get('/getNomesUC/{codigo_uc}', 'UnidadeCurricularController@getNomesUC');
 Route::post('/criarUC', 'UnidadeCurricularController@criarUC');
 
 //-----------------------------Cursos----------------------------------

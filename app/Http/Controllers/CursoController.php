@@ -11,9 +11,6 @@ class CursoController extends Controller
 {
     public function getCursos()
     {
-        //$nome_curso = str_replace(substr($role, 0, 15), '', $role);
-        //$curso = Curso::where('nome_curso', $nome_curso)->first();
-
         return Curso::all();
     }
 
@@ -30,29 +27,35 @@ class CursoController extends Controller
         foreach ($uc as $value) {
             $value_parsing = explode(";", $value);
 
-            if (!in_array($value_parsing[0], $array_codigo_cursos) && !empty($value_parsing[0])) {
-                $curso = new Curso;
-                $curso->codigo = $value_parsing[0];
-                $curso->nome_curso = utf8_encode($value_parsing[1]);
-                $curso->save();
+            $curso = Curso::where('codigo', $value_parsing[0])->get();
+
+            if (!in_array($value_parsing[0], $array_codigo_cursos) && !empty($value_parsing[0] && $curso->isEmpty())) {
+                $cursoAInserir = new Curso;
+                $cursoAInserir->codigo = $value_parsing[0];
+                $cursoAInserir->nome_curso = utf8_encode($value_parsing[1]);
+                $cursoAInserir->save();
 
                 //* Para não colocar o mesmo curso na Base de Dados
                 array_push($array_codigo_cursos, $value_parsing[0]);
             }
 
-            if (!in_array($value_parsing[2], $array_codigo_ucs) && !empty($value_parsing[2])) {
-                $uc = new UnidadeCurricular;
-                $uc->codigo = $value_parsing[2];
-                $uc->nome = utf8_encode($value_parsing[3]);
-                $uc->codigo_curso = $value_parsing[0];
-                $uc->save();
+            if(array_key_exists(2, $value_parsing)) {
+                $uc = UnidadeCurricular::where('codigo', $value_parsing[2])->get();
 
-                //* Para não colocar o mesmo UC na Base de Dados
-                array_push($array_codigo_ucs, $value_parsing[2]);
+                if (!in_array($value_parsing[2], $array_codigo_ucs) && !empty($value_parsing[2]) && $uc->isEmpty()) {
+                    $ucAInserir = new UnidadeCurricular;
+                    $ucAInserir->codigo = $value_parsing[2];
+                    $ucAInserir->nome = utf8_encode($value_parsing[3]);
+                    $ucAInserir->codigo_curso = $value_parsing[0];
+                    $ucAInserir->save();
+    
+                    //* Para não colocar o mesmo UC na Base de Dados
+                    array_push($array_codigo_ucs, $value_parsing[2]);
+                }
             }
         }
 
-        return 'Sucesso';
+        return response()->json("Cursos e Unidades Curriculares carregados com sucesso!", 200);;
     }
 
     public function criarCurso(Request $request){

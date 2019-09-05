@@ -39,12 +39,6 @@ class UnidadeCurricularController extends Controller
         return $tipo;
     }
 
-    public function getNomesUC($codigoUC){
-        //dd($codigoUC);
-        $nome = UnidadeCurricular::where('codigo', $codigoUC)->first()->nome;
-        return $nome;
-    }
-
     public function criarUC(Request $request){
         $uc = UnidadeCurricular::where('codigo', $request->codigo)->get();
         if(!$uc->isEmpty()){

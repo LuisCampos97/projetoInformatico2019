@@ -154,6 +154,7 @@ export default {
       role: '',
       mostrarCompAddCurso:false,
       mostrarCompAddUC:false,
+      mensagemCarregarUCsCursos: ''
     }
   },
   methods: {
@@ -191,7 +192,7 @@ export default {
     },
     carregar() {
       axios.get("api/lerCursosEUcs").then(response => {
-        console.log(response);
+        this.$swal('Sucesso', response.data, 'success');
       });
     },
     editar(id) {
