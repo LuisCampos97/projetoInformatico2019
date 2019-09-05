@@ -87,8 +87,6 @@ export default {
           axios
             .post("/api/diretorUO/propostaDiretor", this.propostaDiretor)
             .then(response => {
-              console.log(response);
-              console.log(this.propostaSelecionada)
               let parecer = response.data.parecer;
               axios
                 .patch(
