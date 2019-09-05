@@ -248,19 +248,20 @@ export default {
   validations() {
     if (this.$store.state.user.roleDB == "proponente_departamento") {
       return {
+        fundamentacaoCheck: { required },
         proposta: {
           data_de_assinatura_coordenador_departamento: { required },
           fundamentacao_coordenador_departamento: { required },
         },
-        fundamentacaoCheck: { required }
       };
-    } else if(this.$store.state.user.roleDB == "proponente_curso") {
+    } 
+    if(this.$store.state.user.roleDB == "proponente_curso") {
       return {
+        fundamentacaoCheck: { required },
         proposta: {
           data_de_assinatura_coordenador_de_curso: { required },
           fundamentacao_coordenador_curso: { required },
         },
-        fundamentacaoCheck: { required }
       };
     }
   },
@@ -271,9 +272,9 @@ export default {
     },
     submeterPropostaProfessor(propostaProponenteProfessor) {
       if (this.unidadesCurriculares.length > 0) {
-        this.$v.$touch();
-        this.$swal
-          .fire({
+         this.$v.$touch();
+        if (!this.$v.$invalid) {
+        this.$swal.fire({
             title: "Tem a certeza que pretende submeter estes dados?",
             text: "Não poderá realizar mais nenhuma alteração",
             type: "warning",
@@ -437,10 +438,13 @@ export default {
               }
             }
           });
+        }
       }
     },
     submeterPropostaAssistente(propostaProponenteAssistente) {
       if (this.unidadesCurriculares.length > 0) {
+         this.$v.$touch();
+        if (!this.$v.$invalid) {
         this.$swal
           .fire({
             title: "Tem a certeza que pretende submeter estes dados?",
@@ -595,10 +599,13 @@ export default {
             }
           }
           });
+        }
       }
     },
     submeterPropostaMonitor(propostaProponenteMonitor) {
       if (this.unidadesCurriculares.length > 0) {
+        this.$v.$touch();
+        if (!this.$v.$invalid) {
         this.$swal
           .fire({
             title: "Tem a certeza que pretende submeter estes dados?",
@@ -755,6 +762,7 @@ export default {
             }
             }
           });
+        }
       }
     },
     makeToast(variant = null) {
@@ -769,6 +777,9 @@ export default {
       //* Mudar para o componente PropostaProponente*
       this.$emit("mostrarPropostaProponente_" + this.proposta.role);
     }
+  },
+  mounted(){
+    console.log(this.proposta);
   }
 };
 </script>

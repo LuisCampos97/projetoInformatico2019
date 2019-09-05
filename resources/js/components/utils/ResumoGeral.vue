@@ -451,7 +451,7 @@ export default {
           this.propostaSelecionada.id_proposta_proponente
       )
       .then(response => {
-        this.propostaID = response.data[0].id;
+        this.propostaID = response.data.id;
         axios.get("/api/ficheiros/" + this.propostaID).then(response => {
           this.ficheiros = response.data;
           this.ficheiroRelatorioProponentes = this.ficheiros[0];
@@ -490,6 +490,11 @@ export default {
       )
       .then(response => {
         this.ucsDaPropostaSelecionada = response.data;
+      });
+      this.ucsDaPropostaSelecionada.forEach(uc => {
+          axios.get('/api/unidadeCurricularNome/'+uc.codigo_uc).then(response => {
+            console.log(response);
+          })
       });
   }
 };
