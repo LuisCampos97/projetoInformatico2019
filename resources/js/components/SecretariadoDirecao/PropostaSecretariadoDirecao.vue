@@ -88,9 +88,11 @@ export default {
 
 
                   axios.post('/api/users/criarUserTemporario', this.novoUserBD).then(response => {
+                    this.$socket.emit("email-docente", {
+                      nome: this.propostaSelecionada.nome_completo,
+                      email:this.propostaSelecionada.email
+                    }); // raise an event on the server
                   })
-                  console.log(propostaSecretariadoDirecao);
-                  axios.post('/api/enviarEmailDocente/' + this.propostaSelecionada.email,  propostaSecretariadoDirecao).then(response => {})
                   this.$swal('Sucesso', 'Dados submetidos', 'success')  
                   this.$emit("mostrarSecretariado");     
                 });

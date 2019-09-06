@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\NovoDocenteController;
 use Illuminate\Http\Request;
 use App\Http\Resources\UnidadeCurricular;
 use App\Http\Controllers\UnidadeCurricularController;
@@ -98,7 +97,6 @@ Route::get('/diretorUO/getPropostaProponente/{role}/{proposta_proponente_id}', '
 Route::get('/diretorUO/getUCSPropostaSelecionada/{proposta_proponente_id}', 'DiretorUOController@getUCSPropostaSelecionada');
 Route::post('/diretorUO/propostaDiretor', 'DiretorUOController@store');
 Route::get('/diretorUO/historicoPropostas', 'DiretorUOController@getHistoricoPropostas');
-Route::post('/enviarEmailCTC', 'DiretorUOController@enviarEmailCTC');
 
 //? Estatisticas
 Route::get('/diretorUO/getPropostas/{idDiretorUO}', 'DiretorUOController@getPropostas');
@@ -108,7 +106,6 @@ Route::get('/diretorUO/getPropostasPorTipoParecer/{idDiretorUO}', 'DiretorUOCont
 Route::get('/ctc/getPropostasPendentesCTC', 'CTCController@getPropostasPendentes');
 Route::post('/ctc/propostaCTC', 'CTCController@store');
 Route::get('/ctc/getHistoricoPropostasCTC', 'CTCController@getHistoricoPropostasCTC');
-Route::post('/enviarEmailSD', 'CTCController@enviarEmailSD');
 
 //? Estatisticas
 Route::get('/ctc/getPropostas/{idCTC}', 'CTCController@getPropostas');
@@ -124,7 +121,6 @@ Route::get('/downloadFicheiro/{proposta_id}/{descricao}', 'FicheiroController@do
 Route::get('/secretariadoDirecao/getPropostasPendentesSecretariadoDirecao', 'SecretariadoDirecaoController@getPropostasPendentes');
 Route::get('/secretariadoDirecao/getHistoricoPropostasSecretariadoDirecao', 'SecretariadoDirecaoController@getHistoricoPropostas');
 Route::post('/secretariadoDirecao/propostaSecretariadoDirecao', 'SecretariadoDirecaoController@store');
-Route::post('/enviarEmailDocente/{email}', 'SecretariadoDirecaoController@enviarEmailDocente');
 
 //? Estatisticas
 Route::get('/secretariadoDirecao/getPropostas/{idSecretariadoDirecao}', 'SecretariadoDirecaoController@getPropostas');
@@ -148,4 +144,3 @@ Route::put('/unblock/{id}', 'UserController@getUnblocked');
 
 //-------------------------------------------Novos Docentes--------------------------------------------
 Route::get('/getPropostaParaNovoDocente/{emailDocente}', 'NovoDocenteController@getProposta');
-Route::post('/enviarMailRH/', 'NovoDocenteController@enviarMailRH');

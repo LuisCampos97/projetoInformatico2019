@@ -516,15 +516,15 @@ export default {
                 axios.put('/api/updateFicheirosDocente/'+this.proposta.id).then(response => {
                   axios.put('/api/block/' + this.$store.state.user.id).then(response => {
                     axios.post('/api/logout').then(response => {
-                    axios.post('/api/enviarMailRH').then(response => {
                     this.$swal('Sucesso', 'Ficheiros submetidos com sucesso!!', 'success')
                     this.$store.commit("clearUserAndToken");
-                    
+                    this.$socket.emit("email-recursos", {
+                      msg: "Pedido de email enviado..."
+                    });
                     this.$router.push({
                       name: "login"
                     });
                 })
-              })
             });
           })
         });

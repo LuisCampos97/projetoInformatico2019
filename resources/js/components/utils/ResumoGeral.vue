@@ -455,8 +455,10 @@ export default {
       )
       .then(response => {
         this.propostaID = response.data.id;
+        console.log(this.propostaID)
         axios.get("/api/ficheiros/" + this.propostaID).then(response => {
           this.ficheiros = response.data;
+          console.log(this.ficheiros)
           this.ficheiroRelatorioProponentes = this.ficheiros[0];
           this.ficheiroCurriculo = this.ficheiros[1];
           this.ficheiroCertificadoHabilitacoes = this.ficheiros[2];
