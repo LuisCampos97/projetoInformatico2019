@@ -28,13 +28,13 @@ Vue.component('apexchart', VueApexCharts)
 
 import router from './routes/routes';
 import store from './store/global-store';
-
+/*
 import VueSocketIO from 'vue-socket.io';
 Vue.use(new VueSocketIO({
     debug: true,
     connection: 'http://localhost:8080'
 }));
-
+*/
 // Para manter o utilizador logado depois de refrescar a pagina
 store.state.user = store.getters.getAuthUser
 store.state.token = store.getters.getToken

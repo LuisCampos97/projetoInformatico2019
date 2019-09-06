@@ -778,8 +778,6 @@ export default {
       this.$emit("mostrarPropostaProponente_" + this.proposta.role);
     }
   },
-  mounted(){
-    console.log(this.proposta);
-  }
+
 };
 </script>

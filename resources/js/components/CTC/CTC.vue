@@ -147,6 +147,7 @@ export default {
                     this.propostaSelecionada.id+"/"+aprovacao
                 )
                 .then(response => {
+                  axios.post('/api/enviarEmailSD').then(response => {});
                     this.$swal('Sucesso', 'Parecer enviado com sucesso', 'success')
                     this.$emit("mostrarCTC");
                 });
@@ -156,9 +157,6 @@ export default {
             .catch(error => {
               console.log(error);
             });
-          this.$socket.emit("email-secretariado", {
-            msg: "Pedido de email enviado..."
-          }); // raise an event on the server
           }
         });
       }

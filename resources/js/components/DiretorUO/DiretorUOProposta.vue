@@ -87,6 +87,7 @@ export default {
           axios
             .post("/api/diretorUO/propostaDiretor", this.propostaDiretor)
             .then(response => {
+              //console.log(response)
               let parecer = response.data.parecer;
               axios
                 .patch(
@@ -99,9 +100,7 @@ export default {
                 )
                 .then(response => {
                   if (parecer == "Favoravel") {
-                    this.$socket.emit("email-ctc", {
-                      msg: "Pedido de email enviado..."
-                    });
+                   axios.post('/api/enviarEmailCTC').then(response => {});
                   }
                     this.$swal('Sucesso', 'Parecer Submetido', 'success')
                     this.$emit("mostrarDiretor");
