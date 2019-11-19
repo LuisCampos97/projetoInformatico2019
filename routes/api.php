@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/generateLog', 'UserController@generateLog');
+
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/loginAdmin', 'Auth\LoginController@loginAdmin')->name('loginAdmin');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
@@ -139,6 +141,7 @@ Route::get('/users', 'UserController@all');
 Route::post('/users/criarUserTemporario', 'UserController@registarNaBD');
 Route::put('/users/updateRole/{id}', 'UserController@updateRole');
 Route::put('/block/{id}', 'UserController@getBlocked');
+Route::put('/blockByEmail/{email}', 'UserController@getBlockByEmail');
 Route::put('/unblock/{id}', 'UserController@getUnblocked');
 
 

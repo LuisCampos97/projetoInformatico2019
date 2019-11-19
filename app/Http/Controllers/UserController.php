@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -65,6 +66,14 @@ class UserController extends Controller
         return response()->json([$user, 200]);
     }
 
+    public function getBlockByEmail($email) {
+        $user = User::where('email', $email)->firstOrFail();
+        $user->blocked = 1;
+        $user->delete();
+        $user->save();
+        return response()->json([$user, 200]);
+    }
+
     public function getUnblocked($id){
         //dd($id);
         $user = User::withTrashed()->findOrFail($id);
@@ -72,5 +81,9 @@ class UserController extends Controller
         $user->deleted_at = NULL;
         $user->save();
         return response()->json([$user, 200]);
+    }
+
+    public function generateLog(Request $request) {
+        Log::channel('syslog')->alert($request->message);  
     }
 }

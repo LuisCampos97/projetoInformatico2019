@@ -45,6 +45,10 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
         ],
+        'auth' => [
+            'driver' => 'syslog',
+            'level' => 'debug',
+        ],
 
         'daily' => [
             'driver' => 'daily',

@@ -50,6 +50,7 @@ export default {
       isLoading: false,
       error: false,
       errorMessage: "",
+      numeroTentantivas: 0,
       user: {
         email: "",
         password: ""
@@ -75,6 +76,20 @@ export default {
           this.error = true;
           this.isLoading = false;
           this.errorMessage = Object.values(error.response.data)[0];
+          if(this.user.email && this.user.password) {
+            this.numeroTentantivas++;
+            console.log(this.numeroTentantivas);
+          }
+          
+          if(this.numeroTentantivas >= 3) {
+            //! Número de tentativas excedidas
+            this.errorMessage = "O utilizador " + this.user.email + "excedeu as 3 tentativas de login, sendo bloqueado";
+            axios.post("api/generateLog", {message: this.errorMessage }).then(response => { 
+              axios.put("/api/blockByEmail/"+this.user.email).then(response => {
+                
+              });
+            });
+          }
         });
     },
     showProponenteView() {
